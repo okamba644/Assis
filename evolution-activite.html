@@ -77,18 +77,19 @@
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 (function () {
-  // ===== À CONFIGURER =====
+  /* ===== À CONFIGURER ===== */
+  /* Gardez les guillemets autour des 3 valeurs dynamiques : si Bubble */
+  /* insère une valeur vide, le script continue de fonctionner. */
   var CONFIG = {
     url: "https://xuub-b4yt-tdhb.p7.xano.io/api:Wg9wVimD/activity_evolution",
-    account_id: 1080,          // Bubble : Current User's account_id
-    start_date: "2026-08-01",  // Bubble : DatePicker Début's value :formatted as yyyy-mm-dd
-    end_date: "2026-09-01",    // Bubble : DatePicker Fin's value :formatted as yyyy-mm-dd
-    points: 4                  // Nombre de points sur la courbe (ex. 1, 10, 20, 30 sept.)
+    account_id: "1080", /* Bubble : Current User's account_id */
+    start_date: "2026-08-01", /* Bubble : DatePicker Début's value :formatted as yyyy-mm-dd */
+    end_date: "2026-09-01", /* Bubble : DatePicker Fin's value :formatted as yyyy-mm-dd */
+    points: 4 /* Nombre de points sur la courbe (ex. 1, 10, 20, 30 sept.) */
   };
-  // ========================
+  /* ======================== */
 
   var SERIES = [
     { key: "comptes",      label: "Comptes",      color: "#2563eb" },
@@ -103,7 +104,7 @@
   var msg = root.querySelector(".evo-msg");
   var legend = root.querySelector(".evo-legend");
 
-  // Toutes les dates (YYYY-MM-DD) entre start et end, bornes incluses
+  /* Toutes les dates (YYYY-MM-DD) entre start et end, bornes incluses */
   function dayRange(start, end) {
     var days = [];
     var d = new Date(start + "T00:00:00Z");
@@ -115,7 +116,7 @@
     return days;
   }
 
-  // Accepte "2026-08-03", "2026-08-03T10:00:00Z" ou un timestamp Xano (ms)
+  /* Accepte "2026-08-03", "2026-08-03T10:00:00Z" ou un timestamp Xano (ms) */
   function toDay(value) {
     if (typeof value === "number") return new Date(value).toISOString().slice(0, 10);
     return String(value).slice(0, 10);
@@ -127,8 +128,8 @@
     });
   }
 
-  // Choisit n dates régulièrement espacées (première et dernière incluses)
-  // et rattache chaque jour au point le plus proche.
+  /* Choisit n dates régulièrement espacées (première et dernière incluses) */
+  /* et rattache chaque jour au point le plus proche. */
   function pointIndexes(nbDays, n) {
     n = Math.max(1, Math.min(n, nbDays));
     var idx = [];
@@ -146,7 +147,7 @@
     return best;
   }
 
-  // Fausse réponse Xano pour tester tant que l'URL n'est pas configurée
+  /* Fausse réponse Xano pour tester tant que l'URL n'est pas configurée */
   function demoData(days) {
     var out = {};
     SERIES.forEach(function (s, i) {
@@ -157,10 +158,38 @@
     return out;
   }
 
+  /* Charge Chart.js une seule fois, même si Bubble réinjecte l'élément HTML */
+  function loadChartJs() {
+    if (window.Chart) return Promise.resolve();
+    if (!window.__evoChartJs) {
+      window.__evoChartJs = new Promise(function (resolve, reject) {
+        var s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js";
+        s.onload = resolve;
+        s.onerror = function () {
+          window.__evoChartJs = null;
+          reject(new Error("Chart.js introuvable"));
+        };
+        document.head.appendChild(s);
+      });
+    }
+    return window.__evoChartJs;
+  }
+
+  function checkConfig() {
+    var isDate = /^\d{4}-\d{2}-\d{2}$/;
+    if (!String(CONFIG.account_id).trim()) throw new Error("account_id vide");
+    if (!isDate.test(CONFIG.start_date)) throw new Error("date de début invalide : \"" + CONFIG.start_date + "\"");
+    if (!isDate.test(CONFIG.end_date)) throw new Error("date de fin invalide : \"" + CONFIG.end_date + "\"");
+    if (CONFIG.start_date > CONFIG.end_date) throw new Error("la date de début est après la date de fin");
+  }
+
   function fetchData() {
     if (CONFIG.url.indexOf("VOTRE-INSTANCE") !== -1) {
       return Promise.resolve(demoData(dayRange(CONFIG.start_date, CONFIG.end_date)));
     }
+    var controller = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (controller) controller.abort(); }, 15000);
     return fetch(CONFIG.url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -168,10 +197,15 @@
         account_id: Number(CONFIG.account_id),
         start_date: CONFIG.start_date,
         end_date: CONFIG.end_date
-      })
+      }),
+      signal: controller ? controller.signal : undefined
     }).then(function (res) {
+      clearTimeout(timer);
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
+    }, function (err) {
+      clearTimeout(timer);
+      throw new Error(err.name === "AbortError" ? "Xano ne répond pas" : "Xano injoignable");
     });
   }
 
@@ -199,6 +233,9 @@
       };
     });
 
+    var previous = Chart.getChart(canvas);
+    if (previous) previous.destroy();
+
     var chart = new Chart(canvas, {
       type: "line",
       data: { labels: idx.map(function (i) { return formatLabel(days[i]); }), datasets: datasets },
@@ -223,7 +260,7 @@
       }
     });
 
-    // Légende HTML (cliquable pour masquer/afficher une courbe)
+    /* Légende HTML (cliquable pour masquer/afficher une courbe) */
     legend.innerHTML = "";
     SERIES.forEach(function (s, i) {
       var li = document.createElement("li");
@@ -240,10 +277,13 @@
     msg.style.display = "none";
   }
 
-  fetchData()
-    .then(render)
+  Promise.resolve()
+    .then(checkConfig)
+    .then(function () { return Promise.all([loadChartJs(), fetchData()]); })
+    .then(function (results) { render(results[1]); })
     .catch(function (err) {
       msg.textContent = "Impossible de charger les données (" + err.message + ")";
+      if (window.console) console.error("[evo-activite]", err, CONFIG);
     });
 })();
 </script>
