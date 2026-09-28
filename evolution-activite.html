@@ -1,0 +1,226 @@
+<!--
+  Graphique "Évolution globale de l'activité"
+  À coller dans un élément HTML Bubble.
+  Remplacez les 4 valeurs de CONFIG (dans Bubble : "Insert dynamic data").
+-->
+<div class="evo-card" id="evo-activite">
+  <div class="evo-head">
+    <h3 class="evo-title">Évolution globale de l'activité</h3>
+    <ul class="evo-legend"></ul>
+  </div>
+  <div class="evo-body">
+    <canvas></canvas>
+    <p class="evo-msg">Chargement…</p>
+  </div>
+</div>
+
+<style>
+  #evo-activite {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 20px 12px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+    width: 100%;
+  }
+  #evo-activite .evo-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-bottom: 16px;
+  }
+  #evo-activite .evo-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  #evo-activite .evo-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  #evo-activite .evo-legend li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #475569;
+    cursor: pointer;
+    user-select: none;
+  }
+  #evo-activite .evo-legend li.off { opacity: 0.35; }
+  #evo-activite .evo-legend i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  #evo-activite .evo-body {
+    position: relative;
+    height: 220px;
+  }
+  #evo-activite .evo-msg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  // ===== À CONFIGURER =====
+  var CONFIG = {
+    url: "https://VOTRE-INSTANCE.xano.io/api:VOTRE_GROUPE/activity_evolution",
+    account_id: 1080,          // Bubble : Current User's account_id
+    start_date: "2026-08-01",  // Bubble : DatePicker Début's value :formatted as yyyy-mm-dd
+    end_date: "2026-09-01"     // Bubble : DatePicker Fin's value :formatted as yyyy-mm-dd
+  };
+  // ========================
+
+  var SERIES = [
+    { key: "comptes",      label: "Comptes",      color: "#2563eb" },
+    { key: "contacts",     label: "Contacts",     color: "#8b5cf6" },
+    { key: "opportunites", label: "Opportunités", color: "#10b981" },
+    { key: "interactions", label: "Interactions", color: "#38bdf8" },
+    { key: "taches",       label: "Tâches",       color: "#f59e0b" }
+  ];
+
+  var root = document.getElementById("evo-activite");
+  var canvas = root.querySelector("canvas");
+  var msg = root.querySelector(".evo-msg");
+  var legend = root.querySelector(".evo-legend");
+
+  // Toutes les dates (YYYY-MM-DD) entre start et end, bornes incluses
+  function dayRange(start, end) {
+    var days = [];
+    var d = new Date(start + "T00:00:00Z");
+    var last = new Date(end + "T00:00:00Z");
+    while (d <= last) {
+      days.push(d.toISOString().slice(0, 10));
+      d.setUTCDate(d.getUTCDate() + 1);
+    }
+    return days;
+  }
+
+  // Accepte "2026-08-03", "2026-08-03T10:00:00Z" ou un timestamp Xano (ms)
+  function toDay(value) {
+    if (typeof value === "number") return new Date(value).toISOString().slice(0, 10);
+    return String(value).slice(0, 10);
+  }
+
+  function formatLabel(day) {
+    return new Date(day + "T00:00:00Z").toLocaleDateString("fr-FR", {
+      day: "numeric", month: "short", timeZone: "UTC"
+    });
+  }
+
+  // Fausse réponse Xano pour tester tant que l'URL n'est pas configurée
+  function demoData(days) {
+    var out = {};
+    SERIES.forEach(function (s, i) {
+      out[s.key] = days.map(function (day, j) {
+        return { date: day, count: Math.max(0, Math.round(4 + 3 * Math.sin(j / 4 + i) + j / 6 - i)) };
+      });
+    });
+    return out;
+  }
+
+  function fetchData() {
+    if (CONFIG.url.indexOf("VOTRE-INSTANCE") !== -1) {
+      return Promise.resolve(demoData(dayRange(CONFIG.start_date, CONFIG.end_date)));
+    }
+    return fetch(CONFIG.url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        account_id: Number(CONFIG.account_id),
+        start_date: CONFIG.start_date,
+        end_date: CONFIG.end_date
+      })
+    }).then(function (res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    });
+  }
+
+  function render(data) {
+    var days = dayRange(CONFIG.start_date, CONFIG.end_date);
+
+    var datasets = SERIES.map(function (s) {
+      var counts = {};
+      (data[s.key] || []).forEach(function (row) {
+        var day = toDay(row.date);
+        counts[day] = (counts[day] || 0) + Number(row.count || 0);
+      });
+      return {
+        label: s.label,
+        data: days.map(function (day) { return counts[day] || 0; }),
+        borderColor: s.color,
+        backgroundColor: s.color,
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHoverRadius: 4
+      };
+    });
+
+    var chart = new Chart(canvas, {
+      type: "line",
+      data: { labels: days.map(formatLabel), datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { display: false },
+            ticks: { color: "#64748b", font: { size: 11 }, maxTicksLimit: 6, maxRotation: 0 }
+          },
+          y: {
+            beginAtZero: true,
+            border: { display: false },
+            grid: { color: "#eef2f7" },
+            ticks: { color: "#94a3b8", font: { size: 11 }, precision: 0 }
+          }
+        }
+      }
+    });
+
+    // Légende HTML (cliquable pour masquer/afficher une courbe)
+    legend.innerHTML = "";
+    SERIES.forEach(function (s, i) {
+      var li = document.createElement("li");
+      li.innerHTML = '<i style="background:' + s.color + '"></i>' + s.label;
+      li.onclick = function () {
+        var visible = chart.isDatasetVisible(i);
+        chart.setDatasetVisibility(i, !visible);
+        li.classList.toggle("off", visible);
+        chart.update();
+      };
+      legend.appendChild(li);
+    });
+
+    msg.style.display = "none";
+  }
+
+  fetchData()
+    .then(render)
+    .catch(function (err) {
+      msg.textContent = "Impossible de charger les données (" + err.message + ")";
+    });
+})();
+</script>
