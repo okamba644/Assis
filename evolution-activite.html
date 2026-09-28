@@ -188,16 +188,30 @@
     if (CONFIG.url.indexOf("VOTRE-INSTANCE") !== -1) {
       return Promise.resolve(demoData(dayRange(CONFIG.start_date, CONFIG.end_date)));
     }
+    var inputs = {
+      account_id: Number(CONFIG.account_id),
+      start_date: CONFIG.start_date,
+      end_date: CONFIG.end_date
+    };
+    var asJson = JSON.stringify(inputs);
+    /* Format "formulaire" : pas de requête préalable OPTIONS, donc pas de blocage CORS sur les en-têtes */
+    var asForm = Object.keys(inputs).map(function (k) {
+      return encodeURIComponent(k) + "=" + encodeURIComponent(inputs[k]);
+    }).join("&");
+
+    return post("application/json", asJson).catch(function (err) {
+      if (!err.network) throw err;
+      return post("application/x-www-form-urlencoded", asForm);
+    });
+  }
+
+  function post(contentType, body) {
     var controller = window.AbortController ? new AbortController() : null;
     var timer = setTimeout(function () { if (controller) controller.abort(); }, 15000);
-    return fetch(CONFIG.url, {
+    return fetch(CONFIG.url.trim(), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        account_id: Number(CONFIG.account_id),
-        start_date: CONFIG.start_date,
-        end_date: CONFIG.end_date
-      }),
+      headers: { "Content-Type": contentType },
+      body: body,
       signal: controller ? controller.signal : undefined
     }).then(function (res) {
       clearTimeout(timer);
@@ -205,7 +219,11 @@
       return res.json();
     }, function (err) {
       clearTimeout(timer);
-      throw new Error(err.name === "AbortError" ? "Xano ne répond pas" : "Xano injoignable");
+      var e = new Error(err.name === "AbortError"
+        ? "Xano ne répond pas"
+        : "Xano injoignable : " + err.message + " — voir l'onglet Réseau (F12)");
+      e.network = err.name !== "AbortError";
+      throw e;
     });
   }
 
@@ -283,7 +301,7 @@
     .then(function (results) { render(results[1]); })
     .catch(function (err) {
       msg.textContent = "Impossible de charger les données (" + err.message + ")";
-      if (window.console) console.error("[evo-activite]", err, CONFIG);
+      if (window.console) console.error("[evo-activite] " + err.message, JSON.stringify(CONFIG));
     });
 })();
 </script>
