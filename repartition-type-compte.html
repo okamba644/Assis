@@ -1,0 +1,89 @@
+<div id="rep-type-compte"
+     data-account-id="1080"
+     data-start-date=""
+     data-end-date="">
+  <div class="rep-donut">
+    <canvas></canvas>
+    <div class="rep-center">
+      <span class="rep-total">–</span>
+      <span class="rep-unit">Comptes</span>
+    </div>
+  </div>
+  <div class="rep-side">
+    <ul class="rep-legend"></ul>
+    <p class="rep-msg">Chargement…</p>
+  </div>
+</div>
+
+<style>
+  #rep-type-compte {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  #rep-type-compte .rep-donut {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    flex: none;
+  }
+  #rep-type-compte .rep-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  #rep-type-compte .rep-total {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #0f172a;
+  }
+  #rep-type-compte .rep-unit {
+    font-size: 12px;
+    color: #64748b;
+  }
+  #rep-type-compte .rep-side {
+    flex: 1;
+    min-width: 160px;
+  }
+  #rep-type-compte .rep-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  #rep-type-compte .rep-legend li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #475569;
+  }
+  #rep-type-compte .rep-legend i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex: none;
+  }
+  #rep-type-compte .rep-legend b {
+    font-weight: 600;
+    color: #0f172a;
+  }
+  #rep-type-compte .rep-msg {
+    margin: 0;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/gh/okamba644/Assis@4673b9b28db1e727870ca81c99582a32384df725/repartition-type-compte.js"></script>
