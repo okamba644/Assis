@@ -1,9 +1,8 @@
-<!--
-  Graphique "Évolution globale de l'activité"
-  À coller dans un élément HTML Bubble.
-  Remplacez les 4 valeurs de CONFIG (dans Bubble : "Insert dynamic data").
--->
-<div class="evo-card" id="evo-activite">
+<div class="evo-card" id="evo-activite"
+     data-account-id="1080"
+     data-start-date="2026-08-01"
+     data-end-date="2026-09-01"
+     data-points="4">
   <div class="evo-head">
     <h3 class="evo-title">Évolution globale de l'activité</h3>
     <ul class="evo-legend"></ul>
@@ -79,18 +78,16 @@
 
 <script>
 (function () {
-  /* ===== À CONFIGURER ===== */
-  /* Gardez les guillemets autour des 3 valeurs dynamiques : si Bubble */
-  /* insère une valeur vide, le script continue de fonctionner. */
+  var root = document.getElementById("evo-activite");
+  if (!root) return;
   var CONFIG = {
     url: "https://xuub-b4yt-tdhb.p7.xano.io/api:Wg9wVimD/activity_evolution",
-    account_id: "1080", /* Bubble : Current User's account_id */
-    start_date: "2026-08-01", /* Bubble : DatePicker Début's value :formatted as yyyy-mm-dd */
-    end_date: "2026-09-01", /* Bubble : DatePicker Fin's value :formatted as yyyy-mm-dd */
-    points: 4 /* Nombre de points sur la courbe (ex. 1, 10, 20, 30 sept.) */
+    account_id: (root.getAttribute("data-account-id") || "").trim(),
+    start_date: (root.getAttribute("data-start-date") || "").trim(),
+    end_date: (root.getAttribute("data-end-date") || "").trim(),
+    points: Number(root.getAttribute("data-points")) || 4
   };
-  /* ======================== */
-
+  if (window.console) console.log("[evo-activite] démarrage", JSON.stringify(CONFIG));
   var SERIES = [
     { key: "comptes",      label: "Comptes",      color: "#2563eb" },
     { key: "contacts",     label: "Contacts",     color: "#8b5cf6" },
@@ -98,13 +95,9 @@
     { key: "interactions", label: "Interactions", color: "#38bdf8" },
     { key: "taches",       label: "Tâches",       color: "#f59e0b" }
   ];
-
-  var root = document.getElementById("evo-activite");
   var canvas = root.querySelector("canvas");
   var msg = root.querySelector(".evo-msg");
   var legend = root.querySelector(".evo-legend");
-
-  /* Toutes les dates (YYYY-MM-DD) entre start et end, bornes incluses */
   function dayRange(start, end) {
     var days = [];
     var d = new Date(start + "T00:00:00Z");
@@ -115,21 +108,15 @@
     }
     return days;
   }
-
-  /* Accepte "2026-08-03", "2026-08-03T10:00:00Z" ou un timestamp Xano (ms) */
   function toDay(value) {
     if (typeof value === "number") return new Date(value).toISOString().slice(0, 10);
     return String(value).slice(0, 10);
   }
-
   function formatLabel(day) {
     return new Date(day + "T00:00:00Z").toLocaleDateString("fr-FR", {
       day: "numeric", month: "short", timeZone: "UTC"
     });
   }
-
-  /* Choisit n dates régulièrement espacées (première et dernière incluses) */
-  /* et rattache chaque jour au point le plus proche. */
   function pointIndexes(nbDays, n) {
     n = Math.max(1, Math.min(n, nbDays));
     var idx = [];
@@ -138,7 +125,6 @@
     }
     return idx;
   }
-
   function nearestPoint(idx, d) {
     var best = 0;
     for (var k = 1; k < idx.length; k++) {
@@ -146,8 +132,6 @@
     }
     return best;
   }
-
-  /* Fausse réponse Xano pour tester tant que l'URL n'est pas configurée */
   function demoData(days) {
     var out = {};
     SERIES.forEach(function (s, i) {
@@ -157,8 +141,6 @@
     });
     return out;
   }
-
-  /* Charge Chart.js une seule fois, même si Bubble réinjecte l'élément HTML */
   function loadChartJs() {
     if (window.Chart) return Promise.resolve();
     if (!window.__evoChartJs) {
@@ -175,7 +157,6 @@
     }
     return window.__evoChartJs;
   }
-
   function checkConfig() {
     var isDate = /^\d{4}-\d{2}-\d{2}$/;
     if (!String(CONFIG.account_id).trim()) throw new Error("account_id vide");
@@ -183,7 +164,6 @@
     if (!isDate.test(CONFIG.end_date)) throw new Error("date de fin invalide : \"" + CONFIG.end_date + "\"");
     if (CONFIG.start_date > CONFIG.end_date) throw new Error("la date de début est après la date de fin");
   }
-
   function fetchData() {
     if (CONFIG.url.indexOf("VOTRE-INSTANCE") !== -1) {
       return Promise.resolve(demoData(dayRange(CONFIG.start_date, CONFIG.end_date)));
@@ -194,17 +174,14 @@
       end_date: CONFIG.end_date
     };
     var asJson = JSON.stringify(inputs);
-    /* Format "formulaire" : pas de requête préalable OPTIONS, donc pas de blocage CORS sur les en-têtes */
     var asForm = Object.keys(inputs).map(function (k) {
       return encodeURIComponent(k) + "=" + encodeURIComponent(inputs[k]);
     }).join("&");
-
     return post("application/json", asJson).catch(function (err) {
       if (!err.network) throw err;
       return post("application/x-www-form-urlencoded", asForm);
     });
   }
-
   function post(contentType, body) {
     var controller = window.AbortController ? new AbortController() : null;
     var timer = setTimeout(function () { if (controller) controller.abort(); }, 15000);
@@ -226,13 +203,11 @@
       throw e;
     });
   }
-
   function render(data) {
     var days = dayRange(CONFIG.start_date, CONFIG.end_date);
     var idx = pointIndexes(days.length, CONFIG.points);
     var dayToPoint = {};
     days.forEach(function (day, d) { dayToPoint[day] = nearestPoint(idx, d); });
-
     var datasets = SERIES.map(function (s) {
       var sums = idx.map(function () { return 0; });
       (data[s.key] || []).forEach(function (row) {
@@ -250,10 +225,8 @@
         pointHoverRadius: 4
       };
     });
-
     var previous = Chart.getChart(canvas);
     if (previous) previous.destroy();
-
     var chart = new Chart(canvas, {
       type: "line",
       data: { labels: idx.map(function (i) { return formatLabel(days[i]); }), datasets: datasets },
@@ -277,8 +250,6 @@
         }
       }
     });
-
-    /* Légende HTML (cliquable pour masquer/afficher une courbe) */
     legend.innerHTML = "";
     SERIES.forEach(function (s, i) {
       var li = document.createElement("li");
@@ -291,10 +262,8 @@
       };
       legend.appendChild(li);
     });
-
     msg.style.display = "none";
   }
-
   Promise.resolve()
     .then(checkConfig)
     .then(function () { return Promise.all([loadChartJs(), fetchData()]); })
