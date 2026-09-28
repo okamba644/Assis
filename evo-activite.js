@@ -176,8 +176,8 @@
         }
       }
     });
-    legend.innerHTML = "";
-    SERIES.forEach(function (s, i) {
+    if (legend) legend.innerHTML = "";
+    if (legend) SERIES.forEach(function (s, i) {
       var li = document.createElement("li");
       li.innerHTML = '<i style="background:' + s.color + '"></i>' + s.label;
       li.onclick = function () {
