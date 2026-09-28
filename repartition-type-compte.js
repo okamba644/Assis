@@ -3,7 +3,7 @@
   var root = document.getElementById("rep-type-compte");
   if (!root) return;
   var CONFIG = {
-    url: "https://xuub-b4yt-tdhb.p7.xano.io/api:Wg9wVimD/accounts_by_type",
+    url: "https://xuub-b4yt-tdhb.p7.xano.io/api:3LHB5qKu/accounts_by_type",
     account_id: (root.getAttribute("data-account-id") || "").trim(),
     start_date: (root.getAttribute("data-start-date") || "").trim(),
     end_date: (root.getAttribute("data-end-date") || "").trim()
