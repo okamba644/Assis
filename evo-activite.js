@@ -126,13 +126,17 @@
     });
   }
   function render(data) {
+    if (window.console) console.log("[evo-activite] réponse Xano", JSON.stringify(data));
+    if (!data || typeof data !== "object") data = {};
     var days = dayRange(CONFIG.start_date, CONFIG.end_date);
     var idx = pointIndexes(days.length, CONFIG.points);
     var dayToPoint = {};
     days.forEach(function (day, d) { dayToPoint[day] = nearestPoint(idx, d); });
     var datasets = SERIES.map(function (s) {
       var sums = idx.map(function () { return 0; });
-      (data[s.key] || []).forEach(function (row) {
+      var rows = Array.isArray(data[s.key]) ? data[s.key] : [];
+      rows.forEach(function (row) {
+        if (!row) return;
         var k = dayToPoint[toDay(row.date)];
         if (k !== undefined) sums[k] += Number(row.count || 0);
       });
@@ -184,7 +188,16 @@
       };
       legend.appendChild(li);
     });
-    msg.style.display = "none";
+    var total = datasets.reduce(function (sum, ds) {
+      return sum + ds.data.reduce(function (a, b) { return a + b; }, 0);
+    }, 0);
+    if (total === 0) {
+      msg.textContent = "Aucune activité sur cette période";
+      msg.style.display = "flex";
+      msg.style.pointerEvents = "none";
+    } else {
+      msg.style.display = "none";
+    }
   }
   Promise.resolve()
     .then(checkConfig)
