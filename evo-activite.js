@@ -9,6 +9,22 @@
     end_date: (root.getAttribute("data-end-date") || "").trim(),
     points: Number(root.getAttribute("data-points")) || 4
   };
+  function isValidDate(s) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    var d = new Date(s + "T00:00:00Z");
+    return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }
+  function localDay(d) {
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  var now = new Date();
+  var monthStart = localDay(new Date(now.getFullYear(), now.getMonth(), 1));
+  var monthEnd = localDay(new Date(now.getFullYear(), now.getMonth() + 1, 0));
+  if (!isValidDate(CONFIG.start_date) || !isValidDate(CONFIG.end_date)) {
+    CONFIG.start_date = monthStart;
+    CONFIG.end_date = monthEnd;
+  }
   if (window.console) console.log("[evo-activite] démarrage", JSON.stringify(CONFIG));
   var SERIES = [
     { key: "comptes",      label: "Comptes",      color: "#2563eb" },
