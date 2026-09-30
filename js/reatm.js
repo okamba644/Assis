@@ -205,6 +205,21 @@
     });
   }
 
+  /* ---------- Retour arrière : rien de la transition ne doit subsister ----------
+     Un navigateur qui restaure la page depuis son cache la rend telle qu'elle a
+     été quittée, donc avec le calque plein écran de la transition encore posé.
+     On nettoie à chaque affichage, y compris lors d'une restauration. */
+  function clearTransition(){
+    document.querySelectorAll('.tx-clone').forEach(function(el){
+      if(el.parentNode)el.parentNode.removeChild(el);
+    });
+    document.body.classList.remove('no-scroll');
+    root.classList.remove('tx-leaving');
+    if(document.querySelector('.veil-in'))root.classList.add('tx-ready');
+  }
+  window.addEventListener('pageshow',clearTransition);
+  window.addEventListener('popstate',clearTransition);
+
   /* ---------- Transition card → plein écran → page ---------- */
   function goTo(url){ window.location.href=url; }
   document.querySelectorAll('a[data-transition]').forEach(function(link){
