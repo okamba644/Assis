@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=15"/>
+<link rel="stylesheet" href="../css/reatm.css?v=16"/>
 <style>
 /* ===== STUDIO — sombre, sonore, technique ===== */
 .phero{background:#050505;color:#fff}
@@ -24,23 +24,47 @@
 .phero .crumbs{color:rgba(255,255,255,.6)}
 /* la lumière suit le curseur */
 .phero-light{position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:radial-gradient(420px circle at var(--mx,50%) var(--my,40%),rgba(255,255,255,.14),transparent 70%)}
+  background:radial-gradient(440px circle at var(--mx,50%) var(--my,40%),rgba(225,27,34,.20),transparent 70%)}
 .st-wave{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 clamp(18px,3.2vw,64px) 26px;--wh:70px;opacity:.5}
 .st-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-.st-meta span{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.84)}
-.st-serv{background:var(--bg-alt)}
+.st-meta span{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:9px 16px;border-radius:999px;border:1px solid rgba(225,27,34,.45);color:#fff}
+.st-meta span:first-child{background:#e11b22;border-color:#e11b22}
+.st-serv{background:#0E0E0E;color:#fff}
+html[data-theme="light"] .st-serv{background:#F2F2F3;color:#111}
+.st-serv .sec-title{color:#fff}
+html[data-theme="light"] .st-serv .sec-title{color:#111}
+.st-serv .sec-lead{color:rgba(255,255,255,.62)}
+html[data-theme="light"] .st-serv .sec-lead{color:#5b5b5b}
+.st-serv .sec-num{-webkit-text-stroke-color:#e11b22}
+.st-serv .lines{border-top-color:rgba(255,255,255,.14)}
+html[data-theme="light"] .st-serv .lines{border-top-color:#e3e3e3}
+.st-serv .lines li{border-bottom-color:rgba(255,255,255,.12)}
+html[data-theme="light"] .st-serv .lines li{border-bottom-color:#e3e3e3}
+.st-serv .pcard{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
+html[data-theme="light"] .st-serv .pcard{background:#fff;border-color:#e3e3e3}
+.st-serv .pcard p{color:rgba(255,255,255,.66)}
+html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
+
+/* 02 — la section qui était blanche passe au noir : le studio est un lieu sombre */
+.st-mid{background:#050505;color:#fff}
+.st-mid .sec-title{color:#fff}
+.st-mid .sec-lead{color:rgba(255,255,255,.66)}
+.st-mid .sec-num{-webkit-text-stroke-color:#e11b22}
+.st-mid .pcard{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
+.st-mid .pcard p{color:rgba(255,255,255,.66)}
+.st-mid .pcard:hover{border-color:#e11b22;box-shadow:0 24px 50px rgba(225,27,34,.18)}
 .st-split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);align-items:start}
 .st-gear{background:#050505;color:#fff}
 .st-gear .sec-title,.st-gear .sec-lead{color:#fff}
 .st-gear .sec-lead{color:rgba(255,255,255,.66)}
-.st-gear .sec-num{-webkit-text-stroke-color:#fff}
+.st-gear .sec-num{-webkit-text-stroke-color:#e11b22}
 .gear{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.5vw,20px)}
 .gear div{
   border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:24px 20px;position:relative;overflow:hidden;
   transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .4s ease,background-color .4s ease;
 }
-.gear div::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.2,.8,.3,1)}
-.gear div:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.04)}
+.gear div::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#e11b22;transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.2,.8,.3,1)}
+.gear div:hover{transform:translateY(-8px);border-color:rgba(225,27,34,.55);background:rgba(225,27,34,.05)}
 .gear div:hover::after{transform:scaleX(1)}
 .gear b{display:block;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:12px}
 .gear span{font-size:13.6px;font-weight:500;line-height:1.75;color:rgba(255,255,255,.82)}
@@ -72,13 +96,13 @@
 <span class="brand-txt"><span class="n1">REATM</span><span class="n2">RECORDS</span></span>
 </a>
 <ul class="menu">
-<li><a href="../">Accueil</a></li>
-<li><a href="../maison/">Nos services</a></li>
-<li><a href="../academy/">Académie</a></li>
-<li><a href="../studio/">Studio</a></li>
-<li><a href="../production/">Production</a></li>
-<li><a href="../store/">Store</a></li>
-<li><a href="../events/">Events</a></li>
+<li><a href="../#top">Accueil</a></li>
+<li><a href="../#services">Nos services</a></li>
+<li><a href="../#academie">Académie</a></li>
+<li><a href="../#services">Studio</a></li>
+<li><a href="../#mission">Production</a></li>
+<li><a href="../#services">Store</a></li>
+<li><a href="../#services">Events</a></li>
 <li><a href="../#contact">Contact</a></li>
 </ul>
 <div class="hdr-actions">
@@ -99,13 +123,13 @@
 <div class="mnav-inner">
 <span class="mnav-label">Menu</span>
 <ul class="mnav-list">
-<li style="--i:0"><a href="../"><span>Accueil</span><span class="num">01</span></a></li>
-<li style="--i:1"><a href="../maison/"><span>Nos services</span><span class="num">02</span></a></li>
-<li style="--i:2"><a href="../academy/"><span>Académie</span><span class="num">03</span></a></li>
-<li style="--i:3"><a href="../studio/"><span>Studio</span><span class="num">04</span></a></li>
-<li style="--i:4"><a href="../production/"><span>Production</span><span class="num">05</span></a></li>
-<li style="--i:5"><a href="../store/"><span>Store</span><span class="num">06</span></a></li>
-<li style="--i:6"><a href="../events/"><span>Events</span><span class="num">07</span></a></li>
+<li style="--i:0"><a href="../#top"><span>Accueil</span><span class="num">01</span></a></li>
+<li style="--i:1"><a href="../#services"><span>Nos services</span><span class="num">02</span></a></li>
+<li style="--i:2"><a href="../#academie"><span>Académie</span><span class="num">03</span></a></li>
+<li style="--i:3"><a href="../#services"><span>Studio</span><span class="num">04</span></a></li>
+<li style="--i:4"><a href="../#mission"><span>Production</span><span class="num">05</span></a></li>
+<li style="--i:5"><a href="../#services"><span>Store</span><span class="num">06</span></a></li>
+<li style="--i:6"><a href="../#services"><span>Events</span><span class="num">07</span></a></li>
 <li style="--i:7"><a href="../#contact"><span>Contact</span><span class="num">08</span></a></li>
 </ul>
 <div class="mnav-foot">
@@ -147,7 +171,7 @@
 </div>
 </section>
 
-<section class="sec">
+<section class="sec st-mid">
 <div class="wrap">
 <div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">Production, répétition, mixage</h2></div></div>
 <div class="pgrid pgrid--3">
@@ -253,7 +277,7 @@
 
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=15"></script>
+<script src="../js/reatm.js?v=16"></script>
 <script>
 (function(){
   var h=document.getElementById('stLight');
