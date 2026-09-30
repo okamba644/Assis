@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="css/reatm.css?v=13"/>
+<link rel="stylesheet" href="css/reatm.css?v=15"/>
 </head>
 <body>
 <!-- Jeu d'icônes sociales embarqué : affichage garanti même si le CDN est bloqué -->
@@ -37,12 +37,12 @@
 </a>
 <ul class="menu">
 <li><a class="active" href="#top">Accueil</a></li>
-<li><a href="#services">Nos services</a></li>
-<li><a href="#academie">Académie</a></li>
-<li><a href="#services">Studio</a></li>
-<li><a href="#mission">Production</a></li>
-<li><a href="#services">Store</a></li>
-<li><a href="#services">Events</a></li>
+<li><a href="maison/">Nos services</a></li>
+<li><a href="academy/">Académie</a></li>
+<li><a href="studio/">Studio</a></li>
+<li><a href="production/">Production</a></li>
+<li><a href="store/">Store</a></li>
+<li><a href="events/">Events</a></li>
 <li><a href="#contact">Contact</a></li>
 </ul>
 <div class="hdr-actions">
@@ -63,12 +63,12 @@
 <span class="mnav-label">Menu</span>
 <ul class="mnav-list">
 <li style="--i:0"><a class="active" href="#top"><span>Accueil</span><span class="num">01</span></a></li>
-<li style="--i:1"><a href="#services"><span>Nos services</span><span class="num">02</span></a></li>
-<li style="--i:2"><a href="#academie"><span>Académie</span><span class="num">03</span></a></li>
-<li style="--i:3"><a href="#services"><span>Studio</span><span class="num">04</span></a></li>
-<li style="--i:4"><a href="#mission"><span>Production</span><span class="num">05</span></a></li>
-<li style="--i:5"><a href="#services"><span>Store</span><span class="num">06</span></a></li>
-<li style="--i:6"><a href="#services"><span>Events</span><span class="num">07</span></a></li>
+<li style="--i:1"><a href="maison/"><span>Nos services</span><span class="num">02</span></a></li>
+<li style="--i:2"><a href="academy/"><span>Académie</span><span class="num">03</span></a></li>
+<li style="--i:3"><a href="studio/"><span>Studio</span><span class="num">04</span></a></li>
+<li style="--i:4"><a href="production/"><span>Production</span><span class="num">05</span></a></li>
+<li style="--i:5"><a href="store/"><span>Store</span><span class="num">06</span></a></li>
+<li style="--i:6"><a href="events/"><span>Events</span><span class="num">07</span></a></li>
 <li style="--i:7"><a href="#contact"><span>Contact</span><span class="num">08</span></a></li>
 </ul>
 <div class="mnav-foot">
@@ -93,9 +93,9 @@
 <div class="hero-inner">
 <div>
 <div class="eyebrow reveal"><span class="dot"></span><span><b>REATM</b> RECORDS</span></div>
-<h1 class="reveal" style="--d:80ms">La maison de<br/><span class="red">production musicale</span>
-<span class="thin">qui vous accompagne<br/>dans tous vos projets</span></h1>
-<div class="brush reveal" style="--d:160ms"></div>
+<h1 class="reveal reveal-mask" style="--d:80ms"><span class="rm-i">La maison de<br/><span class="red">production musicale</span>
+<span class="thin">qui vous accompagne<br/>dans tous vos projets</span></span></h1>
+<div class="brush reveal reveal-line" style="--d:160ms"></div>
 <div class="hero-cta reveal" style="--d:220ms">
 <a class="btn btn-red" href="#services" style="padding:14px 26px;font-size:14px">Découvrir nos services <i class="fas fa-arrow-right"></i></a>
 <a class="btn btn-ghost" href="#academie" style="padding:14px 24px;font-size:14px">L'Académie <i class="fas fa-graduation-cap"></i></a>
@@ -120,7 +120,7 @@
 <div class="services-head">
 <div>
 <div class="tag reveal">Nos services</div>
-<h2 class="section-title reveal" style="--d:60ms">5 pôles, une seule vision :<br/><span class="y">votre réussite</span></h2>
+<h2 class="section-title reveal reveal-mask" style="--d:60ms"><span class="rm-i">5 pôles, une seule vision :<br/><span class="y">votre réussite</span></span></h2>
 </div>
 <div>
 <p class="lead reveal" style="--d:120ms">Studio, Académie, Production, Store, Events : cinq entités complémentaires qui répondent à chacun de vos besoins, de la première leçon jusqu'à la scène.</p>
@@ -231,16 +231,16 @@
 <div class="mission-grid">
 <div>
 <div class="tag reveal">Nos missions</div>
-<h2 class="reveal" style="--d:60ms">Promouvoir la <span class="y">musique</span>,<br/>partager l'Évangile</h2>
-<div class="brush2 reveal" style="--d:120ms"></div>
+<h2 class="reveal reveal-mask" style="--d:60ms"><span class="rm-i">Promouvoir la <span class="y">musique</span>,<br/>partager l'Évangile</span></h2>
+<div class="brush2 reveal reveal-line" style="--d:120ms"></div>
 <p class="lead reveal" style="--d:160ms">Cinq lettres, cinq mouvements : REATM porte son nom comme une feuille de route.</p>
 </div>
 <div class="mission-items">
-<div class="mi reveal" style="--d:0ms"><div class="mic ci-red">R</div><div><em>Recording</em><strong>Enregistrer</strong>Capter le son juste, dans des conditions professionnelles.</div></div>
-<div class="mi reveal" style="--d:90ms"><div class="mic ci-yellow y">E</div><div><em>Exposition</em><strong>Exposer</strong>Donner de la lumière aux talents et à leurs projets.</div></div>
-<div class="mi reveal" style="--d:180ms"><div class="mic ci-red">A</div><div><em>Assert</em><strong>Affirmer</strong>Poser une identité artistique claire et assumée.</div></div>
-<div class="mi reveal" style="--d:270ms"><div class="mic ci-yellow y">T</div><div><em>Touch</em><strong>Toucher</strong>Atteindre les cœurs, bien au-delà des oreilles.</div></div>
-<div class="mi reveal" style="--d:360ms"><div class="mic ci-red">M</div><div><em>Move</em><strong>Mouvoir</strong>Mettre en mouvement ceux qui écoutent.</div></div>
+<div class="mi reveal reveal-side" style="--d:0ms"><div class="mic ci-red">R</div><div><em>Recording</em><strong>Enregistrer</strong>Capter le son juste, dans des conditions professionnelles.</div></div>
+<div class="mi reveal reveal-side" style="--d:90ms"><div class="mic ci-yellow y">E</div><div><em>Exposition</em><strong>Exposer</strong>Donner de la lumière aux talents et à leurs projets.</div></div>
+<div class="mi reveal reveal-side" style="--d:180ms"><div class="mic ci-red">A</div><div><em>Assert</em><strong>Affirmer</strong>Poser une identité artistique claire et assumée.</div></div>
+<div class="mi reveal reveal-side" style="--d:270ms"><div class="mic ci-yellow y">T</div><div><em>Touch</em><strong>Toucher</strong>Atteindre les cœurs, bien au-delà des oreilles.</div></div>
+<div class="mi reveal reveal-side" style="--d:360ms"><div class="mic ci-red">M</div><div><em>Move</em><strong>Mouvoir</strong>Mettre en mouvement ceux qui écoutent.</div></div>
 </div>
 </div>
 <div class="values reveal" style="--d:200ms">
@@ -256,7 +256,7 @@
 </div>
 <div class="aca-mid">
 <div class="tag-sm reveal">REATM Academy</div>
-<h2 class="reveal" style="--d:60ms">Votre talent mérite<br/>le bon <span class="y">accompagnement</span></h2>
+<h2 class="reveal reveal-mask" style="--d:60ms"><span class="rm-i">Votre talent mérite<br/>le bon <span class="y">accompagnement</span></span></h2>
 <p class="reveal" style="--d:120ms">Centre de formation en musique et en média. En chant, on travaille la texture vocale, la justesse, le souffle, la puissance et les harmonies. Côté instruments : batterie, piano, guitare, guitare basse et guitare solo.</p>
 <div class="aca-stats">
 <div class="st reveal" style="--d:140ms"><b>04</b><span>formations</span></div>
@@ -364,6 +364,6 @@
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
 
-<script src="js/reatm.js?v=13"></script>
+<script src="js/reatm.js?v=15"></script>
 </body>
 </html>
