@@ -12,15 +12,24 @@
     icon.setAttribute('href',(t==='dark')?'#ic-sun':'#ic-moon');
     if(meta) meta.setAttribute('content',t==='dark'?'#000000':'#ffffff');
   }
-  var saved='light';
-  try{saved=localStorage.getItem('reatm-theme')||'light';}catch(e){}
-  apply(saved);
-  btn.addEventListener('click',function(){
-    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
-    apply(next);
-    try{localStorage.setItem('reatm-theme',next);}catch(e){}
-    btn.classList.remove('spin');void btn.offsetWidth;btn.classList.add('spin');
-  });
+  /* Une page peut imposer son thème : elle porte alors data-theme-lock.
+     La préférence enregistrée n'est ni lue ni modifiée, et le bouton de
+     bascule est retiré puisqu'il n'aurait aucun effet. */
+  var verrou=root.getAttribute('data-theme-lock');
+  if(verrou){
+    apply(verrou);
+    if(btn&&btn.parentNode)btn.parentNode.removeChild(btn);
+  }else{
+    var saved='light';
+    try{saved=localStorage.getItem('reatm-theme')||'light';}catch(e){}
+    apply(saved);
+    btn.addEventListener('click',function(){
+      var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+      apply(next);
+      try{localStorage.setItem('reatm-theme',next);}catch(e){}
+      btn.classList.remove('spin');void btn.offsetWidth;btn.classList.add('spin');
+    });
+  }
 
   /* ---------- Menu hamburger plein écran ---------- */
   var burger=document.getElementById('burger');
