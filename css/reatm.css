@@ -1007,3 +1007,62 @@ html.tx-ready .veil-in{transform:translateY(-101%);opacity:0}
   .cur,.cur-dot{display:none}
   .veil,.veil-in,.tx-clone{display:none!important}
 }
+
+/* =========================================================
+   PIED DE PAGE AUX COULEURS DE L'ENTITÉ
+   Seules les pages portant .f-tinted sont concernées : Academy,
+   Production et Store. Studio, l'accueil et la maison gardent
+   l'accent rouge et jaune de la maison.
+   ========================================================= */
+body[data-entity="academy"] .f-tinted{
+  --facc:#2563EB;--facc-2:#60A5FA;
+  --facc-soft:rgba(37,99,235,.16);--facc-line:rgba(37,99,235,.34);
+  --faura-1:rgba(37,99,235,.30);--faura-2:rgba(96,165,250,.20);
+}
+body[data-entity="production"] .f-tinted{
+  --facc:#FACC15;--facc-2:#FDE047;
+  --facc-soft:rgba(250,204,21,.16);--facc-line:rgba(250,204,21,.36);
+  --faura-1:rgba(250,204,21,.26);--faura-2:rgba(253,224,71,.17);
+}
+body[data-entity="store"] .f-tinted{
+  --facc:#FFFFFF;--facc-2:#8A8A8A;
+  --facc-soft:rgba(255,255,255,.10);--facc-line:rgba(255,255,255,.26);
+  --faura-1:rgba(255,255,255,.13);--faura-2:rgba(138,138,138,.12);
+}
+
+/* halos de fond */
+.f-tinted .f-aura .a1{background:radial-gradient(circle,var(--faura-1),transparent 66%)}
+.f-tinted .f-aura .a2{background:radial-gradient(circle,var(--faura-2),transparent 66%)}
+.f-tinted .f-aura .a3{background:radial-gradient(circle,var(--faura-2),transparent 70%)}
+
+/* filets sous les intitulés de colonne */
+.f-tinted .f-cols h4::after{background:linear-gradient(90deg,var(--facc),var(--facc-2))}
+
+/* pastilles de contact */
+.f-tinted .f-line .fi{background:var(--facc-soft);color:var(--facc);border-color:var(--facc-line)}
+.f-tinted .f-line.y .fi{background:var(--facc-soft);color:var(--facc-2);border-color:var(--facc-line)}
+
+/* liens de navigation */
+.f-tinted .f-nav a::before{background:var(--facc)}
+
+/* réseaux sociaux */
+.f-tinted .f-soc a::before{background:linear-gradient(135deg,var(--facc),var(--facc-2))}
+body[data-entity="production"] .f-tinted .f-soc a:hover,
+body[data-entity="store"] .f-tinted .f-soc a:hover{color:#050505}
+.f-tinted .f-handle i{color:var(--facc)}
+
+/* infolettre */
+.f-tinted .f-form input:focus{border-color:var(--facc);box-shadow:0 0 0 4px var(--facc-soft)}
+.f-tinted .f-form .btn-red{background:var(--facc);color:#050505}
+body[data-entity="academy"] .f-tinted .f-form .btn-red{color:#fff}
+.f-tinted .f-form .btn-red:hover{background:var(--facc-2);box-shadow:0 14px 28px var(--facc-soft)}
+.f-tinted .f-note i{color:var(--facc)}
+
+/* retour en haut, dans le pied de page et en flottant */
+.f-tinted .to-top{background:var(--facc);color:#050505}
+body[data-entity="academy"] .f-tinted .to-top{color:#fff}
+.f-tinted .f-bottom-links a:hover{color:var(--facc)}
+body[data-entity="academy"] .fab,
+body[data-entity="production"] .fab,
+body[data-entity="store"] .fab{background:var(--acc);color:#050505;box-shadow:0 14px 30px var(--glow)}
+body[data-entity="academy"] .fab{color:#fff}
