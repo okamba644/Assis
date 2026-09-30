@@ -1064,3 +1064,19 @@ body[data-entity="academy"] .fab,
 body[data-entity="production"] .fab,
 body[data-entity="store"] .fab{background:var(--acc);color:#050505;box-shadow:0 14px 30px var(--glow)}
 body[data-entity="academy"] .fab{color:#fff}
+
+/* ===== LES TROIS PÔLES DE L'ACADÉMIE, VUS DEPUIS L'ACCUEIL =====
+   Trois libellés lisibles d'un coup d'œil : le détail est sur la page
+   REATM Academy, ici on annonce simplement la structure. */
+.aca-poles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px;max-width:600px}
+.aca-poles>*{min-width:0}
+.aca-poles .ap{
+  border:1px solid var(--aca-line,var(--border));border-radius:14px;
+  padding:16px 15px;background:var(--aca-soft,transparent);
+  transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .4s ease;
+}
+.aca-poles .ap:hover{transform:translateY(-5px);border-color:var(--aca,var(--red))}
+.aca-poles i{font-size:15px;color:var(--aca,var(--red));display:block;margin-bottom:11px}
+.aca-poles b{display:block;font-size:13.4px;font-weight:700;letter-spacing:-.2px;margin-bottom:5px}
+.aca-poles span{display:block;font-size:11.4px;line-height:1.65;color:var(--muted)}
+@media(max-width:760px){.aca-poles{grid-template-columns:1fr;gap:8px}.aca-poles i{margin-bottom:8px}}
