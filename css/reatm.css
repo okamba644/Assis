@@ -150,6 +150,13 @@ header.scrolled .nav{padding:8px 0}
 .menu a:hover::after{left:13px;right:13px}
 .menu .active{color:var(--red);font-weight:600;opacity:1}
 .menu .active::after{left:13px;right:13px;background:var(--red)}
+/* repère de page courante : sur une page d'entité il prend sa couleur */
+body[data-entity] .menu .active{color:var(--acc)}
+body[data-entity] .menu .active::after{background:var(--acc)}
+.menu .active::after{height:2.5px;border-radius:2px}
+body[data-entity] .mnav-list a.active{color:var(--acc)}
+body[data-entity] .mnav-list a.active::before{background:var(--acc)}
+html[data-theme="dark"] body[data-entity] .mnav-list a.active{color:var(--acc)}
 .hdr-actions{display:flex;align-items:center;gap:9px}
 .icon-btn{
   width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;
