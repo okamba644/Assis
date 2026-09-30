@@ -871,7 +871,7 @@ footer .wrap{position:relative;z-index:2}
    Chaque entité pose --acc / --acc-img / --glow sur <body>
    ========================================================= */
 body[data-entity]{--acc:#111111;--acc-img:#ffffff;--glow:rgba(0,0,0,.18)}
-body[data-entity="studio"]{--acc:#ffffff;--acc-img:#ffffff;--glow:rgba(255,255,255,.16)}
+body[data-entity="studio"]{--acc:#e11b22;--acc-img:#FF4A50;--glow:rgba(225,27,34,.26)}
 body[data-entity="academy"]{--acc:#2563EB;--acc-img:#93C5FD;--glow:rgba(37,99,235,.32)}
 body[data-entity="production"]{--acc:#FACC15;--acc-img:#FACC15;--glow:rgba(250,204,21,.34)}
 body[data-entity="store"]{--acc:#111111;--acc-img:#ffffff;--glow:rgba(17,17,17,.14)}
@@ -941,8 +941,9 @@ body[data-entity="maison"]{--acc:#e11b22;--acc-img:#ffffff;--glow:rgba(225,27,34
 .btn-acc{
   background:var(--acc);color:#050505;padding:17px 34px;font-size:14px;letter-spacing:.4px;
 }
-body[data-entity="studio"] .btn-acc,body[data-entity="events"] .btn-acc{background:var(--acc);color:#050505}
-html[data-theme="light"] body[data-entity="studio"] .btn-acc{background:#111;color:#fff}
+body[data-entity="events"] .btn-acc{background:var(--acc);color:#050505}
+body[data-entity="studio"] .btn-acc{background:#e11b22;color:#fff}
+body[data-entity="studio"] .btn-acc:hover{background:#c5161c;box-shadow:0 16px 34px rgba(225,27,34,.35)}
 .btn-acc:hover{transform:translateY(-3px);box-shadow:0 16px 34px var(--glow)}
 
 /* waveform réutilisable */
