@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=29"/>
+<link rel="stylesheet" href="../css/reatm.css?v=30"/>
 <style>
 /* ===== LA MAISON — vue d'ensemble, waveform géante ===== */
 .phero{background:#050505;color:#fff;overflow:hidden}
@@ -233,46 +233,109 @@
 </section>
 
 <!-- ======================= ACADEMIE ======================= -->
-<section class="academie" id="academie">
-<div class="aca-photo">
-<div class="sc">Chaque voix<br/>a sa place</div>
+<!-- ======================= APERÇU DES PÔLES ======================= -->
+<section class="spot" id="apercu" aria-label="Aperçu des pôles">
+<div class="wrap spot-head">
+<div class="spot-tabs" role="tablist" aria-label="Choisir un pôle"><button type="button" role="tab" id="tab-studio" aria-controls="spot-studio" data-i="0" aria-selected="true" tabindex="0">Studio</button><button type="button" role="tab" id="tab-academy" aria-controls="spot-academy" data-i="1" aria-selected="false" tabindex="-1">Académie</button><button type="button" role="tab" id="tab-production" aria-controls="spot-production" data-i="2" aria-selected="false" tabindex="-1">Production</button><button type="button" role="tab" id="tab-store" aria-controls="spot-store" data-i="3" aria-selected="false" tabindex="-1">Store</button><button type="button" role="tab" id="tab-events" aria-controls="spot-events" data-i="4" aria-selected="false" tabindex="-1">Events</button><span class="spot-ink" aria-hidden="true"></span></div>
+<div class="spot-prog" aria-hidden="true"><span></span></div>
+</div>
+<div class="spot-stage">
+<article class="spot-slide academie on" data-ent="studio" id="spot-studio" role="tabpanel" aria-labelledby="tab-studio">
+<div class="aca-photo" style="background-image:url('../assets/studio-nuit.png')">
+<div class="sc" style="--d:74ms">Le son juste,<br/>la bonne prise</div>
 </div>
 <div class="aca-mid">
-<div class="tag-sm reveal">REATM Academy</div>
-<h2 class="reveal reveal-mask" style="--d:60ms"><span class="rm-i">Votre talent mérite<br/>le bon <span class="y">accompagnement</span></span></h2>
-<p class="reveal" style="--d:120ms">Centre de formation organisé en <b>trois pôles</b> : la formation musicale, une bibliothèque de ressources et la formation média. En chant, on travaille la texture vocale, la justesse, le souffle, la puissance et les harmonies. Côté instruments : batterie, piano, guitare, guitare basse et guitare solo.</p>
-<div class="aca-poles">
-<div class="ap reveal" style="--d:140ms"><i class="fas fa-music"></i><b>Formation musicale</b><span>Guitare · Batterie · Piano · Voix</span></div>
-<div class="ap reveal" style="--d:210ms"><i class="fas fa-book-open"></i><b>Bibliothèque</b><span>Accords des chants, partitions et supports en PDF</span></div>
-<div class="ap reveal" style="--d:280ms"><i class="fas fa-palette"></i><b>Formation média</b><span>Canva, Photoshop, CapCut, montage vidéo</span></div>
-</div>
-<div class="aca-stats">
-<div class="st reveal" style="--d:140ms"><b>04</b><span>formations</span></div>
-<div class="st reveal" style="--d:200ms"><b>03</b><span>niveaux</span></div>
-<div class="st reveal" style="--d:260ms"><b>02</b><span>sessions</span></div>
-<div class="st reveal" style="--d:320ms"><b>1h30</b><span>par séance</span></div>
-</div>
-<div class="instruments">
-<div class="inst reveal" style="--d:0ms"><div class="ib"><i class="fas fa-microphone-alt"></i></div>Chant</div>
-<div class="inst reveal" style="--d:70ms"><div class="ib"><i class="fas fa-grip-lines-vertical"></i></div>Piano</div>
-<div class="inst reveal" style="--d:140ms"><div class="ib"><i class="fas fa-drum"></i></div>Batterie</div>
-<div class="inst reveal" style="--d:210ms"><div class="ib"><i class="fas fa-guitar"></i></div>Guitare</div>
-<div class="inst reveal" style="--d:280ms"><div class="ib"><i class="fas fa-guitar"></i></div>Basse</div>
-</div>
+<div class="tag-sm" style="--d:0ms">REATM Studio</div>
+<h2 style="--d:50ms">Votre son mérite<br/>le bon <span class="y">studio</span></h2>
+<p style="--d:99ms">Votre espace d'enregistrement, de production et de répétition. Musicien, artiste ou producteur : l'équipe vous accompagne de la première prise jusqu'au master.</p>
+<div class="aca-poles"><div class="ap" style="--d:149ms"><i class="fas fa-microphone-alt"></i><b>Enregistrement</b><span>Voix, instruments, podcast et émission</span></div><div class="ap" style="--d:192ms"><i class="fas fa-sliders-h"></i><b>Production</b><span>Arrangement, mixage et mastering</span></div><div class="ap" style="--d:236ms"><i class="fas fa-drum"></i><b>Répétition</b><span>Une salle équipée, à l'heure</span></div></div>
+<div class="aca-stats"><div class="st" style="--d:285ms"><b>Prise</b><span>enregistrement</span></div><div class="st" style="--d:322ms"><b>Mix</b><span>mixage</span></div><div class="st" style="--d:360ms"><b>Master</b><span>finition</span></div><div class="st" style="--d:397ms"><b>Répèt</b><span>salle équipée</span></div></div>
+<div class="instruments"><div class="inst" style="--d:434ms"><div class="ib"><i class="fas fa-microphone-alt"></i></div>Voix</div><div class="inst" style="--d:471ms"><div class="ib"><i class="fas fa-headphones"></i></div>Écoute</div><div class="inst" style="--d:508ms"><div class="ib"><i class="fas fa-sliders-h"></i></div>Mixage</div><div class="inst" style="--d:546ms"><div class="ib"><i class="fas fa-guitar"></i></div>Guitare</div><div class="inst" style="--d:583ms"><div class="ib"><i class="fas fa-drum"></i></div>Batterie</div></div>
 </div>
 <aside class="aca-side">
-<div class="dark-script only-dark">Transformez votre<br/>passion en<br/><em>profession</em></div>
-<div class="side-title only-light"><span>Des cours pour tous<br/><u>les niveaux</u></span></div>
-<ul class="side-list">
-<li><i class="fas fa-layer-group"></i><span><b>Trois niveaux</b><br/><span class="m">Débutant C3 (3 à 6 mois) · Intermédiaire C2 (3 à 6 mois) · Avancé C1 (3 mois)</span></span></li>
-<li><i class="far fa-clock"></i><span><b>Session normale</b><br/><span class="m">1 séance / semaine — 4 séances / mois</span></span></li>
-<li><i class="fas fa-bolt"></i><span><b>Session accélérée</b><br/><span class="m">2 à 3 séances / semaine — 8 à 12 séances / mois</span></span></li>
-<li><i class="far fa-calendar-alt"></i><span><b>Mercredi, Jeudi, Samedi (à partir de 19h)</b><br/><span class="m">Dimanche (à partir de 18h)</span></span></li>
-<li><i class="fas fa-book-open"></i><span><b>Bibliothèque de ressources</b><br/><span class="m">Accords des chants, partitions et supports de cours en PDF</span></span></li>
-<li><i class="fas fa-photo-video"></i><span><b>Formation média</b><br/><span class="m">Canva, Photoshop, CapCut, montage vidéo, traitement photo</span></span></li>
-</ul>
-<a class="btn btn-red" href="#contact">S'inscrire dès aujourd'hui <i class="fas fa-arrow-right"></i></a>
+<div class="dark-script only-dark" style="--d:87ms">Entrez en cabine,<br/>on s'occupe du <em>reste</em></div>
+<div class="side-title only-light" style="--d:87ms"><span>Du premier jet<br/><u>au master</u></span></div>
+<ul class="side-list"><li style="--d:186ms"><i class="fas fa-microphone-alt"></i><span><b>Enregistrement</b><br/><span class="m">Voix, instruments, podcast et émission, en conditions professionnelles.</span></span></li><li style="--d:236ms"><i class="fas fa-sliders-h"></i><span><b>Production musicale</b><br/><span class="m">Arrangement, mixage et mastering jusqu'au rendu final.</span></span></li><li style="--d:285ms"><i class="fas fa-drum"></i><span><b>Salle de répétition</b><br/><span class="m">Un espace équipé pour préparer la scène ou la séance.</span></span></li><li style="--d:335ms"><i class="fas fa-compact-disc"></i><span><b>De l'idée au master</b><br/><span class="m">Un accompagnement de bout en bout, à votre rythme.</span></span></li></ul>
+<a class="btn btn-red" style="--d:471ms" href="../studio/">Réserver une session <i class="fas fa-arrow-right"></i></a>
 </aside>
+</article>
+<article class="spot-slide academie" data-ent="academy" id="spot-academy" role="tabpanel" aria-labelledby="tab-academy">
+<div class="aca-photo" style="background-image:url('../assets/academy-cours.jpg')">
+<div class="sc" style="--d:74ms">Chaque voix<br/>a sa place</div>
+</div>
+<div class="aca-mid">
+<div class="tag-sm" style="--d:0ms">REATM Academy</div>
+<h2 style="--d:50ms">Votre talent mérite<br/>le bon <span class="y">accompagnement</span></h2>
+<p style="--d:99ms">Centre de formation organisé en <b>trois pôles</b> : la formation musicale, une bibliothèque de ressources et la formation média. En chant, on travaille la texture vocale, la justesse, le souffle, la puissance et les harmonies.</p>
+<div class="aca-poles"><div class="ap" style="--d:149ms"><i class="fas fa-music"></i><b>Formation musicale</b><span>Guitare · Batterie · Piano · Voix</span></div><div class="ap" style="--d:192ms"><i class="fas fa-book-open"></i><b>Bibliothèque</b><span>Accords des chants, partitions et supports en PDF</span></div><div class="ap" style="--d:236ms"><i class="fas fa-palette"></i><b>Formation média</b><span>Canva, Photoshop, CapCut, montage vidéo</span></div></div>
+<div class="aca-stats"><div class="st" style="--d:285ms"><b>04</b><span>formations</span></div><div class="st" style="--d:322ms"><b>03</b><span>niveaux</span></div><div class="st" style="--d:360ms"><b>02</b><span>sessions</span></div><div class="st" style="--d:397ms"><b>1h30</b><span>par séance</span></div></div>
+<div class="instruments"><div class="inst" style="--d:434ms"><div class="ib"><i class="fas fa-microphone-alt"></i></div>Chant</div><div class="inst" style="--d:471ms"><div class="ib"><i class="fas fa-grip-lines-vertical"></i></div>Piano</div><div class="inst" style="--d:508ms"><div class="ib"><i class="fas fa-drum"></i></div>Batterie</div><div class="inst" style="--d:546ms"><div class="ib"><i class="fas fa-guitar"></i></div>Guitare</div><div class="inst" style="--d:583ms"><div class="ib"><i class="fas fa-guitar"></i></div>Basse</div></div>
+</div>
+<aside class="aca-side">
+<div class="dark-script only-dark" style="--d:87ms">Transformez votre<br/>passion en <em>profession</em></div>
+<div class="side-title only-light" style="--d:87ms"><span>Des cours pour tous<br/><u>les niveaux</u></span></div>
+<ul class="side-list"><li style="--d:186ms"><i class="fas fa-layer-group"></i><span><b>Trois niveaux</b><br/><span class="m">Débutant C3 (3 à 6 mois) · Intermédiaire C2 (3 à 6 mois) · Avancé C1 (3 mois)</span></span></li><li style="--d:236ms"><i class="far fa-clock"></i><span><b>Session normale</b><br/><span class="m">1 séance / semaine — 4 séances / mois</span></span></li><li style="--d:285ms"><i class="fas fa-bolt"></i><span><b>Session accélérée</b><br/><span class="m">2 à 3 séances / semaine — 8 à 12 séances / mois</span></span></li><li style="--d:335ms"><i class="far fa-calendar-alt"></i><span><b>Mercredi, Jeudi, Samedi (à partir de 19h)</b><br/><span class="m">Dimanche (à partir de 18h)</span></span></li></ul>
+<a class="btn btn-red" style="--d:471ms" href="../academy/">Découvrir l'Académie <i class="fas fa-arrow-right"></i></a>
+</aside>
+</article>
+<article class="spot-slide academie" data-ent="production" id="spot-production" role="tabpanel" aria-labelledby="tab-production">
+<div class="aca-photo" style="background-image:url('../assets/casque.png')">
+<div class="sc" style="--d:74ms">L'idée<br/>devient création</div>
+</div>
+<div class="aca-mid">
+<div class="tag-sm" style="--d:0ms">REATM Prod</div>
+<h2 style="--d:50ms">Vos idées méritent<br/>le bon <span class="y">format</span></h2>
+<p style="--d:99ms">L'espace créatif de la maison — la REATM Home Kitchen. C'est là que les idées deviennent des formats : paroles travaillées, plateaux, temps de prière, images et récits.</p>
+<div class="aca-poles"><div class="ap" style="--d:149ms"><i class="fas fa-pen-nib"></i><b>Paroles & formats</b><span>Écriture, structure, direction artistique</span></div><div class="ap" style="--d:192ms"><i class="fas fa-video"></i><b>Plateaux REATM</b><span>Émissions, podcasts et captations</span></div><div class="ap" style="--d:236ms"><i class="fas fa-compact-disc"></i><b>Sorties du label</b><span>Les projets portés par la maison</span></div></div>
+<div class="aca-stats"><div class="st" style="--d:285ms"><b>Paroles</b><span>écriture</span></div><div class="st" style="--d:322ms"><b>Plateaux</b><span>tournage</span></div><div class="st" style="--d:360ms"><b>Prière</b><span>temps forts</span></div><div class="st" style="--d:397ms"><b>Label</b><span>sorties</span></div></div>
+<div class="instruments"><div class="inst" style="--d:434ms"><div class="ib"><i class="fas fa-pen-nib"></i></div>Écriture</div><div class="inst" style="--d:471ms"><div class="ib"><i class="fas fa-video"></i></div>Tournage</div><div class="inst" style="--d:508ms"><div class="ib"><i class="fas fa-film"></i></div>Montage</div><div class="inst" style="--d:546ms"><div class="ib"><i class="fas fa-podcast"></i></div>Podcast</div><div class="inst" style="--d:583ms"><div class="ib"><i class="fas fa-compact-disc"></i></div>Label</div></div>
+</div>
+<aside class="aca-side">
+<div class="dark-script only-dark" style="--d:87ms">Vos idées méritent<br/>un <em>format</em></div>
+<div class="side-title only-light" style="--d:87ms"><span>La cuisine<br/><u>créative</u></span></div>
+<ul class="side-list"><li style="--d:186ms"><i class="fas fa-pen-nib"></i><span><b>La parole, travaillée</b><br/><span class="m">On écrit, on structure, on affine avant d'enregistrer.</span></span></li><li style="--d:236ms"><i class="fas fa-video"></i><span><b>Des plateaux</b><br/><span class="m">Émissions, podcasts et captations, pensés pour être vus.</span></span></li><li style="--d:285ms"><i class="fas fa-hands"></i><span><b>Temps de prière</b><br/><span class="m">Des formats dédiés, portés par la maison.</span></span></li><li style="--d:335ms"><i class="fas fa-film"></i><span><b>Raconter en images</b><br/><span class="m">Courts métrages, récits et contenus musicaux.</span></span></li></ul>
+<a class="btn btn-red" style="--d:471ms" href="../production/">Voir nos créations <i class="fas fa-arrow-right"></i></a>
+</aside>
+</article>
+<article class="spot-slide academie" data-ent="store" id="spot-store" role="tabpanel" aria-labelledby="tab-store">
+<div class="aca-photo" style="background-image:url('../assets/store.png')">
+<div class="sc" style="--d:74ms">Le bon matériel,<br/>au bon moment</div>
+</div>
+<div class="aca-mid">
+<div class="tag-sm" style="--d:0ms">REATM Store</div>
+<h2 style="--d:50ms">Votre musique mérite<br/>le bon <span class="y">matériel</span></h2>
+<p style="--d:99ms">Les instruments et les équipements pour donner vie à votre musique. Amateur ou professionnel, pour vous, en groupe ou pour couvrir un événement : à louer, à acheter, à vendre.</p>
+<div class="aca-poles"><div class="ap" style="--d:149ms"><i class="fas fa-guitar"></i><b>Instruments</b><span>Batterie, guitares, piano et synthé</span></div><div class="ap" style="--d:192ms"><i class="fas fa-volume-up"></i><b>Sonorisation</b><span>Table de mixage, micros, enceintes et retours</span></div><div class="ap" style="--d:236ms"><i class="fas fa-tags"></i><b>Louer ou acheter</b><span>Neuf, occasion et dépôt-vente</span></div></div>
+<div class="aca-stats"><div class="st" style="--d:285ms"><b>Louer</b><span>matériel</span></div><div class="st" style="--d:322ms"><b>Acheter</b><span>neuf & occasion</span></div><div class="st" style="--d:360ms"><b>Vendre</b><span>dépôt-vente</span></div><div class="st" style="--d:397ms"><b>Sono</b><span>événements</span></div></div>
+<div class="instruments"><div class="inst" style="--d:434ms"><div class="ib"><i class="fas fa-drum"></i></div>Batterie</div><div class="inst" style="--d:471ms"><div class="ib"><i class="fas fa-guitar"></i></div>Guitare</div><div class="inst" style="--d:508ms"><div class="ib"><i class="fas fa-grip-lines-vertical"></i></div>Piano</div><div class="inst" style="--d:546ms"><div class="ib"><i class="fas fa-microphone"></i></div>Micros</div><div class="inst" style="--d:583ms"><div class="ib"><i class="fas fa-volume-up"></i></div>Enceintes</div></div>
+</div>
+<aside class="aca-side">
+<div class="dark-script only-dark" style="--d:87ms">Équipez-vous<br/>sans vous <em>ruiner</em></div>
+<div class="side-title only-light" style="--d:87ms"><span>Le showroom<br/><u>de la maison</u></span></div>
+<ul class="side-list"><li style="--d:186ms"><i class="fas fa-guitar"></i><span><b>Instruments</b><br/><span class="m">Batterie, guitare acoustique et électro-acoustique, piano synthé.</span></span></li><li style="--d:236ms"><i class="fas fa-volume-up"></i><span><b>Sonorisation</b><br/><span class="m">Table de mixage, micros filaires et sans fil, enceintes et retours.</span></span></li><li style="--d:285ms"><i class="fas fa-tags"></i><span><b>Louer, acheter, vendre</b><br/><span class="m">Pour un projet, un événement ou une installation durable.</span></span></li><li style="--d:335ms"><i class="fas fa-headphones"></i><span><b>Conseil</b><br/><span class="m">On vous oriente vers ce qui sert vraiment votre projet.</span></span></li></ul>
+<a class="btn btn-red" style="--d:471ms" href="../store/">Voir le matériel <i class="fas fa-arrow-right"></i></a>
+</aside>
+</article>
+<article class="spot-slide academie" data-ent="events" id="spot-events" role="tabpanel" aria-labelledby="tab-events">
+<div class="aca-photo" style="background-image:url('../assets/production.png')">
+<div class="sc" style="--d:74ms">De la première idée<br/>à la dernière lumière</div>
+</div>
+<div class="aca-mid">
+<div class="tag-sm" style="--d:0ms">REATM Events</div>
+<h2 style="--d:50ms">Vos moments méritent<br/>la bonne <span class="y">mise en scène</span></h2>
+<p style="--d:99ms">Nous donnons vie à vos événements. Organisation interne et prestations externes : REATM Events s'occupe de tout, de la première idée à la dernière lumière.</p>
+<div class="aca-poles"><div class="ap" style="--d:149ms"><i class="fas fa-music"></i><b>Scène & concerts</b><span>Concerts, soirées et plateaux live</span></div><div class="ap" style="--d:192ms"><i class="fas fa-chalkboard-teacher"></i><b>Rencontres</b><span>Conférences et séminaires</span></div><div class="ap" style="--d:236ms"><i class="fas fa-ring"></i><b>Célébrations</b><span>Mariages et anniversaires</span></div></div>
+<div class="aca-stats"><div class="st" style="--d:285ms"><b>Concerts</b><span>scène</span></div><div class="st" style="--d:322ms"><b>Conférences</b><span>rencontres</span></div><div class="st" style="--d:360ms"><b>Mariages</b><span>célébrations</span></div><div class="st" style="--d:397ms"><b>Soirées</b><span>ambiance</span></div></div>
+<div class="instruments"><div class="inst" style="--d:434ms"><div class="ib"><i class="fas fa-music"></i></div>Concert</div><div class="inst" style="--d:471ms"><div class="ib"><i class="fas fa-chalkboard-teacher"></i></div>Conférence</div><div class="inst" style="--d:508ms"><div class="ib"><i class="fas fa-users"></i></div>Séminaire</div><div class="inst" style="--d:546ms"><div class="ib"><i class="fas fa-ring"></i></div>Mariage</div><div class="inst" style="--d:583ms"><div class="ib"><i class="fas fa-glass-cheers"></i></div>Soirée</div></div>
+</div>
+<aside class="aca-side">
+<div class="dark-script only-dark" style="--d:87ms">Un événement,<br/>zéro <em>imprévu</em></div>
+<div class="side-title only-light" style="--d:87ms"><span>La scène<br/><u>et les coulisses</u></span></div>
+<ul class="side-list"><li style="--d:186ms"><i class="fas fa-music"></i><span><b>Ce que nous organisons</b><br/><span class="m">Nos propres concerts, soirées et rencontres.</span></span></li><li style="--d:236ms"><i class="fas fa-chalkboard-teacher"></i><span><b>Ce que nous couvrons</b><br/><span class="m">Conférences, séminaires, mariages et anniversaires.</span></span></li><li style="--d:285ms"><i class="fas fa-volume-up"></i><span><b>Tout au même endroit</b><br/><span class="m">Son, lumière et matériel viennent de la maison.</span></span></li><li style="--d:335ms"><i class="fas fa-lightbulb"></i><span><b>De bout en bout</b><br/><span class="m">De la première idée à la dernière lumière.</span></span></li></ul>
+<a class="btn btn-red" style="--d:471ms" href="../events/">Organiser un événement <i class="fas fa-arrow-right"></i></a>
+</aside>
+</article>
+</div>
 </section>
 
 <section class="pcta mz-cta">
@@ -358,7 +421,84 @@
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=29"></script>
+<script src="../js/reatm.js?v=30"></script>
+<script>
+/* ===== Aperçu des pôles : le panneau défile d'un pôle à l'autre =====
+   Les cinq plans sont dans la page, empilés ; on ne fait que déplacer la
+   classe « on ». La minuterie s'arrête dès que le pointeur ou le clavier
+   entre dans la section, et ne tourne pas quand elle est hors de l'écran. */
+(function(){
+  var sec=document.getElementById('apercu');
+  if(!sec)return;
+  var plans=[].slice.call(sec.querySelectorAll('.spot-slide'));
+  var onglets=[].slice.call(sec.querySelectorAll('.spot-tabs button'));
+  var trait=sec.querySelector('.spot-ink');
+  var prog=sec.querySelector('.spot-prog');
+  if(plans.length<2)return;
+  var doux=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var DUREE=7000, i=0, minuteur=null, visible=false, suspendu=false;
+
+  function placeTrait(){
+    var b=onglets[i], p=b.parentNode;
+    trait.style.width=b.offsetWidth+'px';
+    trait.style.transform='translateX('+(b.offsetLeft-p.scrollLeft)+'px)';
+  }
+  function relanceProg(){
+    if(!doux)return;
+    prog.classList.remove('go');void prog.offsetWidth;prog.classList.add('go');
+  }
+  function montre(n){
+    i=(n+plans.length)%plans.length;
+    plans.forEach(function(pl,k){pl.classList.toggle('on',k===i);});
+    onglets.forEach(function(b,k){
+      b.setAttribute('aria-selected',String(k===i));
+      b.tabIndex=(k===i)?0:-1;
+    });
+    sec.style.setProperty('--spot-acc',getComputedStyle(plans[i]).getPropertyValue('--aca').trim());
+    placeTrait();
+    relanceProg();
+  }
+  function demarre(){
+    arrete();
+    if(!doux||!visible||suspendu)return;
+    minuteur=setInterval(function(){montre(i+1);},DUREE);
+    relanceProg();
+  }
+  function arrete(){if(minuteur){clearInterval(minuteur);minuteur=null;}prog.classList.remove('go');}
+
+  onglets.forEach(function(b,k){
+    b.addEventListener('click',function(){montre(k);demarre();});
+  });
+  /* flèches gauche/droite dans la barre d'onglets */
+  sec.querySelector('.spot-tabs').addEventListener('keydown',function(e){
+    var d=(e.key==='ArrowRight')?1:(e.key==='ArrowLeft')?-1:0;
+    if(!d)return;
+    e.preventDefault();montre(i+d);onglets[i].focus();demarre();
+  });
+  ['pointerenter','focusin'].forEach(function(ev){
+    sec.addEventListener(ev,function(){suspendu=true;arrete();});
+  });
+  ['pointerleave','focusout'].forEach(function(ev){
+    sec.addEventListener(ev,function(){
+      if(ev==='focusout'&&sec.contains(document.activeElement))return;
+      suspendu=false;demarre();
+    });
+  });
+  window.addEventListener('resize',placeTrait);
+
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){
+      visible=en[0].isIntersecting;
+      visible?demarre():arrete();
+    },{threshold:.25}).observe(sec);
+  }else{visible=true;}
+
+  montre(0);
+  /* le trait se place une fois les polices chargées, sinon il est mal calé */
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(placeTrait);
+})();
+</script>
+
 
 </body>
 </html>
