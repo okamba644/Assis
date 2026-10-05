@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html data-theme="light" data-theme-lock="light" lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta name="theme-color" content="#ffffff" id="metaTheme"/>
+<meta name="description" content="La bibliothèque de REATM Academy : accords des chants, paroles et supports de cours en PDF. Recherche par titre ou par auteur, aperçu et téléchargement."/>
+<title>Bibliothèque — REATM Academy</title>
+<link rel="icon" href="../assets/logo.png"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
+<link rel="stylesheet" href="../css/reatm.css?v=25"/>
+<style>
+/* ===== BIBLIOTHÈQUE — l'univers Academy, en mode catalogue ===== */
+/* le libellé du champ existe pour les lecteurs d'écran seulement */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* appel final, repris de la page Academy */
+.ac-cta{background:#EFF6FF;color:#111111;position:relative;overflow:hidden}
+.ac-cta::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(640px circle at 50% 120%,rgba(37,99,235,.12),transparent 66%)}
+.ac-cta .wrap{position:relative;z-index:2}
+.ac-cta .btn-acc{background:#2563EB;color:#fff}
+.ac-cta .btn-acc:hover{box-shadow:0 16px 34px rgba(37,99,235,.3)}
+.phero{background:#F7F8FA;color:#111111;min-height:52vh}
+.phero-bg{background-image:url('../assets/academy-cours.jpg');background-position:center 45%;opacity:.3}
+.phero-veil{background:
+  linear-gradient(90deg,#F7F8FA 26%,rgba(247,248,250,.8) 54%,rgba(247,248,250,.3) 100%),
+  radial-gradient(720px circle at 88% 22%,rgba(37,99,235,.10),transparent 70%)}
+.phero h1 em{color:#2563EB}
+.phero .sub{color:#4b5563}
+.phero .crumbs{color:#6b7280}
+
+/* ----- la barre de recherche, collée sous l'en-tête ----- */
+.bk-bar{position:sticky;top:72px;z-index:60;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+  border-bottom:1px solid #E6EAF0;padding:18px 0}
+.bk-bar-in{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.bk-champ{position:relative;flex:1 1 320px;min-width:0}
+.bk-champ i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#9aa3b2;font-size:14px;pointer-events:none}
+.bk-champ input{
+  width:100%;border:1px solid #DBE7FB;border-radius:999px;background:#fff;
+  padding:14px 46px 14px 46px;font:inherit;font-size:14.5px;color:#111;
+  transition:border-color .3s ease,box-shadow .3s ease;
+}
+.bk-champ input::placeholder{color:#9aa3b2}
+.bk-champ input:focus{outline:none;border-color:#2563EB;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.bk-vider{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;
+  border:0;border-radius:50%;background:#EEF2F7;color:#5b6472;cursor:pointer;display:none;place-items:center;font-size:12px}
+.bk-champ.rempli .bk-vider{display:grid}
+.bk-vider:hover{background:#2563EB;color:#fff}
+.bk-chips{display:flex;gap:8px;flex-wrap:wrap}
+.bk-chips button{
+  border:1px solid #DBE7FB;background:#fff;color:#5b6472;border-radius:999px;
+  padding:11px 18px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;
+  cursor:pointer;transition:all .3s ease;
+}
+.bk-chips button:hover{border-color:#2563EB;color:#2563EB}
+.bk-chips button[aria-pressed="true"]{background:#2563EB;border-color:#2563EB;color:#fff}
+.bk-compte{font-size:12.5px;color:#5b6472;margin-left:auto;white-space:nowrap}
+.bk-compte b{color:#2563EB}
+
+/* ----- la grille de documents ----- */
+/* la grille suit la barre de recherche de près : le catalogue est le sujet */
+.bk-sec{padding-top:clamp(28px,3.5vw,46px)}
+.bk-grille{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px)}
+.bk-grille>*{min-width:0}
+.bk{
+  display:flex;flex-direction:column;background:#fff;border:1px solid #E6EAF0;border-radius:20px;
+  overflow:hidden;transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .4s ease,box-shadow .5s ease;
+}
+.bk:hover{transform:translateY(-8px);border-color:#2563EB;box-shadow:0 24px 50px rgba(37,99,235,.14)}
+.bk[hidden]{display:none}
+/* la vignette montre la vraie première page : on sait ce qu'on télécharge */
+.bk-vue{display:block;position:relative;background:#F2F5F9;border-bottom:1px solid #E6EAF0;overflow:hidden}
+.bk-vue img{display:block;width:100%;height:auto;transition:transform .7s cubic-bezier(.16,1,.3,1)}
+.bk:hover .bk-vue img{transform:scale(1.035)}
+.bk-vue::after{
+  content:"Aperçu";position:absolute;inset:0;display:grid;place-items:center;
+  background:rgba(37,99,235,.88);color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  opacity:0;transition:opacity .4s ease;
+}
+.bk-vue:hover::after,.bk-vue:focus-visible::after{opacity:1}
+.bk-corps{padding:20px 20px 0;flex:1 0 auto}
+.bk-type{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+  padding:5px 11px;border-radius:999px;background:rgba(37,99,235,.10);color:#2563EB;margin-bottom:12px}
+.bk[data-type="paroles"] .bk-type{background:rgba(68,121,127,.12);color:#3d6c71}
+.bk h3{font-size:17.5px;font-weight:700;letter-spacing:-.3px;line-height:1.3;margin-bottom:6px}
+.bk .bk-aut{font-size:13px;color:#5b6472;margin-bottom:14px}
+.bk .bk-meta{display:flex;flex-wrap:wrap;gap:7px;font-size:11px;color:#5b6472}
+.bk .bk-meta span{border:1px solid #E6EAF0;border-radius:7px;padding:4px 9px}
+.bk-actions{display:flex;gap:9px;padding:18px 20px 20px}
+.bk-actions a{
+  flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:11px;padding:12px 10px;font-size:12.6px;font-weight:600;text-align:center;
+  transition:all .35s ease;
+}
+.bk-dl{background:#2563EB;color:#fff}
+.bk-dl:hover{background:#1d4ed8;box-shadow:0 12px 26px rgba(37,99,235,.3)}
+.bk-ap{border:1px solid #DBE7FB;color:#2563EB;background:#fff}
+.bk-ap:hover{border-color:#2563EB;background:rgba(37,99,235,.06)}
+/* ----- rien trouvé ----- */
+.bk-vide{display:none;text-align:center;padding:70px 20px}
+.bk-vide.on{display:block}
+.bk-vide i{font-size:34px;color:#c7d2e2;margin-bottom:18px;display:block}
+.bk-vide h3{font-size:20px;font-weight:700;margin-bottom:8px}
+.bk-vide p{font-size:13.5px;color:#5b6472}
+.bk-vide button{margin-top:18px;border:1px solid #2563EB;background:#fff;color:#2563EB;border-radius:999px;
+  padding:11px 22px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.bk-vide button:hover{background:#2563EB;color:#fff}
+
+/* ----- la liseuse ----- */
+.lis{position:fixed;inset:0;z-index:300;display:none}
+.lis.on{display:block}
+.lis-fond{position:absolute;inset:0;background:rgba(10,14,22,.78);backdrop-filter:blur(5px);
+  opacity:0;transition:opacity .35s ease}
+.lis.on .lis-fond{opacity:1}
+.lis-feuille{
+  position:absolute;inset:3vh 0 0;margin:0 auto;max-width:860px;width:calc(100% - 28px);
+  background:#fff;border-radius:20px 20px 0 0;display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(26px);opacity:0;transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .35s ease;
+}
+.lis.on .lis-feuille{transform:none;opacity:1}
+.lis-tete{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid #E6EAF0;flex:0 0 auto}
+.lis-tete .t{flex:1;min-width:0}
+.lis-tete h3{font-size:16px;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lis-tete p{font-size:12.4px;color:#5b6472;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lis-tete .bk-dl{display:inline-flex;align-items:center;gap:8px;border-radius:10px;padding:10px 16px;font-size:12.6px;font-weight:600}
+.lis-fermer{flex:0 0 auto;width:40px;height:40px;border:1px solid #E6EAF0;border-radius:11px;background:#fff;
+  color:#5b6472;cursor:pointer;font-size:15px;transition:all .3s ease}
+.lis-fermer:hover{background:#2563EB;border-color:#2563EB;color:#fff}
+.lis-pages{flex:1 1 auto;overflow:auto;background:#EEF1F6;padding:18px;display:grid;gap:18px;justify-items:center}
+.lis-pages img{display:block;width:100%;max-width:760px;height:auto;border:1px solid #DDE3EC;border-radius:8px;
+  box-shadow:0 10px 30px rgba(16,24,40,.12);background:#fff}
+.lis-pied{flex:0 0 auto;padding:12px 18px;border-top:1px solid #E6EAF0;text-align:center;font-size:12px;color:#5b6472}
+.lis-pied a{color:#2563EB;font-weight:600}
+body.lis-ouverte{overflow:hidden}
+
+@media(max-width:1080px){.bk-grille{grid-template-columns:repeat(2,1fr)}.bk-bar{top:64px}}
+@media(max-width:760px){
+  .bk-grille{grid-template-columns:1fr}
+  .bk-compte{margin-left:0;width:100%}
+  .lis-feuille{inset:0;width:100%;border-radius:0}
+  .lis-tete{flex-wrap:wrap}
+  .lis-tete .bk-dl{flex:1}
+}
+</style>
+
+</head>
+<body data-entity="academy" style="--veil-in:#2563EB">
+<div class="veil-in" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+<symbol id="ic-ig" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06z"/><path d="M12 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="18.406" cy="5.594" r="1.44"/></symbol>
+<symbol id="ic-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M20.463 3.488A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413zm-8.412 18.297h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z"/></symbol>
+<symbol id="ic-yt" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></symbol>
+<symbol id="ic-tt" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></symbol>
+<symbol id="ic-moon" viewBox="0 0 24 24"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.05 8.05 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.6 8.6 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05z"/></symbol>
+<symbol id="ic-sun" viewBox="0 0 24 24"><path d="M12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.5 4.9l1.4-1.4 2.1 2.1-1.4 1.4-2.1-2.1zM17 18.4l1.4-1.4 2.1 2.1-1.4 1.4-2.1-2.1zM1 11h3v2H1v-2zm19 0h3v2h-3v-2zM4.9 20.5l-1.4-1.4 2.1-2.1 1.4 1.4-2.1 2.1zM18.4 7l-1.4-1.4 2.1-2.1 1.4 1.4L18.4 7z"/></symbol>
+<symbol id="ic-fb" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></symbol>
+</svg>
+<div class="progress"><span id="progressBar"></span></div>
+
+<!-- ======================= HEADER ======================= -->
+<header id="header">
+<div class="wrap nav">
+<a class="brand" href="../" aria-label="REATM RECORDS — accueil" style="--lm:46px">
+<span class="brand-mark"></span>
+<span class="brand-txt"><span class="n1">REATM</span><span class="n2">ACADEMY</span></span>
+</a>
+<ul class="menu">
+<li><a href="../">Accueil</a></li>
+<li><a href="../maison/">Nos services</a></li>
+<li><a class="active" aria-current="page" href="../academy/">Académie</a></li>
+<li><a href="../studio/">Studio</a></li>
+<li><a href="../production/">Production</a></li>
+<li><a href="../store/">Store</a></li>
+<li><a href="../events/">Events</a></li>
+<li><a href="../#contact">Contact</a></li>
+</ul>
+<div class="hdr-actions">
+<button class="icon-btn" id="themeToggle" title="Changer de thème" aria-label="Changer de thème"><svg class="ic" id="themeIcon"><use href="#ic-moon"></use></svg></button>
+<a class="icon-btn hide-md" href="https://www.instagram.com/reatmrecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
+<a class="icon-btn hide-md" href="https://wa.me/212651475341" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="ic"><use href="#ic-wa"></use></svg></a>
+<a class="btn btn-red hide-md" href="../#contact">Nous contacter <i class="fas fa-arrow-right"></i></a>
+<button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNav">
+<span class="burger-box"><span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span></span>
+</button>
+</div>
+</div>
+</header>
+
+
+<!-- ======================= MENU MOBILE (plein écran) ======================= -->
+<aside class="mobile-nav" id="mobileNav" aria-hidden="true" aria-label="Menu principal">
+<div class="mnav-inner">
+<span class="mnav-label">Menu</span>
+<ul class="mnav-list">
+<li style="--i:0"><a href="../"><span>Accueil</span><span class="num">01</span></a></li>
+<li style="--i:1"><a href="../maison/"><span>Nos services</span><span class="num">02</span></a></li>
+<li style="--i:2"><a class="active" aria-current="page" href="../academy/"><span>Académie</span><span class="num">03</span></a></li>
+<li style="--i:3"><a href="../studio/"><span>Studio</span><span class="num">04</span></a></li>
+<li style="--i:4"><a href="../production/"><span>Production</span><span class="num">05</span></a></li>
+<li style="--i:5"><a href="../store/"><span>Store</span><span class="num">06</span></a></li>
+<li style="--i:6"><a href="../events/"><span>Events</span><span class="num">07</span></a></li>
+<li style="--i:7"><a href="../#contact"><span>Contact</span><span class="num">08</span></a></li>
+</ul>
+<div class="mnav-foot">
+<div class="mnav-soc">
+<a href="https://www.instagram.com/reatmrecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
+<a href="https://wa.me/212651475341" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="ic"><use href="#ic-wa"></use></svg></a>
+<a href="#" aria-label="YouTube"><svg class="ic"><use href="#ic-yt"></use></svg></a>
+<a href="#" aria-label="TikTok"><svg class="ic"><use href="#ic-tt"></use></svg></a>
+</div>
+<a class="btn btn-red" href="../#contact">Nous contacter <i class="fas fa-arrow-right"></i></a>
+<div class="mnav-contact">
+<div><i class="fas fa-phone-alt"></i><a href="tel:+212651475341">+212 06 51 47 53 41</a></div>
+<div><i class="fas fa-envelope"></i><a href="mailto:Contact.reatm@gmail.com">Contact.reatm@gmail.com</a></div>
+</div>
+</div>
+</div>
+</aside>
+
+
+<section class="phero">
+<div class="phero-bg"></div><div class="phero-veil"></div>
+<div class="wrap phero-inner">
+<a class="crumbs" href="../academy/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour à REATM Academy</a>
+<h1 class="reveal">La <em>bibliothèque</em></h1>
+<p class="sub reveal" style="--d:100ms">Les accords des chants, les paroles et les supports de cours, en PDF. Cherchez par titre ou par auteur, feuilletez avant de télécharger.</p>
+</div>
+</section>
+
+<div class="bk-bar">
+<div class="wrap bk-bar-in">
+<div class="bk-champ" id="bkChamp">
+<i class="fas fa-search" aria-hidden="true"></i>
+<label class="sr-only" for="bkQ">Rechercher un document</label>
+<input id="bkQ" type="search" autocomplete="off" placeholder="Titre, auteur, gamme…"/>
+<button class="bk-vider" id="bkVider" type="button" aria-label="Effacer la recherche"><i class="fas fa-times"></i></button>
+</div>
+<div class="bk-chips" role="group" aria-label="Filtrer par type">
+<button type="button" data-type="tout" aria-pressed="true">Tout</button>
+<button type="button" data-type="accords" aria-pressed="false">Accords</button>
+<button type="button" data-type="paroles" aria-pressed="false">Paroles</button>
+</div>
+<p class="bk-compte" id="bkCompte" role="status" aria-live="polite"><b>4</b> documents</p>
+</div>
+</div>
+
+<section class="sec bk-sec">
+<div class="wrap">
+<div class="bk-grille" id="bkGrille">
+
+<article class="bk reveal" data-type="accords" style="--d:0ms"
+  data-cle="ton nom est yeshua hamos ki-say kisay accords gamme fa adoration">
+<a class="bk-vue" href="../assets/biblio/ton-nom-est-yeshua-hamos-ki-say.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/ton-nom-est-yeshua-hamos-ki-say-p-1.jpg"
+   aria-label="Aperçu de Ton Nom est Yeshua">
+<img src="../assets/biblio/ton-nom-est-yeshua-hamos-ki-say-vignette.jpg" alt="Première page de Ton Nom est Yeshua" loading="lazy" width="520" height="353"/>
+</a>
+<div class="bk-corps">
+<span class="bk-type">Accords</span>
+<h3>Ton Nom est Yeshua</h3>
+<p class="bk-aut">Hamos Ki-Say</p>
+<div class="bk-meta"><span>Gamme Fa</span><span>1 page</span><span>52 Ko</span></div>
+</div>
+<div class="bk-actions">
+<a class="bk-ap" href="../assets/biblio/ton-nom-est-yeshua-hamos-ki-say.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/ton-nom-est-yeshua-hamos-ki-say-p-1.jpg"><i class="fas fa-eye"></i>Aperçu</a>
+<a class="bk-dl" href="../assets/biblio/ton-nom-est-yeshua-hamos-ki-say.pdf" download><i class="fas fa-download"></i>Télécharger</a>
+</div>
+</article>
+
+<article class="bk reveal" data-type="accords" style="--d:90ms"
+  data-cle="l'entree du roi lentree jonathan c. gambela accords gamme fa louange">
+<a class="bk-vue" href="../assets/biblio/l-entree-du-roi-jonathan-c-gambela.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/l-entree-du-roi-jonathan-c-gambela-p-1.jpg"
+   aria-label="Aperçu de L'entrée du Roi">
+<img src="../assets/biblio/l-entree-du-roi-jonathan-c-gambela-vignette.jpg" alt="Première page de L'entrée du Roi" loading="lazy" width="520" height="353"/>
+</a>
+<div class="bk-corps">
+<span class="bk-type">Accords</span>
+<h3>L'entrée du Roi</h3>
+<p class="bk-aut">Jonathan C. Gambela</p>
+<div class="bk-meta"><span>Gamme Fa</span><span>1 page</span><span>96 Ko</span></div>
+</div>
+<div class="bk-actions">
+<a class="bk-ap" href="../assets/biblio/l-entree-du-roi-jonathan-c-gambela.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/l-entree-du-roi-jonathan-c-gambela-p-1.jpg"><i class="fas fa-eye"></i>Aperçu</a>
+<a class="bk-dl" href="../assets/biblio/l-entree-du-roi-jonathan-c-gambela.pdf" download><i class="fas fa-download"></i>Télécharger</a>
+</div>
+</article>
+
+<article class="bk reveal" data-type="accords" style="--d:180ms"
+  data-cle="yeshua derek jones derek-jones accords gamme sol diese sol# alpha omega">
+<a class="bk-vue" href="../assets/biblio/yeshua-derek-jones.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/yeshua-derek-jones-p-1.jpg"
+   aria-label="Aperçu de Yeshua">
+<img src="../assets/biblio/yeshua-derek-jones-vignette.jpg" alt="Première page de Yeshua" loading="lazy" width="520" height="353"/>
+</a>
+<div class="bk-corps">
+<span class="bk-type">Accords</span>
+<h3>Yeshua</h3>
+<p class="bk-aut">Derek Jones</p>
+<div class="bk-meta"><span>Gamme Sol#</span><span>1 page</span><span>10 Ko</span></div>
+</div>
+<div class="bk-actions">
+<a class="bk-ap" href="../assets/biblio/yeshua-derek-jones.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/yeshua-derek-jones-p-1.jpg"><i class="fas fa-eye"></i>Aperçu</a>
+<a class="bk-dl" href="../assets/biblio/yeshua-derek-jones.pdf" download><i class="fas fa-download"></i>Télécharger</a>
+</div>
+</article>
+
+<article class="bk reveal" data-type="paroles" style="--d:270ms"
+  data-cle="paroles pfr 17 mai recueil roi de gloire esprit de dieu rouah elohim sabaoth intensifie">
+<a class="bk-vue" href="../assets/biblio/paroles-pfr-17-mai.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/paroles-pfr-17-mai-p-1.jpg,../assets/biblio/paroles-pfr-17-mai-p-2.jpg"
+   aria-label="Aperçu de Paroles — PFR 17 mai">
+<img src="../assets/biblio/paroles-pfr-17-mai-vignette.jpg" alt="Première page du recueil PFR 17 mai" loading="lazy" width="520" height="353"/>
+</a>
+<div class="bk-corps">
+<span class="bk-type">Paroles</span>
+<h3>Paroles — PFR 17 mai</h3>
+<p class="bk-aut">Recueil · Roi de gloire, Esprit de Dieu, Rouah Elohim, Sabaoth, Intensifie</p>
+<div class="bk-meta"><span>Recueil</span><span>2 pages</span><span>178 Ko</span></div>
+</div>
+<div class="bk-actions">
+<a class="bk-ap" href="../assets/biblio/paroles-pfr-17-mai.pdf" target="_blank" rel="noopener"
+   data-apercu data-pages="../assets/biblio/paroles-pfr-17-mai-p-1.jpg,../assets/biblio/paroles-pfr-17-mai-p-2.jpg"><i class="fas fa-eye"></i>Aperçu</a>
+<a class="bk-dl" href="../assets/biblio/paroles-pfr-17-mai.pdf" download><i class="fas fa-download"></i>Télécharger</a>
+</div>
+</article>
+
+</div>
+
+<div class="bk-vide" id="bkVide">
+<i class="fas fa-search"></i>
+<h3>Aucun document ne correspond</h3>
+<p>Essayez un autre titre, un autre auteur, ou revenez à la liste complète.</p>
+<button type="button" id="bkReset">Voir tous les documents</button>
+</div>
+</div>
+</section>
+
+<section class="pcta ac-cta">
+<div class="wrap">
+<h2 class="reveal">Un morceau<br/>vous manque ?</h2>
+<a class="btn btn-acc reveal" style="--d:100ms" href="../#contact">Demander une partition <i class="fas fa-arrow-right"></i></a>
+</div>
+</section>
+
+<!-- ======================= LISEUSE ======================= -->
+<div class="lis" id="lis" role="dialog" aria-modal="true" aria-labelledby="lisTitre" aria-hidden="true">
+<div class="lis-fond" data-fermer></div>
+<div class="lis-feuille">
+<div class="lis-tete">
+<div class="t"><h3 id="lisTitre"></h3><p id="lisAut"></p></div>
+<a class="bk-dl" id="lisDl" href="#" download><i class="fas fa-download"></i>Télécharger</a>
+<button class="lis-fermer" type="button" data-fermer aria-label="Fermer l'aperçu"><i class="fas fa-times"></i></button>
+</div>
+<div class="lis-pages" id="lisPages"></div>
+<div class="lis-pied">Aperçu page par page — <a id="lisOuvrir" href="#" target="_blank" rel="noopener">ouvrir le PDF dans un nouvel onglet</a></div>
+</div>
+</div>
+
+<!-- ======================= FOOTER ======================= -->
+<footer id="contact" class="f-tinted">
+<div class="f-aura" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<div class="f-grid-lines" aria-hidden="true"></div>
+
+<div class="wrap">
+<div class="f-top">
+<div class="f-brandblock">
+<a class="brand-full on-dark reveal" href="../" style="--lm:120px" aria-label="REATM RECORDS — accueil"></a>
+</div>
+<div class="f-news reveal" style="--d:120ms">
+<h4>Restez dans la boucle</h4>
+<p>Nouveautés de l'académie, sessions studio, sorties et offres du store : recevez tout en avant-première.</p>
+<form class="f-form" id="newsForm" novalidate>
+<input type="email" id="newsEmail" placeholder="Votre adresse e-mail" aria-label="Votre adresse e-mail" required/>
+<button class="btn btn-red" type="submit">S'abonner <i class="fas fa-paper-plane"></i></button>
+</form>
+<div class="f-note" id="newsNote"><i class="fas fa-lock"></i> Pas de spam. Désinscription en un clic.</div>
+</div>
+</div>
+
+<div class="f-cols">
+<div>
+<h4>Nous trouver</h4>
+<div class="f-line"><span class="fi"><i class="fas fa-map-marker-alt"></i></span><span>RCEANNAIM DOHATABRIQUET 11000 SALE<br/>106 AV LALLAL BEN ABDELLAH RABAT VILLE</span></div>
+<div class="f-line y"><span class="fi"><i class="fas fa-envelope"></i></span><span><a href="mailto:Contact.reatm@gmail.com">Contact.reatm@gmail.com</a></span></div>
+<div class="f-line"><span class="fi"><i class="fas fa-phone-alt"></i></span><span><a href="tel:+212651475341">+212 06 51 47 53 41</a></span></div>
+</div>
+<div>
+<h4>Navigation</h4>
+<ul class="f-nav">
+<li><a href="../">Accueil</a></li>
+<li><a href="../maison/">Nos services</a></li>
+<li><a href="../academy/">Académie</a></li>
+<li><a href="../production/">Production</a></li>
+<li><a href="../#contact">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4>Nos pôles</h4>
+<ul class="f-nav">
+<li><a href="../studio/">REATM Studio</a></li>
+<li><a href="../academy/">REATM Academy</a></li>
+<li><a href="../production/">REATM Prod</a></li>
+<li><a href="../store/">REATM Store</a></li>
+<li><a href="../events/">REATM Events</a></li>
+</ul>
+</div>
+<div>
+<h4>Suivez-nous</h4>
+<div class="f-soc">
+<a href="https://www.instagram.com/reatmrecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
+<a href="https://wa.me/212651475341" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="ic"><use href="#ic-wa"></use></svg></a>
+<a href="#" aria-label="YouTube"><svg class="ic"><use href="#ic-yt"></use></svg></a>
+<a href="#" aria-label="TikTok"><svg class="ic"><use href="#ic-tt"></use></svg></a>
+<a href="#" aria-label="Facebook"><svg class="ic"><use href="#ic-fb"></use></svg></a>
+</div>
+<div class="f-handle"><i class="fas fa-hashtag"></i>@REATMRECORDS</div>
+<div class="f-handle" style="margin-top:10px"><i class="fas fa-music"></i>Plus qu'un studio, une famille !</div>
+</div>
+</div>
+</div>
+
+<div class="wrap">
+<div class="f-bottom">
+<span>© <span id="year">2025</span> REATM RECORDS. Tous droits réservés.</span>
+<div class="f-bottom-links">
+<a href="#">Mentions légales</a>
+<a href="#">Confidentialité</a>
+<a href="../#contact">Contact</a>
+</div>
+<button class="to-top" id="toTopFooter" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
+</div>
+</div>
+</footer>
+
+<button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
+<script src="../js/reatm.js?v=25"></script>
+<script>
+/* ===== Bibliothèque : recherche, filtre et liseuse =====
+   Tout part du DOM : chaque fiche porte ses mots-clés et ses pages, donc la
+   liste reste lisible sans JavaScript et il n'y a pas de catalogue à tenir
+   à jour en double. */
+(function(){
+  var grille=document.getElementById('bkGrille');
+  if(!grille)return;
+  var fiches=[].slice.call(grille.querySelectorAll('.bk'));
+  var champ=document.getElementById('bkChamp');
+  var q=document.getElementById('bkQ');
+  var vider=document.getElementById('bkVider');
+  var compte=document.getElementById('bkCompte');
+  var vide=document.getElementById('bkVide');
+  var chips=[].slice.call(document.querySelectorAll('.bk-chips button'));
+  var type='tout';
+
+  /* « Rouah » doit se trouver en tapant « rouah » comme « ROUAH »,
+     et « entrée » en tapant « entree ». */
+  function simplifie(t){
+    t=(t||'').toLowerCase();
+    return (t.normalize?t.normalize('NFD').replace(/[̀-ͯ]/g,''):t);
+  }
+  function filtre(){
+    var mots=simplifie(q.value).split(/\s+/).filter(Boolean);
+    var n=0;
+    fiches.forEach(function(f){
+      var cle=simplifie(f.getAttribute('data-cle')+' '+f.textContent);
+      var ok=(type==='tout'||f.getAttribute('data-type')===type)
+          && mots.every(function(m){return cle.indexOf(m)>=0;});
+      f.hidden=!ok;
+      if(ok)n++;
+    });
+    compte.innerHTML='<b>'+n+'</b> document'+(n>1?'s':'');
+    vide.classList.toggle('on',n===0);
+    champ.classList.toggle('rempli',q.value.length>0);
+  }
+  q.addEventListener('input',filtre);
+  vider.addEventListener('click',function(){q.value='';filtre();q.focus();});
+  document.getElementById('bkReset').addEventListener('click',function(){
+    q.value='';type='tout';
+    chips.forEach(function(c){c.setAttribute('aria-pressed',String(c.getAttribute('data-type')==='tout'));});
+    filtre();q.focus();
+  });
+  chips.forEach(function(c){
+    c.addEventListener('click',function(){
+      type=c.getAttribute('data-type');
+      chips.forEach(function(o){o.setAttribute('aria-pressed',String(o===c));});
+      filtre();
+    });
+  });
+  filtre();
+
+  /* ---- la liseuse ----
+     Elle affiche les pages déjà rendues en image : c'est la seule façon
+     d'avoir le même aperçu sur tous les navigateurs, le lecteur PDF intégré
+     restant capricieux dans un cadre, surtout sur téléphone. Le vrai PDF
+     reste à un clic, dans un onglet. */
+  var lis=document.getElementById('lis');
+  var pages=document.getElementById('lisPages');
+  var titre=document.getElementById('lisTitre');
+  var aut=document.getElementById('lisAut');
+  var dl=document.getElementById('lisDl');
+  var ouvrir=document.getElementById('lisOuvrir');
+  var rendu=null;
+
+  function ouvre(lien){
+    var fiche=lien.closest('.bk');
+    var t=fiche.querySelector('h3').textContent;
+    titre.textContent=t;
+    aut.textContent=fiche.querySelector('.bk-aut').textContent;
+    dl.href=lien.getAttribute('href');
+    ouvrir.href=lien.getAttribute('href');
+    pages.innerHTML='';
+    lien.getAttribute('data-pages').split(',').forEach(function(src,i){
+      var img=document.createElement('img');
+      img.src=src;img.alt='Page '+(i+1)+' de '+t;
+      pages.appendChild(img);
+    });
+    pages.scrollTop=0;
+    rendu=document.activeElement;
+    lis.classList.add('on');
+    lis.setAttribute('aria-hidden','false');
+    document.body.classList.add('lis-ouverte');
+    lis.querySelector('.lis-fermer').focus();
+  }
+  function ferme(){
+    lis.classList.remove('on');
+    lis.setAttribute('aria-hidden','true');
+    document.body.classList.remove('lis-ouverte');
+    if(rendu&&rendu.focus)rendu.focus();
+  }
+  /* Sans JavaScript, ces liens ouvrent simplement le PDF : on n'intercepte
+     que lorsque la liseuse peut réellement prendre le relais. */
+  document.querySelectorAll('a[data-apercu]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;
+      e.preventDefault();ouvre(a);
+    });
+  });
+  lis.querySelectorAll('[data-fermer]').forEach(function(b){b.addEventListener('click',ferme);});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&lis.classList.contains('on'))ferme();
+  });
+})();
+</script>
+
+</body>
+</html>

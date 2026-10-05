@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=24"/>
+<link rel="stylesheet" href="../css/reatm.css?v=25"/>
 <style>
 /* ===== ACADEMY — bleu + blanc, lumineuse et pédagogique ===== */
 .phero{background:#F7F8FA;color:#111111}
@@ -120,6 +120,15 @@ html[data-theme="dark"] .ac-poles article>p{color:#8A8A8A}
 .ac-poles ul{list-style:none;border-top:1px solid rgba(37,99,235,.16);padding-top:16px;display:grid;gap:11px}
 .ac-poles li{display:flex;align-items:center;gap:11px;font-size:13.2px;font-weight:500}
 .ac-poles li i{font-size:12px;color:#2563EB;width:16px;flex:0 0 16px;text-align:center}
+/* seul le pôle Bibliothèque mène à un catalogue : il porte son propre lien */
+.ac-poles .bk-lien{
+  display:inline-flex;align-items:center;gap:9px;margin-top:20px;
+  background:#2563EB;color:#fff;border-radius:11px;padding:12px 18px;
+  font-size:12.8px;font-weight:600;transition:all .35s ease;
+}
+.ac-poles .bk-lien:hover{background:#1d4ed8;box-shadow:0 14px 30px rgba(37,99,235,.3)}
+.ac-poles .bk-lien i{font-size:11px;transition:transform .35s ease}
+.ac-poles .bk-lien:hover i{transform:translateX(3px)}
 
 /* progression des niveaux */
 .ac-levels{position:relative;margin-top:10px}
@@ -242,7 +251,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 <div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos trois pôles</h2><p class="sec-lead">L'Académie s'organise autour de trois pôles complémentaires : on apprend son instrument, on s'appuie sur une bibliothèque de ressources à télécharger, et on maîtrise les outils média pour présenter sa musique.</p></div></div>
 <div class="ac-poles">
 <article class="reveal" style="--d:0ms"><span class="pn">01</span><i class="fas fa-music"></i><h3>Formation musicale</h3><p>Le cœur de l'Académie : un instrument, un professeur, une progression claire. Du premier accord jusqu'au jeu en groupe.</p><ul><li><i class="fas fa-guitar"></i>Cours de guitare</li><li><i class="fas fa-drum"></i>Cours de batterie</li><li><i class="fas fa-grip-lines-vertical"></i>Cours de piano</li><li><i class="fas fa-microphone"></i>Cours de voix</li></ul></article>
-<article class="reveal" style="--d:110ms"><span class="pn">02</span><i class="fas fa-book-open"></i><h3>Bibliothèque</h3><p>Un fonds de ressources en PDF, consultables et téléchargeables : de quoi travailler entre deux séances et retrouver un morceau au bon moment.</p><ul><li><i class="fas fa-file-pdf"></i>Accords des chants</li><li><i class="fas fa-file-pdf"></i>Partitions et tablatures</li><li><i class="fas fa-file-pdf"></i>Supports et exercices de cours</li><li><i class="fas fa-download"></i>Fichiers à télécharger</li></ul></article>
+<article class="reveal" style="--d:110ms"><span class="pn">02</span><i class="fas fa-book-open"></i><h3>Bibliothèque</h3><p>Un fonds de ressources en PDF, consultables et téléchargeables : de quoi travailler entre deux séances et retrouver un morceau au bon moment.</p><ul><li><i class="fas fa-file-pdf"></i>Accords des chants</li><li><i class="fas fa-file-pdf"></i>Partitions et tablatures</li><li><i class="fas fa-file-pdf"></i>Supports et exercices de cours</li><li><i class="fas fa-download"></i>Fichiers à télécharger</li></ul><a class="bk-lien" href="../bibliotheque/">Ouvrir la bibliothèque <i class="fas fa-arrow-right"></i></a></article>
 <article class="reveal" style="--d:220ms"><span class="pn">03</span><i class="fas fa-palette"></i><h3>Formation média</h3><p>Savoir montrer sa musique autant que la jouer : visuels, pochettes, affiches et montage vidéo, avec les outils que l'on utilise vraiment.</p><ul><li><i class="fas fa-palette"></i>Canva</li><li><i class="fas fa-crop"></i>Photoshop</li><li><i class="fas fa-film"></i>CapCut et montage vidéo</li><li><i class="fas fa-camera"></i>Traitement photo</li></ul></article>
 </div>
 </div>
@@ -358,10 +367,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-
-
-<button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=24"></script>
+<script src="../js/reatm.js?v=25"></script>
 <script>
 (function(){
   var el=document.getElementById('acLevels');
