@@ -98,16 +98,19 @@ html[data-theme="dark"] .only-light{display:none}
 
 /* =================== LOGO / MARQUE =================== */
 .brand{display:flex;align-items:center;gap:12px;color:var(--text)}
+/* Le sigle est détouré par un masque plutôt que peint : sa couleur devient
+   une simple variable, ce qui permet à chaque pôle de porter son logo
+   (voir --logo-ink, plus bas) sans dupliquer le fichier image. */
 .brand-mark{
   flex:0 0 auto;height:var(--lm,46px);width:calc(var(--lm,46px) * 1.294);
-  background:url('../assets/logo.png') no-repeat 49% 46%;
-  background-size:122.6% auto;
+  background-color:var(--logo-ink,#111111);
+  -webkit-mask:url('../assets/logo.png') no-repeat 49% 46%;
+  mask:url('../assets/logo.png') no-repeat 49% 46%;
+  -webkit-mask-size:122.6% auto;mask-size:122.6% auto;
   position:relative;
-  filter:invert(1);
-  transition:transform .45s cubic-bezier(.2,.8,.3,1),filter .4s ease;
+  transition:transform .45s cubic-bezier(.2,.8,.3,1),background-color .4s ease;
 }
-html[data-theme="dark"] .brand-mark{filter:none}
-.brand.on-dark .brand-mark{filter:none}
+.brand.on-dark .brand-mark{background-color:var(--logo-ink-dark,#ffffff)}
 /* variante logo complet, mot-symbole inclus */
 .brand-full{
   display:block;height:var(--lm,120px);width:calc(var(--lm,120px) * 1.148);
@@ -1080,3 +1083,30 @@ body[data-entity="academy"] .fab{color:#fff}
 .aca-poles b{display:block;font-size:13.4px;font-weight:700;letter-spacing:-.2px;margin-bottom:5px}
 .aca-poles span{display:block;font-size:11.4px;line-height:1.65;color:var(--muted)}
 @media(max-width:760px){.aca-poles{grid-template-columns:1fr;gap:8px}.aca-poles i{margin-bottom:8px}}
+
+/* ===== LE LOGO DE CHAQUE PÔLE =====
+   L'accueil et « Nos services » portent le logo de la maison, en noir sur
+   fond clair et en blanc sur fond sombre. Sur la page d'un pôle, le même
+   sigle prend la couleur de ce pôle : on sait où l'on est dès l'en-tête.
+   Deux valeurs par pôle, car l'en-tête est blanc en mode clair et noir en
+   mode sombre, et une couleur lisible sur l'un ne l'est pas sur l'autre. */
+body{--logo-ink:#111111}
+html[data-theme="dark"] body{--logo-ink:#ffffff}
+body[data-entity="maison"]{--logo-ink:#111111}
+html[data-theme="dark"] body[data-entity="maison"]{--logo-ink:#ffffff}
+
+body[data-entity="studio"]{--logo-ink:#e11b22}
+html[data-theme="dark"] body[data-entity="studio"]{--logo-ink:#FF4A50}
+body[data-entity="academy"]{--logo-ink:#2563EB}
+html[data-theme="dark"] body[data-entity="academy"]{--logo-ink:#93C5FD}
+/* le jaune du pôle Prod disparaît sur un en-tête blanc : on l'assombrit
+   juste assez pour le lire, sans quitter la famille ambrée */
+body[data-entity="production"]{--logo-ink:#CA8A04}
+html[data-theme="dark"] body[data-entity="production"]{--logo-ink:#FACC15}
+body[data-entity="store"]{--logo-ink:#111111}
+html[data-theme="dark"] body[data-entity="store"]{--logo-ink:#ffffff}
+body[data-entity="events"]{--logo-ink:#111111}
+html[data-theme="dark"] body[data-entity="events"]{--logo-ink:#FFE3B8}
+
+/* le second mot du logotype nomme le pôle : REATM ACADEMY, REATM STUDIO… */
+body[data-entity]:not([data-entity="maison"]) .brand-txt .n2{color:var(--logo-ink)}

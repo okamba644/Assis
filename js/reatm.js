@@ -105,6 +105,39 @@
   var topBtn=document.getElementById('toTopFooter');
   if(topBtn)topBtn.addEventListener('click',toTop);
 
+  /* ---------- « Accueil » ne doit rien laisser dans l'adresse ----------
+     Un lien qui pointe vers la page déjà ouverte ne recharge rien : on
+     remonte en douceur et l'adresse reste propre, sans fragment #top.
+     Ouvert depuis le disque, un lien vers un dossier n'ouvre pas
+     index.html tout seul : on complète alors le chemin. */
+  (function(){
+    var surDisque=(location.protocol==='file:');
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var href=a.getAttribute('href');
+      if(!href||href.charAt(0)==='#')return;
+      if(surDisque){
+        /* « ../ » comme « ../#contact » visent un dossier : sur disque il
+           faut nommer le fichier, sinon le navigateur liste le répertoire. */
+        var coupe=href.indexOf('#');
+        var chemin=(coupe<0)?href:href.slice(0,coupe);
+        var ancre=(coupe<0)?'':href.slice(coupe);
+        if(chemin&&chemin.charAt(chemin.length-1)==='/')
+          a.setAttribute('href',chemin+'index.html'+ancre);
+      }
+      var cible;
+      try{cible=new URL(a.href,location.href);}catch(e){return;}
+      if(cible.pathname!==location.pathname||cible.search!==location.search)return;
+      a.addEventListener('click',function(e){
+        if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;
+        e.preventDefault();
+        if(isOpen())closeNav();
+        toTop();
+        if(location.hash&&history.replaceState)
+          history.replaceState(null,'',location.pathname+location.search);
+      });
+    });
+  })();
+
   /* ---------- Révélations au défilement ---------- */
   var items=document.querySelectorAll('.reveal,.reveal-x,.reveal-zoom');
   if('IntersectionObserver' in window && !reduce){
