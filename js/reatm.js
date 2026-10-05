@@ -204,7 +204,11 @@
       gal.classList.toggle('on-mark',s.hasAttribute('data-mark'));
       gal.setAttribute('data-ent',s.getAttribute('data-ent')||'');
       if(!capNom)return;
-      capNom.textContent=s.getAttribute('data-nom')||'';
+      /* Un plan sans nom — la photo d'ouverture — n'affiche pas de cartouche. */
+      var nom=s.getAttribute('data-nom')||'';
+      cap.hidden=!nom;
+      if(!nom)return;
+      capNom.textContent=nom;
       cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in');
     }
     sync();

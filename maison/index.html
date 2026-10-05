@@ -4,20 +4,21 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <meta name="theme-color" content="#ffffff" id="metaTheme"/>
-<meta name="description" content="REATM RECORDS, maison de musique et maison de production : notre vision, nos valeurs, nos missions et nos cinq univers."/>
-<title>La maison — REATM RECORDS</title>
+<meta name="description" content="Les cinq pôles de REATM RECORDS : Studio, Academy, Production, Store et Events, et le détail des formations de l\'Académie."/>
+<title>Nos services — REATM RECORDS</title>
 <link rel="icon" href="../assets/logo.png"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=26"/>
+<link rel="stylesheet" href="../css/reatm.css?v=28"/>
 <style>
 /* ===== LA MAISON — vue d'ensemble, waveform géante ===== */
 .phero{background:#050505;color:#fff;overflow:hidden}
 .phero-veil{background:radial-gradient(900px circle at 22% 28%,rgba(225,27,34,.20),transparent 62%),radial-gradient(760px circle at 82% 70%,rgba(245,182,13,.16),transparent 62%)}
 .phero h1{letter-spacing:-3.4px}
+.services{background:transparent}
 .phero h1 em{color:#e11b22}
 .phero .sub{color:rgba(255,255,255,.74)}
 .mz-logo{position:absolute;right:-6%;top:8%;width:min(42vw,520px);height:min(42vw,520px);z-index:1;pointer-events:none;
@@ -28,61 +29,8 @@
 .mz-wave{position:relative;z-index:3;--wh:clamp(90px,15vw,190px);padding:0 clamp(18px,3.2vw,64px) 0;opacity:.85}
 .mz-wave i{background:linear-gradient(180deg,#e11b22,#f5b60d)}
 
-.mz-vision{background:var(--bg-alt)}
-.mz-quote{
-  font-size:clamp(26px,4.4vw,56px);font-weight:800;letter-spacing:-2px;line-height:1.1;text-transform:uppercase;
-}
-.mz-quote em{font-style:normal;color:var(--red)}
-html[data-theme="dark"] .mz-quote em{color:var(--yellow)}
-/* valeurs et missions : deux colonnes de listes numérotées */
-.mz-two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,4vw,70px)}
-.mz-val li{
-  list-style:none;display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);
-  font-size:clamp(17px,2.2vw,27px);font-weight:700;letter-spacing:-.6px;
-  transition:padding-left .45s cubic-bezier(.2,.8,.3,1),color .3s ease;
-}
-.mz-val li:hover{padding-left:16px;color:var(--red)}
-html[data-theme="dark"] .mz-val li:hover{color:var(--yellow)}
-.mz-val b{font-size:11px;font-weight:700;letter-spacing:1.6px;color:var(--muted);flex:0 0 26px}
-.mz-val small{display:block;font-size:12.5px;font-weight:500;letter-spacing:0;color:var(--muted);margin-top:5px;line-height:1.6}
-
-/* NOS UNIVERS — chaque bloc a son propre mouvement */
-.uni{display:flex;flex-direction:column;gap:2px}
-.uni a{
-  position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(14px,2.4vw,36px);
-  padding:clamp(22px,3.4vw,44px) clamp(16px,2.4vw,34px);overflow:hidden;isolation:isolate;
-  border:1px solid var(--border);border-radius:16px;
-  transition:transform .55s cubic-bezier(.16,1,.3,1),border-color .45s ease,background-color .5s ease;
-}
-.uni a::before{
-  content:"";position:absolute;inset:0;z-index:-1;opacity:0;
-  background:linear-gradient(100deg,var(--u),transparent 62%);
-  transition:opacity .55s ease;
-}
-.uni a:hover{transform:translateX(8px);border-color:var(--u)}
-.uni a:hover::before{opacity:.16}
-.uni .n{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--muted);transition:color .4s ease}
-.uni a:hover .n{color:var(--u)}
-.uni h3{font-size:clamp(21px,3.6vw,44px);font-weight:800;letter-spacing:-1.6px;text-transform:uppercase;line-height:1}
-.uni h3 span{color:var(--u)}
-.uni .verb{
-  font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--muted);
-  transition:color .4s ease,transform .5s cubic-bezier(.2,.8,.3,1);
-}
-.uni a:hover .verb{color:var(--u);transform:translateX(-6px)}
-.uni .sig{
-  width:46px;height:46px;border-radius:12px;overflow:hidden;background:#050505 center/contain no-repeat;flex:0 0 auto;
-  transition:transform .55s cubic-bezier(.34,1.4,.64,1)}
-.uni a:hover .sig{transform:scale(1.08) rotate(-4deg)}
-.uni .sig img{width:100%;height:100%;object-fit:cover;display:block}
-.uni .sig--logo{background-image:url('../assets/logo.png');background-size:78% auto;background-position:49% 46%}
 .mz-cta{background:#050505;color:#fff}
 .mz-cta .btn-acc{background:var(--red);color:#fff}
-@media(max-width:820px){
-  .mz-two{grid-template-columns:1fr}
-  .uni a{grid-template-columns:auto 1fr;row-gap:10px}
-  .uni .verb{grid-column:2}
-}
 </style>
 </head>
 <body data-entity="maison" style="--veil-in:#050505">
@@ -164,49 +112,163 @@ html[data-theme="dark"] .mz-val li:hover{color:var(--yellow)}
 <div class="phero-veil"></div>
 <div class="mz-logo" aria-hidden="true"></div>
 <div class="wrap phero-inner">
-<h1 class="reveal">Donner une voix<br/>à vos <em>idées.</em></h1>
-<p class="sub reveal" style="--d:100ms">Un espace où la musique, la création et l'excellence se rencontrent.</p>
+<h1 class="reveal">Cinq pôles,<br/>une seule <em>maison.</em></h1>
+<p class="sub reveal" style="--d:100ms">Studio, Académie, Production, Store, Events : chaque pôle répond à un besoin précis, de la première leçon jusqu'à la scène.</p>
 </div>
 <div class="mz-wave"><div class="wavebar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
 </section>
 
-<section class="sec">
+<!-- ======================= SERVICES ======================= -->
+<section class="services" id="services">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Qui sommes-nous ?</h2></div></div>
-<div class="mz-two">
-<p class="sec-lead reveal" style="max-width:none">REATM RECORDS est une maison de musique et une maison de production. Elle regroupe cinq entités qui répondent chacune à un besoin précis : apprendre, enregistrer, produire, s'équiper, célébrer.</p>
-<p class="sec-lead reveal" style="--d:90ms;max-width:none">Le nom dit la feuille de route. R, E, A, T, M : Recording, Exposition, Assert, Touch, Move. Enregistrer, exposer, affirmer, toucher, mouvoir.</p>
-</div>
-</div>
-</section>
-
-<section class="sec mz-vision">
-<div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">Notre vision, notre objectif</h2></div></div>
-<p class="mz-quote reveal">Promouvoir la <em>musique</em>.<br/>Partager l'<em>Évangile</em>.</p>
-</div>
-</section>
-
-<section class="sec">
-<div class="wrap">
-<div class="mz-two">
+<div class="services-head">
 <div>
-<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">Nos valeurs</h2></div></div>
-<ul class="mz-val"><li class="reveal" style="--d:0ms"><b>01</b><div>Diligence<small>Faire les choses à temps, et bien.</small></div></li><li class="reveal" style="--d:70ms"><b>02</b><div>Excellence<small>Ne pas confondre « ça passe » et « c'est juste ».</small></div></li><li class="reveal" style="--d:140ms"><b>03</b><div>Amour<small>Le moteur, avant la technique.</small></div></li><li class="reveal" style="--d:210ms"><b>04</b><div>Foi<small>Ce qui donne sa direction à la maison.</small></div></li><li class="reveal" style="--d:280ms"><b>05</b><div>Autonomie<small>Former des artistes qui n'ont plus besoin de nous.</small></div></li></ul>
+<div class="tag reveal">Nos pôles</div>
+<h2 class="section-title reveal reveal-mask" style="--d:60ms"><span class="rm-i">5 pôles, une seule vision :<br/><span class="y">votre réussite</span></span></h2>
 </div>
 <div>
-<div class="sec-head reveal"><span class="sec-num">04</span><div><h2 class="sec-title">Nos missions</h2></div></div>
-<ul class="mz-val"><li class="reveal" style="--d:0ms"><b>01</b><div>Enregistrer<small>Capter le son juste, dans des conditions professionnelles.</small></div></li><li class="reveal" style="--d:70ms"><b>02</b><div>Exposer<small>Donner de la lumière aux talents et à leurs projets.</small></div></li><li class="reveal" style="--d:140ms"><b>03</b><div>Affirmer<small>Poser une identité artistique claire et assumée.</small></div></li><li class="reveal" style="--d:210ms"><b>04</b><div>Toucher<small>Atteindre les cœurs, bien au-delà des oreilles.</small></div></li><li class="reveal" style="--d:280ms"><b>05</b><div>Mouvoir<small>Mettre en mouvement ceux qui écoutent.</small></div></li></ul>
+<p class="lead reveal" style="--d:120ms">Studio, Académie, Production, Store, Events : cinq entités complémentaires qui répondent à chacun de vos besoins, de la première leçon jusqu'à la scène.</p>
+<a class="btn btn-yellow reveal" style="--d:180ms" href="../bibliotheque/">Voir la bibliothèque <i class="fas fa-arrow-right"></i></a>
 </div>
+</div>
+<div class="cards">
+
+<!-- 01 · STUDIO — professionnel, sonore, technique -->
+<article class="ucard reveal reveal-card" data-entity="studio" style="--d:0ms" data-tilt>
+<div class="ucard-media">
+<div class="ucard-img" style="background-image:url('../assets/studio-nuit.png')"></div>
+<div class="ucard-veil"></div><div class="ucard-tint"></div>
+<span class="ucard-sigil" aria-hidden="true"><img src="../assets/mark-studio.jpg" alt=""/></span>
+<span class="ucard-idx">01</span>
+<div class="gfx gfx-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="ucard-word">Créer<em>.</em></div>
+</div>
+<div class="ucard-body">
+<span class="ucard-kicker">Le son</span>
+<h3>REATM <em>Studio</em></h3>
+<p>Votre espace d'enregistrement et de création musicale : pose de voix, production, podcast, arrangement, mixage et mastering — et une salle de répétition équipée.</p>
+<a class="ucard-cta" data-transition data-label="Studio" href="../studio/">En savoir plus <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+</article>
+
+<!-- 02 · ACADEMY — éducative, lumineuse, bleu + blanc -->
+<article class="ucard reveal reveal-card" data-entity="academy" style="--d:110ms" data-tilt>
+<div class="ucard-media">
+<div class="ucard-img" style="background-image:url('../assets/academy-cours.jpg');background-position:center 42%"></div>
+<div class="ucard-veil"></div><div class="ucard-tint"></div>
+<span class="ucard-sigil" aria-hidden="true"><img src="../assets/mark-academy.jpg" alt=""/></span>
+<span class="ucard-idx">02</span>
+<div class="gfx gfx-steps" aria-hidden="true"><span>C3</span><div class="rail"><b></b></div><span>C2</span><div class="rail"><b></b></div><span>C1</span></div>
+<div class="ucard-word">Apprendre<em>.</em></div>
+</div>
+<div class="ucard-body">
+<span class="ucard-kicker">La transmission</span>
+<h3>REATM <em>Academy</em></h3>
+<p>Piano, guitare, batterie et voix, plus les formations média. Trois niveaux — C3, C2, C1 — en session normale ou accélérée, à votre rythme.</p>
+<a class="ucard-cta" data-transition data-label="Academy" href="../academy/">En savoir plus <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+</article>
+
+<!-- 03 · PRODUCTION — créative, audacieuse, jaune -->
+<article class="ucard reveal reveal-card" data-entity="production" style="--d:220ms" data-tilt>
+<div class="ucard-media">
+<div class="ucard-img" style="background-image:url('../assets/casque.png')"></div>
+<div class="ucard-veil"></div><div class="ucard-tint"></div>
+<span class="ucard-sigil" aria-hidden="true"><img src="../assets/mark-production.jpg" alt=""/></span>
+<span class="ucard-idx">03</span>
+<div class="gfx gfx-build" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="ucard-word">Produire<em>.</em></div>
+</div>
+<div class="ucard-body">
+<span class="ucard-kicker">La cuisine créative</span>
+<h3>REATM <em>Prod</em></h3>
+<p>Podcasts, émissions, programmes de prières, courts métrages et contenus musicaux. La REATM Home Kitchen, là où naissent les idées.</p>
+<a class="ucard-cta" data-transition data-label="Prod" href="../production/">En savoir plus <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+</article>
+
+<!-- 04 · STORE — minimaliste, showroom, blanc + noir -->
+<article class="ucard reveal reveal-card" data-entity="store" style="--d:330ms" data-tilt>
+<div class="ucard-media">
+<div class="ucard-img" style="background-image:url('../assets/store.png')"></div>
+<div class="ucard-veil"></div>
+<span class="ucard-sigil" aria-hidden="true"><img src="../assets/mark-store.jpg" alt=""/></span>
+<span class="ucard-idx">04</span>
+<div class="gfx gfx-tags" aria-hidden="true"><span>Louer</span><span>Acheter</span><span>Neuf &amp; occasion</span></div>
+<div class="ucard-word">S'équiper<em>.</em></div>
+</div>
+<div class="ucard-body">
+<span class="ucard-kicker">Le showroom</span>
+<h3>REATM <em>Store</em></h3>
+<p>Batterie, guitares, piano et synthé, table de mixage, micros filaires et sans fil, enceintes et retours de scène. À louer, à vendre, à acheter.</p>
+<a class="ucard-cta" data-transition data-label="Store" href="../store/">En savoir plus <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+</article>
+
+<!-- 05 · EVENTS — festive, spectaculaire, lumière de scène -->
+<article class="ucard reveal reveal-card" data-entity="events" style="--d:440ms" data-tilt>
+<div class="ucard-media">
+<div class="ucard-img" style="background-image:url('../assets/production.png');background-position:center 45%"></div>
+<div class="ucard-veil"></div><div class="ucard-tint"></div>
+<div class="gfx gfx-spot" aria-hidden="true"><i></i></div>
+<div class="gfx gfx-spark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<span class="ucard-sigil" aria-hidden="true"><img src="../assets/mark-events.jpg" alt=""/></span>
+<span class="ucard-idx">05</span>
+<div class="ucard-word">Célébrer<em>.</em></div>
+</div>
+<div class="ucard-body">
+<span class="ucard-kicker">La scène</span>
+<h3>REATM <em>Events</em></h3>
+<p>Concerts, conférences, séminaires, mariages, anniversaires, soirées. Nous donnons vie à vos événements, de la première idée à la dernière lumière.</p>
+<a class="ucard-cta" data-transition data-label="Events" href="../events/">En savoir plus <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+</article>
+
 </div>
 </div>
 </section>
 
-<section class="sec" style="background:var(--bg-alt)">
-<div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">05</span><div><h2 class="sec-title">Nos univers</h2><p class="sec-lead">Cinq portes, cinq ambiances. Une seule maison.</p></div></div>
-<div class="uni"><a class="reveal" style="--d:0ms;--u:#e11b22" href="../studio/"><span class="sig "><img src="../assets/mark-studio.jpg" alt=""/></span><span><span class="n">01</span><h3>REATM <span>Studio</span></h3></span><span class="verb">Créer · Enregistrer</span></a><a class="reveal" style="--d:80ms;--u:#2563EB" href="../academy/"><span class="sig "><img src="../assets/mark-academy.jpg" alt=""/></span><span><span class="n">02</span><h3>REATM <span>Academy</span></h3></span><span class="verb">Apprendre</span></a><a class="reveal" style="--d:160ms;--u:#FACC15" href="../production/"><span class="sig "><img src="../assets/mark-production.jpg" alt=""/></span><span><span class="n">03</span><h3>REATM <span>Prod</span></h3></span><span class="verb">Produire</span></a><a class="reveal" style="--d:240ms;--u:#8A8A8A" href="../store/"><span class="sig "><img src="../assets/mark-store.jpg" alt=""/></span><span><span class="n">04</span><h3>REATM <span>Store</span></h3></span><span class="verb">S'équiper</span></a><a class="reveal" style="--d:320ms;--u:#FFE3B8" href="../events/"><span class="sig "><img src="../assets/mark-events.jpg" alt=""/></span><span><span class="n">05</span><h3>REATM <span>Events</span></h3></span><span class="verb">Célébrer</span></a></div>
+<!-- ======================= ACADEMIE ======================= -->
+<section class="academie" id="academie">
+<div class="aca-photo">
+<div class="sc">Chaque voix<br/>a sa place</div>
 </div>
+<div class="aca-mid">
+<div class="tag-sm reveal">REATM Academy</div>
+<h2 class="reveal reveal-mask" style="--d:60ms"><span class="rm-i">Votre talent mérite<br/>le bon <span class="y">accompagnement</span></span></h2>
+<p class="reveal" style="--d:120ms">Centre de formation organisé en <b>trois pôles</b> : la formation musicale, une bibliothèque de ressources et la formation média. En chant, on travaille la texture vocale, la justesse, le souffle, la puissance et les harmonies. Côté instruments : batterie, piano, guitare, guitare basse et guitare solo.</p>
+<div class="aca-poles">
+<div class="ap reveal" style="--d:140ms"><i class="fas fa-music"></i><b>Formation musicale</b><span>Guitare · Batterie · Piano · Voix</span></div>
+<div class="ap reveal" style="--d:210ms"><i class="fas fa-book-open"></i><b>Bibliothèque</b><span>Accords des chants, partitions et supports en PDF</span></div>
+<div class="ap reveal" style="--d:280ms"><i class="fas fa-palette"></i><b>Formation média</b><span>Canva, Photoshop, CapCut, montage vidéo</span></div>
+</div>
+<div class="aca-stats">
+<div class="st reveal" style="--d:140ms"><b>04</b><span>formations</span></div>
+<div class="st reveal" style="--d:200ms"><b>03</b><span>niveaux</span></div>
+<div class="st reveal" style="--d:260ms"><b>02</b><span>sessions</span></div>
+<div class="st reveal" style="--d:320ms"><b>1h30</b><span>par séance</span></div>
+</div>
+<div class="instruments">
+<div class="inst reveal" style="--d:0ms"><div class="ib"><i class="fas fa-microphone-alt"></i></div>Chant</div>
+<div class="inst reveal" style="--d:70ms"><div class="ib"><i class="fas fa-grip-lines-vertical"></i></div>Piano</div>
+<div class="inst reveal" style="--d:140ms"><div class="ib"><i class="fas fa-drum"></i></div>Batterie</div>
+<div class="inst reveal" style="--d:210ms"><div class="ib"><i class="fas fa-guitar"></i></div>Guitare</div>
+<div class="inst reveal" style="--d:280ms"><div class="ib"><i class="fas fa-guitar"></i></div>Basse</div>
+</div>
+</div>
+<aside class="aca-side">
+<div class="dark-script only-dark">Transformez votre<br/>passion en<br/><em>profession</em></div>
+<div class="side-title only-light"><span>Des cours pour tous<br/><u>les niveaux</u></span></div>
+<ul class="side-list">
+<li><i class="fas fa-layer-group"></i><span><b>Trois niveaux</b><br/><span class="m">Débutant C3 (3 à 6 mois) · Intermédiaire C2 (3 à 6 mois) · Avancé C1 (3 mois)</span></span></li>
+<li><i class="far fa-clock"></i><span><b>Session normale</b><br/><span class="m">1 séance / semaine — 4 séances / mois</span></span></li>
+<li><i class="fas fa-bolt"></i><span><b>Session accélérée</b><br/><span class="m">2 à 3 séances / semaine — 8 à 12 séances / mois</span></span></li>
+<li><i class="far fa-calendar-alt"></i><span><b>Mercredi, Jeudi, Samedi (à partir de 19h)</b><br/><span class="m">Dimanche (à partir de 18h)</span></span></li>
+<li><i class="fas fa-book-open"></i><span><b>Bibliothèque de ressources</b><br/><span class="m">Accords des chants, partitions et supports de cours en PDF</span></span></li>
+<li><i class="fas fa-photo-video"></i><span><b>Formation média</b><br/><span class="m">Canva, Photoshop, CapCut, montage vidéo, traitement photo</span></span></li>
+</ul>
+<a class="btn btn-red" href="#contact">S'inscrire dès aujourd'hui <i class="fas fa-arrow-right"></i></a>
+</aside>
 </section>
 
 <section class="pcta mz-cta">
@@ -292,7 +354,7 @@ html[data-theme="dark"] .mz-val li:hover{color:var(--yellow)}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=26"></script>
+<script src="../js/reatm.js?v=28"></script>
 
 </body>
 </html>
