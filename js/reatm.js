@@ -193,9 +193,19 @@
     if(!gal)return;
     var slides=gal.querySelectorAll('.hs-slide');
     if(slides.length<2)return;
+    var cap=document.getElementById('hsCap');
+    var capNom=cap&&cap.querySelector('em');
     var i=0,t=1;
+    /* Le nom vit dans le cadre et non dans le plan : un plan porte une
+       transformation, donc son propre contexte d'empilement, et tout ce
+       qu'il contient passerait sous le voile quoi qu'on fasse. */
     function sync(){
-      gal.classList.toggle('on-mark',slides[i].hasAttribute('data-mark'));
+      var s=slides[i];
+      gal.classList.toggle('on-mark',s.hasAttribute('data-mark'));
+      gal.setAttribute('data-ent',s.getAttribute('data-ent')||'');
+      if(!capNom)return;
+      capNom.textContent=s.getAttribute('data-nom')||'';
+      cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in');
     }
     sync();
     if(reduce)return;

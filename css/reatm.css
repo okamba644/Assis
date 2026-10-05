@@ -320,29 +320,74 @@ html[data-theme="dark"] .hero .brush{background:linear-gradient(90deg,var(--red)
 /* le plan d'ouverture suit le thème : Studio jour en clair, Studio nuit en sombre */
 .hs-slide--studio{background-image:url('../assets/studio-jour.png')}
 html[data-theme="dark"] .hs-slide--studio{background-image:url('../assets/studio-nuit.png')}
-/* un logo ou une plaque de marque ne se recadre pas : on l'affiche en entier */
-.hs-slide.is-mark{background-size:contain}
-.hs-slide[data-bg="teal"]{background-color:#44797F}
-.hs-slide[data-bg="white"]{background-color:#FFFFFF}
-.hs-slide[data-bg="black"]{background-color:#000000}
-.hs-slide[data-bg="house"]{background-color:#FFFFFF}
-html[data-theme="dark"] .hs-slide[data-bg="house"]{background-color:#050505}
-/* quatre transitions qui tournent : fondu-zoom, glissé, parallaxe, volet */
-[data-gal].tx-1 .hs-slide{transform:scale(1.14)}
-[data-gal].tx-1 .hs-slide.is-on{transform:scale(1)}
-[data-gal].tx-2 .hs-slide{transform:translateX(12%);clip-path:inset(0 0 0 100%)}
-[data-gal].tx-2 .hs-slide.is-on{transform:none;clip-path:inset(0 0 0 0)}
-[data-gal].tx-3 .hs-slide{transform:translateY(10%) scale(1.06)}
-[data-gal].tx-3 .hs-slide.is-on{transform:none}
-[data-gal].tx-4 .hs-slide{clip-path:inset(0 0 100% 0);transform:scale(1.06)}
-[data-gal].tx-4 .hs-slide.is-on{clip-path:inset(0 0 0 0);transform:none}
+/* ----- les plaques de marque -----
+   Le sigle officiel du pôle, posé sur un fond de la même couleur que la
+   pastille : les deux se fondent, on ne voit qu'une plaque. */
+.hs-pl{
+  background-repeat:no-repeat;
+  background-position:center 38%;
+  background-size:auto clamp(44%,52%,62%);
+}
+.hs-pl[data-ent="house"]{background-color:#FFFFFF;background-image:url('../assets/mark-store.jpg')}
+html[data-theme="dark"] .hs-pl[data-ent="house"]{background-color:#000000;background-image:url('../assets/mark-events.jpg')}
+.hs-pl[data-ent="academy"]{background-color:#44797F;background-image:url('../assets/mark-academy.jpg')}
+.hs-pl[data-ent="store"]{background-color:#FFFFFF;background-image:url('../assets/mark-store.jpg')}
+.hs-pl[data-ent="production"]{background-color:#FFFFFF;background-image:url('../assets/mark-production.jpg')}
+.hs-pl[data-ent="events"]{background-color:#000000;background-image:url('../assets/mark-events.jpg')}
 
+/* ----- le nom de l'entité -----
+   Il appartient au cadre, pas au plan : un plan porte une transformation,
+   donc son propre contexte d'empilement, et le nom passerait sous le voile.
+   Un filet de couleur, la maison en petites capitales espacées, puis le pôle
+   en gras. Même place sur les six plans, photo comprise. */
+.hs-cap{
+  position:absolute;z-index:6;
+  left:clamp(18px,2.6vw,34px);bottom:clamp(16px,2.4vw,30px);
+  display:flex;align-items:center;gap:clamp(10px,1.2vw,15px);
+  color:var(--pl-ink,#FFFFFF);pointer-events:none;
+  transition:color .6s ease;
+}
+.hs-cap b,.hs-cap em{
+  opacity:0;transform:translateY(15px);
+  transition:opacity .7s ease .28s,transform .9s cubic-bezier(.16,1,.3,1) .28s;
+}
+.hs-cap em{transition-delay:.36s}
+.hs-cap.in b,.hs-cap.in em{opacity:1;transform:none}
+.hs-cap i{
+  display:block;width:3px;height:clamp(26px,3.4vw,40px);border-radius:3px;
+  background:var(--pl-acc,#e11b22);
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform .8s cubic-bezier(.16,1,.3,1) .42s,background-color .6s ease;
+}
+.hs-cap.in i{transform:scaleY(1)}
+.hs-cap b{
+  font-size:clamp(9px,.78vw,11px);font-weight:600;letter-spacing:3.2px;text-transform:uppercase;
+  opacity:0;align-self:flex-end;padding-bottom:3px;
+}
+.hs-cap.in b{opacity:.7}
+.hs-cap em{
+  font-style:normal;font-size:clamp(19px,2.6vw,34px);font-weight:800;letter-spacing:-1px;line-height:1;
+}
+/* l'encre et le filet suivent le plan affiché */
+.hs-main[data-ent="studio"]{--pl-ink:#FFFFFF;--pl-acc:#e11b22}
+.hs-main[data-ent="house"]{--pl-ink:#111111;--pl-acc:#e11b22}
+html[data-theme="dark"] .hs-main[data-ent="house"]{--pl-ink:#FFFFFF}
+.hs-main[data-ent="academy"]{--pl-ink:#17201F;--pl-acc:#17201F}
+.hs-main[data-ent="store"]{--pl-ink:#111111;--pl-acc:#111111}
+.hs-main[data-ent="production"]{--pl-ink:#1B1D1A;--pl-acc:#FF3F1A}
+.hs-main[data-ent="events"]{--pl-ink:#FFFFFF;--pl-acc:#FFE3B8}
+/* sur une photo, le nom a besoin d'un fondu à lui : le voile éclaircit
+   justement le coin où il se lit quand le thème est clair */
+.hs-main:not(.on-mark)::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:46%;z-index:5;pointer-events:none;
+  background:linear-gradient(0deg,rgba(5,5,5,.84),rgba(5,5,5,.38) 40%,transparent 100%);
+}
 .hs-veil{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(90deg,var(--bg) 0%,rgba(0,0,0,0) 34%),linear-gradient(0deg,rgba(5,5,5,.35),transparent 55%)}
 /* sur une plaque de marque le voile s'efface : il la salirait */
 .hs-main.on-mark .hs-veil{opacity:0;transition:opacity .6s ease}
 .hs-veil{transition:opacity .6s ease}
-.eq{position:absolute;left:20px;bottom:18px;z-index:5;display:flex;align-items:flex-end;gap:4px;height:26px;transition:opacity .5s ease}
+.eq{position:absolute;right:20px;bottom:18px;z-index:6;display:flex;align-items:flex-end;gap:4px;height:26px;transition:opacity .5s ease}
 .hs-main.on-mark .eq{opacity:0}
 .eq i{display:block;width:4px;border-radius:3px;background:var(--yellow);animation:eqbar 1.1s ease-in-out infinite}
 .eq i:nth-child(1){height:40%;animation-delay:0s}
