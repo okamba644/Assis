@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=30"/>
+<link rel="stylesheet" href="../css/reatm.css?v=31"/>
 <style>
 /* ===== LA MAISON — vue d'ensemble, waveform géante ===== */
 .phero{background:#050505;color:#fff;overflow:hidden}
@@ -49,7 +49,6 @@
 <symbol id="ic-sun" viewBox="0 0 24 24"><path d="M12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.5 4.9l1.4-1.4 2.1 2.1-1.4 1.4-2.1-2.1zM17 18.4l1.4-1.4 2.1 2.1-1.4 1.4-2.1-2.1zM1 11h3v2H1v-2zm19 0h3v2h-3v-2zM4.9 20.5l-1.4-1.4 2.1-2.1 1.4 1.4-2.1 2.1zM18.4 7l-1.4-1.4 2.1-2.1 1.4 1.4L18.4 7z"/></symbol>
 <symbol id="ic-fb" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></symbol>
 </svg>
-<div class="progress"><span id="progressBar"></span></div>
 
 <!-- ======================= HEADER ======================= -->
 <header id="header">
@@ -234,13 +233,9 @@
 
 <!-- ======================= ACADEMIE ======================= -->
 <!-- ======================= APERÇU DES PÔLES ======================= -->
-<section class="spot" id="apercu" aria-label="Aperçu des pôles">
-<div class="wrap spot-head">
-<div class="spot-tabs" role="tablist" aria-label="Choisir un pôle"><button type="button" role="tab" id="tab-studio" aria-controls="spot-studio" data-i="0" aria-selected="true" tabindex="0">Studio</button><button type="button" role="tab" id="tab-academy" aria-controls="spot-academy" data-i="1" aria-selected="false" tabindex="-1">Académie</button><button type="button" role="tab" id="tab-production" aria-controls="spot-production" data-i="2" aria-selected="false" tabindex="-1">Production</button><button type="button" role="tab" id="tab-store" aria-controls="spot-store" data-i="3" aria-selected="false" tabindex="-1">Store</button><button type="button" role="tab" id="tab-events" aria-controls="spot-events" data-i="4" aria-selected="false" tabindex="-1">Events</button><span class="spot-ink" aria-hidden="true"></span></div>
-<div class="spot-prog" aria-hidden="true"><span></span></div>
-</div>
+<section class="spot" id="apercu" aria-label="Aperçu des pôles" aria-roledescription="carrousel">
 <div class="spot-stage">
-<article class="spot-slide academie on" data-ent="studio" id="spot-studio" role="tabpanel" aria-labelledby="tab-studio">
+<article class="spot-slide academie on" data-ent="studio" id="spot-studio">
 <div class="aca-photo" style="background-image:url('../assets/studio-nuit.png')">
 <div class="sc" style="--d:74ms">Le son juste,<br/>la bonne prise</div>
 </div>
@@ -259,7 +254,7 @@
 <a class="btn btn-red" style="--d:471ms" href="../studio/">Réserver une session <i class="fas fa-arrow-right"></i></a>
 </aside>
 </article>
-<article class="spot-slide academie" data-ent="academy" id="spot-academy" role="tabpanel" aria-labelledby="tab-academy">
+<article class="spot-slide academie" data-ent="academy" id="spot-academy">
 <div class="aca-photo" style="background-image:url('../assets/academy-cours.jpg')">
 <div class="sc" style="--d:74ms">Chaque voix<br/>a sa place</div>
 </div>
@@ -278,7 +273,7 @@
 <a class="btn btn-red" style="--d:471ms" href="../academy/">Découvrir l'Académie <i class="fas fa-arrow-right"></i></a>
 </aside>
 </article>
-<article class="spot-slide academie" data-ent="production" id="spot-production" role="tabpanel" aria-labelledby="tab-production">
+<article class="spot-slide academie" data-ent="production" id="spot-production">
 <div class="aca-photo" style="background-image:url('../assets/casque.png')">
 <div class="sc" style="--d:74ms">L'idée<br/>devient création</div>
 </div>
@@ -297,7 +292,7 @@
 <a class="btn btn-red" style="--d:471ms" href="../production/">Voir nos créations <i class="fas fa-arrow-right"></i></a>
 </aside>
 </article>
-<article class="spot-slide academie" data-ent="store" id="spot-store" role="tabpanel" aria-labelledby="tab-store">
+<article class="spot-slide academie" data-ent="store" id="spot-store">
 <div class="aca-photo" style="background-image:url('../assets/store.png')">
 <div class="sc" style="--d:74ms">Le bon matériel,<br/>au bon moment</div>
 </div>
@@ -316,7 +311,7 @@
 <a class="btn btn-red" style="--d:471ms" href="../store/">Voir le matériel <i class="fas fa-arrow-right"></i></a>
 </aside>
 </article>
-<article class="spot-slide academie" data-ent="events" id="spot-events" role="tabpanel" aria-labelledby="tab-events">
+<article class="spot-slide academie" data-ent="events" id="spot-events">
 <div class="aca-photo" style="background-image:url('../assets/production.png')">
 <div class="sc" style="--d:74ms">De la première idée<br/>à la dernière lumière</div>
 </div>
@@ -421,60 +416,35 @@
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=30"></script>
+<script src="../js/reatm.js?v=31"></script>
 <script>
-/* ===== Aperçu des pôles : le panneau défile d'un pôle à l'autre =====
+/* ===== Aperçu des pôles : le bloc change tout seul =====
    Les cinq plans sont dans la page, empilés ; on ne fait que déplacer la
-   classe « on ». La minuterie s'arrête dès que le pointeur ou le clavier
+   classe « on ». Le défilement s'arrête dès que le pointeur ou le clavier
    entre dans la section, et ne tourne pas quand elle est hors de l'écran. */
 (function(){
   var sec=document.getElementById('apercu');
   if(!sec)return;
   var plans=[].slice.call(sec.querySelectorAll('.spot-slide'));
-  var onglets=[].slice.call(sec.querySelectorAll('.spot-tabs button'));
-  var trait=sec.querySelector('.spot-ink');
-  var prog=sec.querySelector('.spot-prog');
   if(plans.length<2)return;
   var doux=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var DUREE=7000, i=0, minuteur=null, visible=false, suspendu=false;
+  var DUREE=4000, i=0, minuteur=null, visible=false, suspendu=false;
 
-  function placeTrait(){
-    var b=onglets[i], p=b.parentNode;
-    trait.style.width=b.offsetWidth+'px';
-    trait.style.transform='translateX('+(b.offsetLeft-p.scrollLeft)+'px)';
-  }
-  function relanceProg(){
-    if(!doux)return;
-    prog.classList.remove('go');void prog.offsetWidth;prog.classList.add('go');
-  }
   function montre(n){
     i=(n+plans.length)%plans.length;
-    plans.forEach(function(pl,k){pl.classList.toggle('on',k===i);});
-    onglets.forEach(function(b,k){
-      b.setAttribute('aria-selected',String(k===i));
-      b.tabIndex=(k===i)?0:-1;
+    plans.forEach(function(pl,k){
+      var actif=(k===i);
+      pl.classList.toggle('on',actif);
+      pl.setAttribute('aria-hidden',String(!actif));
     });
-    sec.style.setProperty('--spot-acc',getComputedStyle(plans[i]).getPropertyValue('--aca').trim());
-    placeTrait();
-    relanceProg();
   }
   function demarre(){
     arrete();
     if(!doux||!visible||suspendu)return;
     minuteur=setInterval(function(){montre(i+1);},DUREE);
-    relanceProg();
   }
-  function arrete(){if(minuteur){clearInterval(minuteur);minuteur=null;}prog.classList.remove('go');}
+  function arrete(){if(minuteur){clearInterval(minuteur);minuteur=null;}}
 
-  onglets.forEach(function(b,k){
-    b.addEventListener('click',function(){montre(k);demarre();});
-  });
-  /* flèches gauche/droite dans la barre d'onglets */
-  sec.querySelector('.spot-tabs').addEventListener('keydown',function(e){
-    var d=(e.key==='ArrowRight')?1:(e.key==='ArrowLeft')?-1:0;
-    if(!d)return;
-    e.preventDefault();montre(i+d);onglets[i].focus();demarre();
-  });
   ['pointerenter','focusin'].forEach(function(ev){
     sec.addEventListener(ev,function(){suspendu=true;arrete();});
   });
@@ -484,18 +454,13 @@
       suspendu=false;demarre();
     });
   });
-  window.addEventListener('resize',placeTrait);
-
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(en){
       visible=en[0].isIntersecting;
       visible?demarre():arrete();
-    },{threshold:.25}).observe(sec);
-  }else{visible=true;}
-
+    },{threshold:.2}).observe(sec);
+  }else{visible=true;demarre();}
   montre(0);
-  /* le trait se place une fois les polices chargées, sinon il est mal calé */
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(placeTrait);
 })();
 </script>
 

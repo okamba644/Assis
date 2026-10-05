@@ -80,9 +80,8 @@
   if(mq.addEventListener)mq.addEventListener('change',onBreak);
   else if(mq.addListener)mq.addListener(onBreak);
 
-  /* ---------- Header au défilement + barre de progression + bouton flottant ---------- */
+  /* ---------- Header au défilement + bouton flottant ---------- */
   var header=document.getElementById('header');
-  var bar=document.getElementById('progressBar');
   var fab=document.getElementById('fab');
   var heroImg=document.querySelector('.hero-media .ph');
   var ticking=false;
@@ -90,8 +89,6 @@
     var y=window.pageYOffset||document.documentElement.scrollTop;
     if(header)header.classList.toggle('scrolled',y>12);
     if(fab)fab.classList.toggle('show',y>600);
-    var h=document.documentElement.scrollHeight-window.innerHeight;
-    if(bar)bar.style.width=(h>0?Math.min(100,(y/h)*100):0)+'%';
     if(heroImg&&!reduce)heroImg.style.setProperty('--par',(Math.min(y,520)*0.07).toFixed(1)+'px');
     ticking=false;
   }
