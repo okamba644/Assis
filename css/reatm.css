@@ -1266,6 +1266,10 @@ html[data-theme="dark"] .spot-slide[data-ent="studio"] .aca-side .btn-red{backgr
 html[data-theme="dark"] .spot-slide[data-ent="studio"] .aca-side .btn-red:hover{background:#c5161c}
 .academie .aca-side .btn-red:hover{background:var(--aca-fort,var(--aca));box-shadow:0 14px 28px var(--aca-line)}
 
+/* Moins d'animation : le bloc change toujours de pôle, mais d'un coup.
+   Le figer laisserait quatre pôles sur cinq invisibles. */
 @media(prefers-reduced-motion:reduce){
   .spot-slide [style*="--d"]{opacity:1;transform:none;transition:none}
+  .spot-slide{transition:none}
+  .spot-slide.on{transition:none}
 }
