@@ -323,51 +323,70 @@ html[data-theme="dark"] .hs-slide--studio{background-image:url('../assets/studio
 /* ----- les plaques de marque -----
    Le sigle officiel du pôle, posé sur un fond de la même couleur que la
    pastille : les deux se fondent, on ne voit qu'une plaque. */
-.hs-pl{
-  background-repeat:no-repeat;
-  background-position:center 38%;
-  background-size:auto clamp(44%,52%,62%);
-}
-.hs-pl[data-ent="studio"]{background-color:#1B1D1A;background-image:url('../assets/mark-studio.jpg')}
-.hs-pl[data-ent="house"]{background-color:#FFFFFF;background-image:url('../assets/mark-store.jpg')}
-html[data-theme="dark"] .hs-pl[data-ent="house"]{background-color:#000000;background-image:url('../assets/mark-events.jpg')}
-.hs-pl[data-ent="academy"]{background-color:#44797F;background-image:url('../assets/mark-academy.jpg')}
-.hs-pl[data-ent="store"]{background-color:#FFFFFF;background-image:url('../assets/mark-store.jpg')}
-.hs-pl[data-ent="production"]{background-color:#FFFFFF;background-image:url('../assets/mark-production.jpg')}
-.hs-pl[data-ent="events"]{background-color:#000000;background-image:url('../assets/mark-events.jpg')}
+/* ----- les plaques de marque -----
+   La plaque n'est plus qu'un aplat : le sigle a rejoint le cartouche, pour
+   que le logo et le nom se composent comme un seul bloc centré. */
+.hs-pl{background-image:none}
+.hs-pl[data-ent="studio"]{background-color:#1B1D1A}
+.hs-pl[data-ent="house"]{background-color:#FFFFFF}
+html[data-theme="dark"] .hs-pl[data-ent="house"]{background-color:#000000}
+.hs-pl[data-ent="academy"]{background-color:#44797F}
+.hs-pl[data-ent="store"]{background-color:#FFFFFF}
+.hs-pl[data-ent="production"]{background-color:#FFFFFF}
+.hs-pl[data-ent="events"]{background-color:#000000}
 
-/* ----- le nom de l'entité -----
-   Il appartient au cadre, pas au plan : un plan porte une transformation,
-   donc son propre contexte d'empilement, et le nom passerait sous le voile.
-   Un filet de couleur, la maison en petites capitales espacées, puis le pôle
-   en gras. Même place sur les six plans, photo comprise. */
+/* ----- le cartouche : petit logo, grand nom -----
+   Le sigle passe en vignette discrète et le nom du pôle devient le sujet.
+   Tout est centré et empilé : sigle, filet, la maison en petites capitales
+   espacées, puis le pôle en grand.
+   Le cartouche appartient au cadre et non au plan : un plan porte une
+   transformation, donc son propre contexte d'empilement, et il passerait
+   sous le voile. */
 .hs-cap{
-  position:absolute;z-index:6;
-  left:clamp(18px,2.6vw,34px);bottom:clamp(16px,2.4vw,30px);
-  display:flex;align-items:center;gap:clamp(10px,1.2vw,15px);
-  color:var(--pl-ink,#FFFFFF);pointer-events:none;
+  position:absolute;z-index:6;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(9px,1.1vw,14px);
+  color:var(--pl-ink,#FFFFFF);pointer-events:none;text-align:center;
+  padding:0 clamp(16px,3vw,40px);
   transition:color .6s ease;
 }
-.hs-cap b,.hs-cap em{
-  opacity:0;transform:translateY(15px);
-  transition:opacity .7s ease .28s,transform .9s cubic-bezier(.16,1,.3,1) .28s;
+/* la vignette : le fond du fichier est celui de la plaque, les deux se fondent */
+.hs-mk{
+  display:block;width:clamp(40px,5vw,66px);height:clamp(40px,5vw,66px);
+  border-radius:12px;background:center/cover no-repeat;
+  opacity:0;transform:translateY(12px) scale(.94);
+  transition:opacity .7s ease .18s,transform .9s cubic-bezier(.16,1,.3,1) .18s;
 }
-.hs-cap em{transition-delay:.36s}
-.hs-cap.in b,.hs-cap.in em{opacity:1;transform:none}
+.hs-cap.in .hs-mk{opacity:1;transform:none}
+.hs-main[data-ent="studio"] .hs-mk{background-image:url('../assets/mark-studio.jpg')}
+.hs-main[data-ent="house"] .hs-mk{background-image:url('../assets/mark-store.jpg')}
+html[data-theme="dark"] .hs-main[data-ent="house"] .hs-mk{background-image:url('../assets/mark-events.jpg')}
+.hs-main[data-ent="academy"] .hs-mk{background-image:url('../assets/mark-academy.jpg')}
+.hs-main[data-ent="store"] .hs-mk{background-image:url('../assets/mark-store.jpg')}
+.hs-main[data-ent="production"] .hs-mk{background-image:url('../assets/mark-production.jpg')}
+.hs-main[data-ent="events"] .hs-mk{background-image:url('../assets/mark-events.jpg')}
+/* le filet devient une barre horizontale, qui s'ouvre depuis le centre */
 .hs-cap i{
-  display:block;width:3px;height:clamp(26px,3.4vw,40px);border-radius:3px;
+  display:block;width:clamp(28px,3.4vw,44px);height:2px;border-radius:2px;
   background:var(--pl-acc,#e11b22);
-  transform:scaleY(0);transform-origin:bottom;
-  transition:transform .8s cubic-bezier(.16,1,.3,1) .42s,background-color .6s ease;
+  transform:scaleX(0);
+  transition:transform .8s cubic-bezier(.16,1,.3,1) .3s,background-color .6s ease;
 }
-.hs-cap.in i{transform:scaleY(1)}
+.hs-cap.in i{transform:scaleX(1)}
+.hs-cap b,.hs-cap em{
+  opacity:0;transform:translateY(14px);
+  transition:opacity .7s ease .4s,transform .9s cubic-bezier(.16,1,.3,1) .4s;
+}
+.hs-cap em{transition-delay:.5s}
+.hs-cap.in b,.hs-cap.in em{opacity:1;transform:none}
 .hs-cap b{
-  font-size:clamp(9px,.78vw,11px);font-weight:600;letter-spacing:3.2px;text-transform:uppercase;
-  opacity:0;align-self:flex-end;padding-bottom:3px;
+  font-size:clamp(9px,.8vw,11px);font-weight:600;letter-spacing:5px;text-transform:uppercase;
+  line-height:1;margin-right:-5px;
 }
-.hs-cap.in b{opacity:.7}
+.hs-cap.in b{opacity:.55}
 .hs-cap em{
-  font-style:normal;font-size:clamp(19px,2.6vw,34px);font-weight:800;letter-spacing:-1px;line-height:1;
+  font-style:normal;font-size:clamp(32px,5.6vw,70px);font-weight:800;
+  letter-spacing:-2.4px;line-height:.95;
 }
 /* l'encre et le filet suivent le plan affiché */
 .hs-main[data-ent="studio"]{--pl-ink:#FFFFFF;--pl-acc:#e11b22}

@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=28"/>
+<link rel="stylesheet" href="../css/reatm.css?v=29"/>
 <style>
 /* ===== LA MAISON — vue d'ensemble, waveform géante ===== */
 .phero{background:#050505;color:#fff;overflow:hidden}
@@ -27,7 +27,11 @@
 @keyframes mzDrift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-20px,16px,0) scale(1.04)}}
 /* waveform géante */
 .mz-wave{position:relative;z-index:3;--wh:clamp(90px,15vw,190px);padding:0 clamp(18px,3.2vw,64px) 0;opacity:.85}
-.mz-wave i{background:linear-gradient(180deg,#e11b22,#f5b60d)}
+/* La vague passe au noir. Le cadre d'ouverture étant lui-même noir, un noir
+   pur l'effacerait : les barres gardent juste assez de matière pour se lire
+   comme un relief sombre. */
+.mz-wave{opacity:1}
+.mz-wave i{background:linear-gradient(180deg,#3A3A3A,#101010)}
 
 .mz-cta{background:#050505;color:#fff}
 .mz-cta .btn-acc{background:var(--red);color:#fff}
@@ -354,7 +358,7 @@
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=28"></script>
+<script src="../js/reatm.js?v=29"></script>
 
 </body>
 </html>
