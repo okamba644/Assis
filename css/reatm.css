@@ -1097,8 +1097,9 @@ html[data-theme="dark"] body[data-entity="maison"]{--logo-ink:#ffffff}
 
 body[data-entity="studio"]{--logo-ink:#e11b22}
 html[data-theme="dark"] body[data-entity="studio"]{--logo-ink:#FF4A50}
-body[data-entity="academy"]{--logo-ink:#2563EB}
-html[data-theme="dark"] body[data-entity="academy"]{--logo-ink:#93C5FD}
+/* le logo de l'Académie est vert-bleu : le logotype le suit */
+body[data-entity="academy"]{--logo-ink:#44797F}
+html[data-theme="dark"] body[data-entity="academy"]{--logo-ink:#7FB3B8}
 /* le jaune du pôle Prod disparaît sur un en-tête blanc : on l'assombrit
    juste assez pour le lire, sans quitter la famille ambrée */
 body[data-entity="production"]{--logo-ink:#CA8A04}
@@ -1110,3 +1111,25 @@ html[data-theme="dark"] body[data-entity="events"]{--logo-ink:#FFE3B8}
 
 /* le second mot du logotype nomme le pôle : REATM ACADEMY, REATM STUDIO… */
 body[data-entity]:not([data-entity="maison"]) .brand-txt .n2{color:var(--logo-ink)}
+
+/* ===== LE LOGO OFFICIEL DE CHAQUE PÔLE =====
+   Sur la page d'un pôle, le sigle détouré laisse place au logo de ce pôle :
+   une pastille qui porte sa couleur. Le mot « REATM RECORDS » gravé sous le
+   sigle a été retiré de ces fichiers, illisible à 46 px — il est de toute
+   façon déjà écrit à côté, en toutes lettres.
+   Les chemins restent dans des règles ordinaires : une url() rangée dans une
+   variable se résoudrait depuis la page et non depuis la feuille de style. */
+body[data-entity]:not([data-entity="maison"]) .brand-mark{
+  width:var(--lm,46px);
+  background-color:transparent;
+  background-repeat:no-repeat;background-position:center;background-size:cover;
+  -webkit-mask:none;mask:none;
+  border-radius:13px;
+  box-shadow:0 2px 12px rgba(0,0,0,.16);
+}
+body[data-entity="studio"] .brand-mark{background-image:url('../assets/mark-studio.jpg')}
+body[data-entity="academy"] .brand-mark{background-image:url('../assets/mark-academy.jpg')}
+body[data-entity="production"] .brand-mark{background-image:url('../assets/mark-production.jpg')}
+body[data-entity="store"] .brand-mark{background-image:url('../assets/mark-store.jpg')}
+body[data-entity="events"] .brand-mark{background-image:url('../assets/mark-events.jpg')}
+html[data-theme="dark"] body[data-entity] .brand-mark{box-shadow:0 2px 12px rgba(0,0,0,.5)}
