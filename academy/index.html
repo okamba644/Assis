@@ -12,45 +12,56 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=33"/>
+<link rel="stylesheet" href="../css/reatm.css?v=34"/>
 <style>
 /* ===== ACADEMY — bleu + blanc, lumineuse et pédagogique ===== */
 .phero{background:#F7F8FA;color:#111111}
 html[data-theme="dark"] .phero{background:#0B0D12;color:#fff}
-/* photo de cours en fond, claire et désaturée : elle pose l'ambiance sans crier */
-.phero-bg{background-image:url('../assets/academy-cours.jpg');background-position:center 45%;opacity:.42}
-html[data-theme="dark"] .phero-bg{opacity:.2}
-/* le voile ramène le texte au premier plan ; le bleu n'est plus qu'une nuance au loin */
-.phero-veil{background:
-  linear-gradient(90deg,#F7F8FA 26%,rgba(247,248,250,.78) 52%,rgba(247,248,250,.25) 100%),
-  radial-gradient(720px circle at 88% 22%,rgba(37,99,235,.10),transparent 70%)}
-html[data-theme="dark"] .phero-veil{background:
-  linear-gradient(90deg,#0B0D12 26%,rgba(11,13,18,.8) 52%,rgba(11,13,18,.3) 100%),
-  radial-gradient(720px circle at 88% 22%,rgba(37,99,235,.16),transparent 70%)}
+/* ----- le cadre se partage en deux -----
+   Une diagonale sépare le texte, sur fond clair à gauche, de la photo de
+   cours à droite. Les deux bornes sont des variables : la coupe garde la
+   même pente quelle que soit la largeur, et le texte ne la franchit jamais. */
+/* en vw et non en % : la même valeur sert au découpage du fond et à la
+   largeur maximale du texte, qui sans cela se compareraient à deux
+   conteneurs différents */
+.phero{--coupe-haut:46vw;--coupe-bas:64vw}
+.phero-bg{
+  background-image:url('../assets/academy-cours.jpg');background-position:center 45%;opacity:1;
+  clip-path:polygon(var(--coupe-haut) 0,100% 0,100% 100%,var(--coupe-bas) 100%);
+}
+/* le voile n'assombrit que le côté photo : il porte le nom en grand sans
+   toucher au côté texte, qui reste clair */
+.phero-veil{
+  clip-path:polygon(var(--coupe-haut) 0,100% 0,100% 100%,var(--coupe-bas) 100%);
+  background:
+    linear-gradient(115deg,rgba(8,13,26,.66) 0%,rgba(8,13,26,.38) 46%,rgba(8,13,26,.58) 100%),
+    radial-gradient(760px circle at 78% 24%,rgba(37,99,235,.26),transparent 68%);
+}
+/* le filet de la coupe, dans le bleu de l'Académie */
+.ph-cut{
+  position:absolute;inset:0;z-index:2;pointer-events:none;background:#2563EB;
+  clip-path:polygon(var(--coupe-haut) 0,calc(var(--coupe-haut) + 2px) 0,calc(var(--coupe-bas) + 2px) 100%,var(--coupe-bas) 100%);
+}
+/* ----- le nom du pôle, posé sur la photo -----
+   REATM au trait, Academy plein : les deux se lisent d'un coup sans
+   recouvrir le visuel. */
+.ph-nom{
+  position:absolute;z-index:3;right:clamp(26px,4.4vw,88px);top:47%;
+  transform:translateY(-50%);text-align:right;pointer-events:none;
+  font-weight:800;letter-spacing:-3px;line-height:.9;
+}
+.ph-nom b,.ph-nom em{display:block;font-style:normal;font-size:clamp(30px,5.6vw,92px)}
+.ph-nom b{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.92);filter:drop-shadow(0 6px 20px rgba(0,0,0,.5))}
+.ph-nom em{color:#fff;text-shadow:0 10px 36px rgba(0,0,0,.42)}
+/* Le texte reste du côté clair. La contrainte porte sur chaque élément et
+   non sur .phero-inner, qui est aussi le conteneur centré de la page : lui
+   donner une largeur maximale l'aurait recentré au milieu du cadre. */
+.phero .phero-inner>*{max-width:min(560px,calc(var(--coupe-haut) - 120px))}
 .phero h1 em{color:#2563EB}
 .phero .sub{color:#4b5563}
 html[data-theme="dark"] .phero .sub{color:#9ca3af}
 .phero .crumbs{color:#6b7280}
 html[data-theme="dark"] .phero .crumbs{color:#9ca3af}
-/* ----- l'étiquette du pôle, au-dessus du titre -----
-   Un filet qui se trace, puis le nom en petites capitales espacées. Même
-   langage que les étiquettes du reste du site, à l'échelle d'un cadre
-   d'ouverture. */
-.ph-tag{
-  display:flex;align-items:center;gap:clamp(12px,1.4vw,18px);
-  margin-bottom:clamp(16px,2vw,24px);
-  font-size:clamp(10px,.82vw,11.5px);font-weight:700;letter-spacing:3px;
-  text-transform:uppercase;color:#2563EB;
-}
-.ph-tag::before{
-  content:"";flex:0 0 auto;width:clamp(30px,4.4vw,62px);height:2px;border-radius:2px;
-  background:currentColor;
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .95s cubic-bezier(.16,1,.3,1) .12s;
-}
-.js .ph-tag.in::before{transform:scaleX(1)}
-.ph-tag span{display:block}
-
 /* trois mots empilés, rythme pédagogique */
 .ac-steps{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
 .ac-steps span{
@@ -176,6 +187,16 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 .ac-cta .wrap{position:relative;z-index:2}
 .ac-cta .btn-acc{background:#2563EB;color:#fff}
 .ac-cta .btn-acc:hover{box-shadow:0 16px 34px rgba(37,99,235,.3)}
+@media(max-width:980px){
+  /* trop étroit pour une coupe en biais : la photo repasse en fond unique,
+     éclairci, et le nom en grand cède la place au titre */
+  .phero-bg{clip-path:none;opacity:.3}
+  .phero-veil{clip-path:none;background:
+    linear-gradient(0deg,rgba(247,248,250,.9) 10%,rgba(247,248,250,.6) 60%,rgba(247,248,250,.3) 100%)}
+  .ph-cut,.ph-nom{display:none}
+  .phero .phero-inner>*{max-width:none}
+  .phero .sub{max-width:620px}
+}
 @media(max-width:1080px){.ac-form{grid-template-columns:repeat(2,1fr)}.ac-poles{grid-template-columns:1fr}}
 @media(max-width:760px){.ac-form,.ac-dots,.ac-ses{grid-template-columns:1fr}.ac-dots .pin{position:static;margin-bottom:12px}.ac-rail{margin:26px 0 22px}}
 </style>
@@ -255,12 +276,11 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 
 
 <section class="phero">
-<div class="phero-bg"></div><div class="phero-veil"></div>
+<div class="phero-bg"></div><div class="phero-veil"></div><div class="ph-cut" aria-hidden="true"></div><div class="ph-nom reveal" aria-hidden="true"><b>REATM</b><em>Academy</em></div>
 <div class="wrap phero-inner">
 <a class="crumbs" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour à l'accueil</a>
-<div class="ph-tag reveal"><span>REATM Academy</span></div>
-<h1 class="reveal" style="--d:70ms">Learn.<br/>Create.<br/><em>Master.</em></h1>
-<p class="sub reveal" style="--d:150ms">Développez votre talent et révélez votre potentiel. Trois pôles pour vous accompagner : la formation musicale, la bibliothèque de ressources et la formation média.</p>
+<h1 class="reveal">Learn.<br/>Create.<br/><em>Master.</em></h1>
+<p class="sub reveal" style="--d:100ms">Développez votre talent et révélez votre potentiel. Trois pôles pour vous accompagner : la formation musicale, la bibliothèque de ressources et la formation média.</p>
 <div class="ac-steps"><span>03 pôles</span><span>04 formations</span><span>03 niveaux</span><span>02 sessions</span></div>
 </div>
 </section>
@@ -386,7 +406,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=33"></script>
+<script src="../js/reatm.js?v=34"></script>
 <script>
 (function(){
   var el=document.getElementById('acLevels');

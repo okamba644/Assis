@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=33"/>
+<link rel="stylesheet" href="../css/reatm.css?v=34"/>
 <style>
 /* ===== LA MAISON — vue d'ensemble, waveform géante ===== */
 .phero{background:#050505;color:#fff;overflow:hidden}
@@ -416,23 +416,22 @@
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=33"></script>
+<script src="../js/reatm.js?v=34"></script>
 <script>
 /* ===== Aperçu des pôles : le bloc change tout seul =====
    Les cinq plans sont dans la page, empilés ; on ne fait que déplacer la
-   classe « on ».
-   Le bloc change de pôle toutes les trois secondes. Il ne s'arrête que si la section quitte
-   l'écran, ou pendant qu'on navigue au clavier à l'intérieur. Il ne s'arrête
-   pas au survol — le bloc occupe le centre de l'écran, la souris s'y pose
-   sans y penser, et il resterait figé sur le premier pôle.
-   Quand le système demande moins d'animation, le bloc continue de changer
-   mais sans fondu : s'arrêter laisserait quatre pôles sur cinq invisibles. */
+   classe « on », toutes les trois secondes.
+   La minuterie n'est soumise à aucune condition : ni survol, ni visibilité,
+   ni réglage d'animation du système. Chacune de ces conditions a déjà figé
+   le bloc sur le premier pôle, ce qui revient à cacher quatre pôles sur
+   cinq. Seule la navigation au clavier à l'intérieur la suspend, le temps
+   d'atteindre le bouton. */
 (function(){
   var sec=document.getElementById('apercu');
   if(!sec)return;
   var plans=[].slice.call(sec.querySelectorAll('.spot-slide'));
   if(plans.length<2)return;
-  var DUREE=3000, i=0, minuteur=null, visible=true, suspendu=false;
+  var DUREE=3000, i=0, minuteur=null;
 
   function montre(n){
     i=(n+plans.length)%plans.length;
@@ -442,26 +441,14 @@
       pl.setAttribute('aria-hidden',String(!actif));
     });
   }
-  function demarre(){
-    arrete();
-    if(!visible||suspendu)return;
-    minuteur=setInterval(function(){montre(i+1);},DUREE);
-  }
+  function demarre(){arrete();minuteur=setInterval(function(){montre(i+1);},DUREE);}
   function arrete(){if(minuteur){clearInterval(minuteur);minuteur=null;}}
 
-  /* Au clavier, on laisse le temps de lire et d'atteindre le bouton. */
-  sec.addEventListener('focusin',function(){suspendu=true;arrete();});
+  sec.addEventListener('focusin',arrete);
   sec.addEventListener('focusout',function(){
-    if(sec.contains(document.activeElement))return;
-    suspendu=false;demarre();
+    if(!sec.contains(document.activeElement))demarre();
   });
-  /* Hors de l'écran, inutile de faire tourner une minuterie. */
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(en){
-      visible=en[0].isIntersecting;
-      visible?demarre():arrete();
-    },{threshold:0}).observe(sec);
-  }
+
   montre(0);
   demarre();
 })();
