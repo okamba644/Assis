@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=37"/>
+<link rel="stylesheet" href="../css/reatm.css?v=38"/>
 <style>
 /* ===== ACADEMY — bleu + blanc, lumineuse et pédagogique ===== */
 .phero{background:#F7F8FA;color:#111111}
@@ -45,6 +45,10 @@ html[data-theme="dark"] .phero{background:#0B0D12;color:#fff}
 /* ----- le nom du pôle, posé sur la photo -----
    REATM au trait, Academy plein : les deux se lisent d'un coup sans
    recouvrir le visuel. */
+/* le nom se dévoile comme le reste du cadre */
+.js .ph-nom{opacity:0;transform:translateY(20px);
+  transition:opacity .85s ease .12s,transform 1.05s cubic-bezier(.16,1,.3,1) .12s}
+.js .ph-nom.in{opacity:1;transform:none}
 .ph-side{
   position:absolute;z-index:3;right:clamp(26px,4.4vw,88px);top:26%;
   text-align:right;max-width:min(54vw,860px);
@@ -263,21 +267,42 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 .ac-cta .btn-acc{background:#2563EB;color:#fff}
 .ac-cta .btn-acc:hover{box-shadow:0 16px 34px rgba(37,99,235,.3)}
 @media(max-width:980px){
-  /* trop étroit pour une coupe en biais : la photo repasse en fond unique,
-     éclairci, et le nom en grand cède la place au titre */
-  .phero-bg{clip-path:none;opacity:.3}
-  .phero-veil{clip-path:none;background:
-    linear-gradient(0deg,rgba(247,248,250,.9) 10%,rgba(247,248,250,.6) 60%,rgba(247,248,250,.3) 100%)}
-  .ph-cut,.ph-nom,.ph-sous{display:none}
-  /* le bloc de droite redescend dans le flux, sous le texte */
-  .ph-side{position:static;max-width:none;text-align:left;
-    padding:0 clamp(18px,3.2vw,64px) clamp(28px,5vw,48px)}
-  .ph-poles{justify-content:flex-start;margin-top:0}
-  .ph-poles a{color:#1f2937;text-shadow:none}
-  .ph-poles .pt,.ph-poles a::after{background:#2563EB}
-  .ph-poles a:hover{color:#2563EB}
+  /* Trop étroit pour une coupe en biais : la photo quitte le fond du cadre
+     et devient une bande à part, sous le texte. Elle garde une arête en
+     biais, le nom en grand et les liens par-dessus — la même composition
+     que sur grand écran, pivotée d'un quart de tour. */
+  .phero{background:#F7F8FA}
+  .phero-bg,.phero-veil,.ph-cut{display:none}
+  .phero-inner{padding-bottom:clamp(28px,6vw,44px)}
   .phero .phero-inner>*{max-width:none}
+  /* la largeur calée sur la coupe en biais n'a plus lieu d'être : à 390 px
+     elle valait 46vw, soit 179 px, et chaque repère tombait sur sa ligne */
+  .phero .phero-inner>.ac-steps{max-width:none}
   .phero .sub{max-width:620px}
+  /* les repères tiennent deux par ligne au lieu de se casser en deux */
+  .ac-steps{gap:8px}
+  .ac-steps span{white-space:nowrap;font-size:10px;letter-spacing:1.2px;padding:9px 14px}
+
+  .ph-side{
+    /* position:relative conserve right/top du mode absolu : on les neutralise,
+       sans quoi la bande glisse hors du cadre par la gauche. */
+    position:relative;right:auto;top:auto;max-width:none;text-align:left;isolation:isolate;
+    padding:clamp(58px,14vw,92px) clamp(18px,3.2vw,64px) clamp(34px,7vw,52px);
+    background:url('../assets/academy-cours.jpg') center 45%/cover no-repeat;
+    clip-path:polygon(0 30px,100% 0,100% 100%,0 100%);
+  }
+  .ph-side::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(165deg,rgba(8,13,26,.76),rgba(8,13,26,.54) 55%,rgba(8,13,26,.7));
+  }
+  .ph-nom{display:block}
+  .ph-nom::before{display:none}
+  .ph-nom b,.ph-nom em{font-size:clamp(42px,13.5vw,78px)}
+  .ph-sous{display:block}
+  .ph-poles{justify-content:flex-start;margin-top:clamp(18px,4.2vw,26px);gap:13px 22px}
+  .ph-poles a{color:#fff}
+  .ph-poles .pt,.ph-poles a::after{background:#93C5FD}
+  .ph-poles a:hover{color:#93C5FD}
 }
 @media(max-width:1080px){.ac-form{grid-template-columns:repeat(2,1fr)}.ac-poles{grid-template-columns:1fr}}
 @media(max-width:760px){.ac-form,.ac-dots,.ac-ses{grid-template-columns:1fr}.ac-dots .pin{position:static;margin-bottom:12px}.ac-rail{margin:26px 0 22px}}
