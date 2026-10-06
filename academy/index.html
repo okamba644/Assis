@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=34"/>
+<link rel="stylesheet" href="../css/reatm.css?v=35"/>
 <style>
 /* ===== ACADEMY — bleu + blanc, lumineuse et pédagogique ===== */
 .phero{background:#F7F8FA;color:#111111}
@@ -46,17 +46,30 @@ html[data-theme="dark"] .phero{background:#0B0D12;color:#fff}
    REATM au trait, Academy plein : les deux se lisent d'un coup sans
    recouvrir le visuel. */
 .ph-nom{
-  position:absolute;z-index:3;right:clamp(26px,4.4vw,88px);top:47%;
+  position:absolute;z-index:3;right:clamp(26px,4.4vw,88px);top:38%;
   transform:translateY(-50%);text-align:right;pointer-events:none;
   font-weight:800;letter-spacing:-3px;line-height:.9;
 }
-.ph-nom b,.ph-nom em{display:block;font-style:normal;font-size:clamp(30px,5.6vw,92px)}
-.ph-nom b{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.92);filter:drop-shadow(0 6px 20px rgba(0,0,0,.5))}
-.ph-nom em{color:#fff;text-shadow:0 10px 36px rgba(0,0,0,.42)}
+/* un halo sombre sous le nom : par endroits la photo est claire et le bleu
+   du pôle y perdait son contraste */
+.ph-nom::before{
+  content:"";position:absolute;inset:-22% -12%;z-index:-1;
+  background:radial-gradient(62% 58% at 58% 52%,rgba(6,11,22,.66),rgba(6,11,22,.28) 62%,transparent 78%);
+}
+.ph-nom b,.ph-nom em{display:block;font-style:normal;font-size:clamp(34px,7.4vw,132px)}
+.ph-nom b{color:transparent;-webkit-text-stroke:2.5px rgba(255,255,255,.92);filter:drop-shadow(0 6px 20px rgba(0,0,0,.5))}
+/* le bleu du pôle, dans sa déclinaison claire : le bleu plein s'éteindrait
+   sur le voile sombre, celui-ci garde près de neuf de contraste */
+.ph-nom em{color:#93C5FD;text-shadow:0 10px 36px rgba(0,0,0,.5)}
 /* Le texte reste du côté clair. La contrainte porte sur chaque élément et
    non sur .phero-inner, qui est aussi le conteneur centré de la page : lui
    donner une largeur maximale l'aurait recentré au milieu du cadre. */
-.phero .phero-inner>*{max-width:min(560px,calc(var(--coupe-haut) - 120px))}
+.phero .phero-inner>*{max-width:min(480px,calc(var(--coupe-haut) - 120px))}
+/* Le titre cède du terrain au nom du pôle, et le cadre démarre plus haut. */
+.phero h1{font-size:clamp(34px,5.4vw,80px);letter-spacing:-2.2px;margin-bottom:18px}
+/* les pastilles sont courtes : on leur laisse de quoi tenir sur une ligne */
+.phero .phero-inner>.ac-steps{max-width:min(560px,calc(var(--coupe-haut) - 70px))}
+.phero-inner{padding-top:clamp(40px,5.4vw,76px);padding-bottom:clamp(44px,5.6vw,80px)}
 .phero h1 em{color:#2563EB}
 .phero .sub{color:#4b5563}
 html[data-theme="dark"] .phero .sub{color:#9ca3af}
@@ -406,7 +419,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=34"></script>
+<script src="../js/reatm.js?v=35"></script>
 <script>
 (function(){
   var el=document.getElementById('acLevels');
