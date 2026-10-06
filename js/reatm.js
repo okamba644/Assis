@@ -136,7 +136,9 @@
   })();
 
   /* ---------- Révélations au défilement ---------- */
-  var items=document.querySelectorAll('.reveal,.reveal-x,.reveal-zoom');
+  /* reveal-raw : l'élément ne reçoit que la classe « in », sa mise en scène
+   lui appartient. Utile quand l'animation porte sur ses enfants. */
+  var items=document.querySelectorAll('.reveal,.reveal-x,.reveal-zoom,.reveal-raw');
   if('IntersectionObserver' in window && !reduce){
     var io=new IntersectionObserver(function(entries){
       entries.forEach(function(en){
