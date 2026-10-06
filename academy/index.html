@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=36"/>
+<link rel="stylesheet" href="../css/reatm.css?v=37"/>
 <style>
 /* ===== ACADEMY — bleu + blanc, lumineuse et pédagogique ===== */
 .phero{background:#F7F8FA;color:#111111}
@@ -45,9 +45,12 @@ html[data-theme="dark"] .phero{background:#0B0D12;color:#fff}
 /* ----- le nom du pôle, posé sur la photo -----
    REATM au trait, Academy plein : les deux se lisent d'un coup sans
    recouvrir le visuel. */
+.ph-side{
+  position:absolute;z-index:3;right:clamp(26px,4.4vw,88px);top:26%;
+  text-align:right;max-width:min(54vw,860px);
+}
 .ph-nom{
-  position:absolute;z-index:3;right:clamp(26px,4.4vw,88px);top:38%;
-  transform:translateY(-50%);text-align:right;pointer-events:none;
+  position:relative;pointer-events:none;
   font-weight:800;letter-spacing:-3px;line-height:.9;
 }
 /* un halo sombre sous le nom : par endroits la photo est claire et le bleu
@@ -78,12 +81,17 @@ html[data-theme="dark"] .phero .crumbs{color:#9ca3af}
 /* ----- l'arrivée du titre -----
    Chaque ligne monte depuis sa propre fenêtre, puis le paragraphe suit.
    Sans JavaScript, tout est visible d'emblée. */
-.ph-anim .l{display:block;overflow:hidden}
+/* Le dévoilement se fait au clip et non au débordement caché : une ligne
+   plus large que sa colonne serait sinon coupée net sur la droite. */
+.ph-anim .l{display:block}
 .ph-anim .l>i{display:block;font-style:normal}
-.js .ph-anim .l>i{transform:translateY(102%);transition:transform 1s cubic-bezier(.16,1,.3,1)}
+.js .ph-anim .l>i{
+  clip-path:inset(0 0 104% 0);transform:translateY(26%);
+  transition:clip-path .95s cubic-bezier(.16,1,.3,1),transform .95s cubic-bezier(.16,1,.3,1);
+}
 .js .ph-anim .l:nth-child(2)>i{transition-delay:.11s}
 .js .ph-anim .l:nth-child(3)>i{transition-delay:.22s}
-.js .ph-anim.in .l>i{transform:none}
+.js .ph-anim.in .l>i{clip-path:inset(-18% -6% -18% 0);transform:none}
 .js .ph-anim--sub{opacity:0;transform:translateY(16px);
   transition:opacity .8s ease .42s,transform 1s cubic-bezier(.16,1,.3,1) .42s}
 .js .ph-anim--sub.in{opacity:1;transform:none}
@@ -91,10 +99,20 @@ html[data-theme="dark"] .phero .crumbs{color:#9ca3af}
 /* ----- les trois pôles, sous le titre -----
    Une pastille, le nom du pôle, et un trait qui se trace au survol.
    Chacun mène à sa carte, plus bas dans la page. */
-.ph-poles{display:flex;flex-wrap:wrap;gap:clamp(14px,2vw,30px);margin-top:clamp(24px,3vw,38px)}
+/* sur les pages de pôle, le nom de la formation prend la place des liens */
+.ph-sous{
+  margin-top:clamp(14px,1.8vw,22px);
+  font-size:clamp(12px,1.1vw,15px);font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.5);
+}
+.ph-poles{
+  display:flex;flex-wrap:wrap;justify-content:flex-end;
+  gap:clamp(14px,2vw,30px);margin-top:clamp(20px,2.4vw,32px);
+}
 .ph-poles a{
   position:relative;display:inline-flex;align-items:center;gap:11px;padding:4px 0;
-  font-size:clamp(12px,1.05vw,14.5px);font-weight:700;letter-spacing:.3px;color:#1f2937;
+  font-size:clamp(12px,1.05vw,15px);font-weight:700;letter-spacing:.3px;color:#fff;
+  text-shadow:0 4px 18px rgba(0,0,0,.5);
   transition:opacity .7s ease,transform .9s cubic-bezier(.16,1,.3,1),color .3s ease;
 }
 .js .ph-poles a{opacity:0;transform:translateY(14px)}
@@ -102,13 +120,13 @@ html[data-theme="dark"] .phero .crumbs{color:#9ca3af}
 .ph-poles a:nth-child(2){transition-delay:.09s}
 .ph-poles a:nth-child(3){transition-delay:.18s}
 .ph-poles .pt{
-  width:9px;height:9px;border-radius:50%;background:#2563EB;flex:0 0 9px;
+  width:9px;height:9px;border-radius:50%;background:#93C5FD;flex:0 0 9px;
   transition:transform .4s cubic-bezier(.34,1.5,.64,1);
 }
-.ph-poles a:hover{color:#2563EB}
+.ph-poles a:hover{color:#93C5FD}
 .ph-poles a:hover .pt{transform:scale(1.45)}
 .ph-poles a::after{
-  content:"";position:absolute;left:20px;right:0;bottom:0;height:2px;border-radius:2px;background:#2563EB;
+  content:"";position:absolute;left:20px;right:0;bottom:0;height:2px;border-radius:2px;background:#93C5FD;
   transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1);
 }
 .ph-poles a:hover::after,.ph-poles a:focus-visible::after{transform:scaleX(1)}
@@ -250,7 +268,14 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
   .phero-bg{clip-path:none;opacity:.3}
   .phero-veil{clip-path:none;background:
     linear-gradient(0deg,rgba(247,248,250,.9) 10%,rgba(247,248,250,.6) 60%,rgba(247,248,250,.3) 100%)}
-  .ph-cut,.ph-nom{display:none}
+  .ph-cut,.ph-nom,.ph-sous{display:none}
+  /* le bloc de droite redescend dans le flux, sous le texte */
+  .ph-side{position:static;max-width:none;text-align:left;
+    padding:0 clamp(18px,3.2vw,64px) clamp(28px,5vw,48px)}
+  .ph-poles{justify-content:flex-start;margin-top:0}
+  .ph-poles a{color:#1f2937;text-shadow:none}
+  .ph-poles .pt,.ph-poles a::after{background:#2563EB}
+  .ph-poles a:hover{color:#2563EB}
   .phero .phero-inner>*{max-width:none}
   .phero .sub{max-width:620px}
 }
@@ -333,11 +358,15 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 
 
 <section class="phero">
-<div class="phero-bg"></div><div class="phero-veil"></div><div class="ph-cut" aria-hidden="true"></div><div class="ph-nom reveal" aria-hidden="true"><b>REATM</b><em>Academy</em></div>
+<div class="phero-bg"></div><div class="phero-veil"></div><div class="ph-cut" aria-hidden="true"></div>
 <div class="wrap phero-inner">
 <a class="crumbs" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour à l'accueil</a>
 <h1 class="ph-anim reveal-raw"><span class="l"><i>Learn.</i></span><span class="l"><i>Create.</i></span><span class="l"><i><em>Master.</em></i></span></h1>
 <p class="sub ph-anim ph-anim--sub reveal-raw">Développez votre talent et révélez votre potentiel. Trois pôles pour vous accompagner : la formation musicale, la bibliothèque de ressources et la formation média.</p>
+
+</div>
+<div class="ph-side">
+<div class="ph-nom reveal-raw"><b>REATM</b><em>Academy</em></div>
 <nav class="ph-poles reveal-raw" aria-label="Les trois pôles"><a href="#pole-musique"><span class="pt"></span>Cours de musique</a><a href="#pole-media"><span class="pt"></span>Formation média</a><a href="#pole-biblio"><span class="pt"></span>Bibliothèque</a></nav>
 </div>
 </section>
@@ -436,7 +465,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=36"></script>
+<script src="../js/reatm.js?v=37"></script>
 <script>
 (function(){
   var el=document.getElementById('acLevels');
