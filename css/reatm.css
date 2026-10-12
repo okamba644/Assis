@@ -1040,15 +1040,6 @@ body[data-entity="studio"] .btn-acc:hover{background:#c5161c;box-shadow:0 16px 3
 .wavebar i:nth-child(6n+5){height:34%;animation-delay:.34s}
 .wavebar i:nth-child(6n){height:58%;animation-delay:.2s}
 
-/* =================== CURSEUR PERSONNALISÉ =================== */
-.cur,.cur-dot{position:fixed;top:0;left:0;z-index:300;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .3s ease}
-.cur{width:38px;height:38px;border:1.5px solid var(--acc);margin:-19px 0 0 -19px;
-  transition:opacity .3s ease,width .35s cubic-bezier(.2,.8,.3,1),height .35s cubic-bezier(.2,.8,.3,1),background-color .35s ease,border-color .35s ease,margin .35s cubic-bezier(.2,.8,.3,1)}
-.cur-dot{width:5px;height:5px;background:var(--acc);margin:-2.5px 0 0 -2.5px}
-html.has-cursor .cur,html.has-cursor .cur-dot{opacity:1}
-html.has-cursor .cur.is-active{width:64px;height:64px;margin:-32px 0 0 -32px;background:color-mix(in srgb,var(--acc) 14%,transparent)}
-/* le curseur du système reste visible : l'anneau ne fait que l'accompagner */
-
 /* =================== TRANSITION DE PAGE =================== */
 .veil{position:fixed;inset:0;z-index:500;pointer-events:none;background:var(--acc);opacity:0;transition:opacity .55s ease}
 html.tx-leaving .veil{opacity:1}
@@ -1081,7 +1072,6 @@ html.tx-ready .veil-in{transform:translateY(-101%);opacity:0}
   .phero h1{letter-spacing:-1.6px}
 }
 @media(prefers-reduced-motion:reduce){
-  .cur,.cur-dot{display:none}
   .veil,.veil-in,.tx-clone{display:none!important}
 }
 

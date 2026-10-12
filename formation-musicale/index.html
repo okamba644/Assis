@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=39"/>
+<link rel="stylesheet" href="../css/reatm.css?v=40"/>
 <style>
 /* ===== ACADEMY — bleu + blanc, lumineuse et pédagogique ===== */
 .phero{background:#F7F8FA;color:#111111}
@@ -76,6 +76,8 @@ html[data-theme="dark"] .phero{background:#0B0D12;color:#fff}
 .phero h1{font-size:clamp(34px,5.4vw,80px);letter-spacing:-2.2px;margin-bottom:18px}
 /* les pastilles sont courtes : on leur laisse de quoi tenir sur une ligne */
 .phero .phero-inner>.ac-steps{max-width:min(560px,calc(var(--coupe-haut) - 70px))}
+/* les deux boutons tiennent côte à côte plutôt que l'un sous l'autre */
+.phero .phero-inner>.ph-liens{max-width:min(560px,calc(var(--coupe-haut) - 70px))}
 .phero-inner{padding-top:clamp(40px,5.4vw,76px);padding-bottom:clamp(44px,5.6vw,80px)}
 .phero h1 em{color:#2563EB}
 .phero .sub{color:#4b5563}
@@ -278,6 +280,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
   /* la largeur calée sur la coupe en biais n'a plus lieu d'être : à 390 px
      elle valait 46vw, soit 179 px, et chaque repère tombait sur sa ligne */
   .phero .phero-inner>.ac-steps{max-width:none}
+  .phero .phero-inner>.ph-liens{max-width:none}
   .phero .sub{max-width:620px}
   /* les repères tiennent deux par ligne au lieu de se casser en deux */
   .ac-steps{gap:8px}
@@ -306,6 +309,40 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 }
 @media(max-width:1080px){.ac-form{grid-template-columns:repeat(2,1fr)}.ac-poles{grid-template-columns:1fr}}
 @media(max-width:760px){.ac-form,.ac-dots,.ac-ses{grid-template-columns:1fr}.ac-dots .pin{position:static;margin-bottom:12px}.ac-rail{margin:26px 0 22px}}
+
+/* ----- passer d'un pôle à l'autre -----
+   Depuis une page de pôle, les deux autres sont à un clic : plus besoin de
+   remonter par l'Académie pour changer de formation. */
+.ph-liens{margin-top:clamp(20px,2.6vw,30px)}
+.ph-liens-t{
+  display:block;margin-bottom:clamp(10px,1.2vw,14px);
+  font-size:clamp(10px,.84vw,12px);font-weight:700;letter-spacing:2.6px;
+  text-transform:uppercase;color:#6b7280;
+}
+.ph-liens-l{display:flex;flex-wrap:wrap;gap:10px clamp(12px,1.5vw,20px)}
+.ph-liens a{
+  position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:12px 20px;border:1px solid #CFE0FB;border-radius:14px;background:#fff;
+  font-size:clamp(12px,1.02vw,14.5px);font-weight:700;color:#1F2937;
+  transition:opacity .7s ease,transform .9s cubic-bezier(.16,1,.3,1),
+             border-color .3s ease,color .3s ease,background-color .3s ease,box-shadow .3s ease;
+}
+.js .ph-liens a{opacity:0;transform:translateY(14px)}
+.js .ph-liens.in a{opacity:1;transform:none}
+.ph-liens-l a:nth-child(2){transition-delay:.1s}
+.ph-liens .pt{
+  width:9px;height:9px;border-radius:50%;background:#2563EB;flex:0 0 9px;
+  transition:transform .4s cubic-bezier(.34,1.5,.64,1);
+}
+.ph-liens a svg{
+  width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.ph-liens a:hover{border-color:#2563EB;color:#2563EB;background:#F3F7FF;
+  box-shadow:0 12px 26px rgba(37,99,235,.14)}
+.ph-liens a:hover .pt{transform:scale(1.45)}
+.ph-liens a:hover svg{transform:translateX(4px)}
+.ph-liens a:focus-visible{outline:2px solid #2563EB;outline-offset:3px}
 </style>
 </head>
 <body data-entity="academy" style="--veil-in:#2563EB">
@@ -390,6 +427,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 <h1 class="ph-anim reveal-raw"><span class="l"><i>Apprendre.</i></span><span class="l"><i>Répéter.</i></span><span class="l"><i><em>Jouer.</em></i></span></h1>
 <p class="sub ph-anim ph-anim--sub reveal-raw">Quatre instruments, quatre professeurs. Trois classes pour savoir où l'on en est, deux rythmes pour avancer à votre mesure.</p>
 <div class="ac-steps"><span>04 instruments</span><span>03 niveaux</span><span>02 formules</span><span>1h30 par séance</span></div>
+<nav class="ph-liens reveal-raw" aria-label="Les autres pôles de l'Académie"><span class="ph-liens-t">Les autres pôles</span><div class="ph-liens-l"><a href="../formation-media/"><span class="pt"></span>Formation média<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="../bibliotheque/"><span class="pt"></span>Bibliothèque<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></nav>
 </div>
 <div class="ph-side">
 <div class="ph-nom reveal-raw"><b>REATM</b><em>Academy</em></div>
@@ -507,7 +545,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=39"></script>
+<script src="../js/reatm.js?v=40"></script>
 <script>
 (function(){
   var el=document.getElementById('acLevels');

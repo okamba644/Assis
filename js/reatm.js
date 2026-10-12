@@ -223,34 +223,23 @@
     },3000);
   })();
 
-  /* ---------- Curseur personnalisé, avec effet magnétique ---------- */
+  /* ---------- Effet magnétique sur les boutons ----------
+     L'anneau qui doublait le curseur du système a été retiré ; seul reste
+     l'aimant, qui attire légèrement vers la souris le bouton survolé. */
   var finePointer=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
   if(finePointer&&!reduce){
-    var ring=document.createElement('div');ring.className='cur';
-    var dot=document.createElement('div');dot.className='cur-dot';
-    document.body.appendChild(ring);document.body.appendChild(dot);
-    root.classList.add('has-cursor');
-    var mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
     document.addEventListener('pointermove',function(e){
-      mx=e.clientX;my=e.clientY;
-      dot.style.transform='translate3d('+mx+'px,'+my+'px,0)';
       var m=e.target.closest&&e.target.closest('.btn,.icon-btn,.ucard-cta,.mnav-soc a,.f-soc a');
       if(m){
         var r=m.getBoundingClientRect();
-        var dx=(mx-(r.left+r.width/2))*.28, dy=(my-(r.top+r.height/2))*.28;
+        var dx=(e.clientX-(r.left+r.width/2))*.28, dy=(e.clientY-(r.top+r.height/2))*.28;
         m.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px)';
         m.__magnet=true;
       }
       document.querySelectorAll('.btn,.icon-btn,.ucard-cta').forEach(function(el){
         if(el!==m&&el.__magnet){el.style.transform='';el.__magnet=false;}
       });
-      ring.classList.toggle('is-active',!!(e.target.closest&&e.target.closest('a,button,.ucard')));
     },{passive:true});
-    (function loop(){
-      rx+=(mx-rx)*.16; ry+=(my-ry)*.16;
-      ring.style.transform='translate3d('+rx.toFixed(2)+'px,'+ry.toFixed(2)+'px,0)';
-      requestAnimationFrame(loop);
-    })();
   }
 
   /* ---------- Arrivée sur une page : le voile de l'entité se retire ---------- */

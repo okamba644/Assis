@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=39"/>
+<link rel="stylesheet" href="../css/reatm.css?v=40"/>
 <style>
 /* ===== BIBLIOTHÈQUE — l'univers Academy, en mode catalogue ===== */
 /* le libellé du champ existe pour les lecteurs d'écran seulement */
@@ -146,6 +146,40 @@ body.lis-ouverte{overflow:hidden}
   .lis-tete{flex-wrap:wrap}
   .lis-tete .bk-dl{flex:1}
 }
+
+/* ----- passer d'un pôle à l'autre -----
+   Depuis une page de pôle, les deux autres sont à un clic : plus besoin de
+   remonter par l'Académie pour changer de formation. */
+.ph-liens{margin-top:clamp(20px,2.6vw,30px)}
+.ph-liens-t{
+  display:block;margin-bottom:clamp(10px,1.2vw,14px);
+  font-size:clamp(10px,.84vw,12px);font-weight:700;letter-spacing:2.6px;
+  text-transform:uppercase;color:#6b7280;
+}
+.ph-liens-l{display:flex;flex-wrap:wrap;gap:10px clamp(12px,1.5vw,20px)}
+.ph-liens a{
+  position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:12px 20px;border:1px solid #CFE0FB;border-radius:14px;background:#fff;
+  font-size:clamp(12px,1.02vw,14.5px);font-weight:700;color:#1F2937;
+  transition:opacity .7s ease,transform .9s cubic-bezier(.16,1,.3,1),
+             border-color .3s ease,color .3s ease,background-color .3s ease,box-shadow .3s ease;
+}
+.js .ph-liens a{opacity:0;transform:translateY(14px)}
+.js .ph-liens.in a{opacity:1;transform:none}
+.ph-liens-l a:nth-child(2){transition-delay:.1s}
+.ph-liens .pt{
+  width:9px;height:9px;border-radius:50%;background:#2563EB;flex:0 0 9px;
+  transition:transform .4s cubic-bezier(.34,1.5,.64,1);
+}
+.ph-liens a svg{
+  width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.ph-liens a:hover{border-color:#2563EB;color:#2563EB;background:#F3F7FF;
+  box-shadow:0 12px 26px rgba(37,99,235,.14)}
+.ph-liens a:hover .pt{transform:scale(1.45)}
+.ph-liens a:hover svg{transform:translateX(4px)}
+.ph-liens a:focus-visible{outline:2px solid #2563EB;outline-offset:3px}
 </style>
 
 </head>
@@ -229,6 +263,7 @@ body.lis-ouverte{overflow:hidden}
 <a class="crumbs" href="../academy/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour à REATM Academy</a>
 <h1 class="reveal">La <em>bibliothèque</em></h1>
 <p class="sub reveal" style="--d:100ms">Les accords des chants, les paroles et les supports de cours, en PDF. Cherchez par titre ou par auteur, feuilletez avant de télécharger.</p>
+<nav class="ph-liens reveal-raw" aria-label="Les autres pôles de l'Académie"><span class="ph-liens-t">Les autres pôles</span><div class="ph-liens-l"><a href="../formation-musicale/"><span class="pt"></span>Cours de musique<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="../formation-media/"><span class="pt"></span>Formation média<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></nav>
 </div>
 </section>
 
@@ -442,7 +477,7 @@ body.lis-ouverte{overflow:hidden}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=39"></script>
+<script src="../js/reatm.js?v=40"></script>
 <script>
 /* ===== Bibliothèque : recherche, filtre et liseuse =====
    Tout part du DOM : chaque fiche porte ses mots-clés et ses pages, donc la
