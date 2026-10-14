@@ -1137,21 +1137,27 @@ body[data-entity="studio"] .btn-acc:hover{background:#c5161c;box-shadow:0 16px 3
 .ph-poles a:hover::after,.ph-poles a:focus-visible::after{transform:scaleX(1)}
 
 /* Trop étroit pour une coupe en biais : la photo quitte le fond du cadre et
-   devient une bande à part, sous le texte. Elle garde une arête en biais, le
-   nom en grand et les liens par-dessus — la même composition que sur grand
-   écran, pivotée d'un quart de tour. */
+   devient une bande à part, en tête du cadre. Elle garde une arête en biais,
+   le nom en grand et les liens par-dessus — la même composition que sur grand
+   écran, pivotée d'un quart de tour. L'entité annonce donc la page, et la
+   phrase qui la porte vient dessous.
+   Le cadre passe en colonne pour que l'ordre se règle : la bande vient après
+   le texte dans le document, où elle doit rester pour la version grand écran. */
 @media(max-width:980px){
+  .ph-coupe{display:flex;flex-direction:column;align-items:stretch}
   .ph-coupe .phero-bg,.ph-coupe .phero-veil,.ph-cut{display:none}
-  .ph-coupe .phero-inner{padding-bottom:clamp(28px,6vw,44px)}
+  .ph-coupe .phero-inner{padding-top:clamp(30px,6.5vw,46px);padding-bottom:clamp(28px,6vw,44px)}
   .ph-coupe .phero-inner>*{max-width:none}
   .ph-coupe .sub{max-width:620px}
   .ph-side{
+    order:-1;
     /* position:relative conserve right/top du mode absolu : on les neutralise,
        sans quoi la bande glisse hors du cadre par la gauche. */
     position:relative;right:auto;top:auto;max-width:none;text-align:left;isolation:isolate;
-    padding:clamp(58px,14vw,92px) clamp(18px,3.2vw,64px) clamp(34px,7vw,52px);
+    padding:clamp(34px,8vw,56px) clamp(18px,3.2vw,64px) clamp(50px,11vw,78px);
     background-size:cover;background-repeat:no-repeat;background-position:center;
-    clip-path:polygon(0 30px,100% 0,100% 100%,0 100%);
+    /* l'arête part vers le bas : c'est de ce côté qu'est désormais le texte */
+    clip-path:polygon(0 0,100% 0,100% calc(100% - 34px),0 100%);
   }
   .ph-side::before{content:"";position:absolute;inset:0;z-index:-1;
     background:linear-gradient(165deg,rgba(8,10,14,.78),rgba(8,10,14,.56) 55%,rgba(8,10,14,.72))}
