@@ -12,13 +12,31 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=40"/>
+<link rel="stylesheet" href="../css/reatm.css?v=41"/>
 <style>
 /* ===== STUDIO — sombre, sonore, technique ===== */
 .phero{background:#050505;color:#fff}
-.phero-bg{background-image:url('../assets/studio-nuit.png');opacity:.5;transform:scale(1.04);animation:stKen 24s ease-in-out infinite alternate}
-@keyframes stKen{to{transform:scale(1.13)}}
-.phero-veil{background:linear-gradient(90deg,#050505 12%,rgba(5,5,5,.78) 46%,rgba(5,5,5,.35) 100%),linear-gradient(0deg,#050505,transparent 55%)}
+/* ----- le cadre se partage en deux -----
+   La mécanique de la coupe vit dans la feuille partagée (« CADRE EN BIAIS ») ;
+   la page n'en règle que les couleurs et l'image. */
+.phero{
+  --ph-h1:clamp(32px,4.9vw,72px);
+  /* la coupe recule : les quatre repères tiennent alors sur une seule ligne */
+  --coupe-haut:52vw;--coupe-bas:70vw;
+  --ph-col:620px;
+  --ph-trait:#e11b22;
+  --ph-encre:#FF7A80;
+  --ph-lien:#FF7A80;
+  --ph-voile:linear-gradient(115deg,rgba(5,5,5,.60) 0%,rgba(5,5,5,.28) 46%,rgba(5,5,5,.54) 100%),
+             radial-gradient(760px circle at 78% 24%,rgba(225,27,34,.22),transparent 68%);
+}
+.phero-bg{background-image:url('../assets/studio-nuit.png');background-position:center 48%;animation:stKen 24s ease-in-out infinite alternate}
+@media(max-width:980px){.ph-side{background-image:url('../assets/studio-nuit.png');background-position:center 48%}}
+/* Le zoom portait sur la boîte elle-même : sa transformation emportait la
+   coupe avec elle. Le balayage se fait désormais sur l'image. */
+@keyframes stKen{from{background-position:center 44%}to{background-position:center 60%}}
+/* la lueur qui suit la souris ne déborde pas sur le côté uni */
+.phero-light{clip-path:polygon(var(--coupe-haut) 0,100% 0,100% 100%,var(--coupe-bas) 100%)}
 .phero h1,.phero .sub{color:#fff}
 .phero .sub{color:rgba(255,255,255,.72)}
 .phero .crumbs{color:rgba(255,255,255,.6)}
@@ -72,6 +90,14 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 .st-cta .wavebar{--wh:34px;justify-content:center;margin-bottom:30px;opacity:.6}
 @media(max-width:900px){.st-split{grid-template-columns:1fr}.gear{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.gear{grid-template-columns:1fr}}
+
+/* l'onde reste du côté texte, elle ne traverse pas la coupe */
+.st-wave{right:auto;width:calc(var(--coupe-bas) - 28px)}
+/* le texte s'arrête au-dessus de l'onde plutôt que de s'y poser */
+@media(min-width:981px){.ph-coupe .phero-inner{padding-bottom:clamp(112px,11vw,150px)}}
+/* sur petit écran l'onde reprend sa place dans le fil, entre le texte et la
+   bande photo : posée au bas du cadre, elle serait passée sous la bande */
+@media(max-width:980px){.st-wave{position:static;width:auto;padding:0 clamp(18px,3.2vw,64px) 24px}}
 </style>
 </head>
 <body data-entity="studio" style="--veil-in:#050505">
@@ -148,9 +174,10 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 </aside>
 
 
-<section class="phero">
+<section class="phero ph-coupe">
 <div class="phero-bg"></div><div class="phero-veil"></div>
 <div class="phero-light" id="stLight" aria-hidden="true"></div>
+<div class="ph-cut" aria-hidden="true"></div>
 <div class="wrap phero-inner">
 <a class="crumbs" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour à l'accueil</a>
 <h1 class="reveal">Where sound<br/>comes <em>alive.</em></h1>
@@ -158,6 +185,9 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 <div class="st-meta reveal" style="--d:180ms"><span>Enregistrement</span><span>Production</span><span>Répétition</span><span>Mixage &amp; mastering</span></div>
 </div>
 <div class="st-wave"><div class="wavebar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+<div class="ph-side">
+<div class="ph-nom reveal-raw"><b>REATM</b><em>Studio</em></div>
+</div>
 </section>
 
 <section class="sec st-serv">
@@ -273,7 +303,7 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=40"></script>
+<script src="../js/reatm.js?v=41"></script>
 <script>
 (function(){
   var h=document.getElementById('stLight');

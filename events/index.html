@@ -12,13 +12,33 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=40"/>
+<link rel="stylesheet" href="../css/reatm.css?v=41"/>
 <style>
 /* ===== EVENTS — la scène : noir, blanc, lumière ===== */
 .phero{background:#050505;color:#fff;min-height:82vh;display:flex;align-items:flex-end}
-.phero-bg{background-image:url('../assets/production.png');background-position:center 45%;opacity:.55;transform:scale(1.05);animation:evKen 26s ease-in-out infinite alternate}
-@keyframes evKen{to{transform:scale(1.16)}}
-.phero-veil{background:linear-gradient(0deg,#050505 10%,rgba(5,5,5,.6) 48%,rgba(5,5,5,.25) 100%)}
+/* ----- le cadre se partage en deux -----
+   La mécanique de la coupe vit dans la feuille partagée (« CADRE EN BIAIS ») ;
+   la page n'en règle que les couleurs et l'image. */
+.phero{
+  --ph-h1:clamp(32px,4.9vw,72px);
+  --ph-col:560px;
+  --ph-trait:#FFE3B8;
+  --ph-encre:#FFE3B8;
+  --ph-lien:#FFE3B8;
+  --ph-voile:linear-gradient(115deg,rgba(5,5,5,.60) 0%,rgba(5,5,5,.28) 46%,rgba(5,5,5,.54) 100%),
+             radial-gradient(760px circle at 78% 24%,rgba(255,227,184,.16),transparent 68%);
+}
+.phero-bg{background-image:url('../assets/production.png');background-position:center 45%;animation:evKen 26s ease-in-out infinite alternate}
+@media(max-width:980px){.ph-side{background-image:url('../assets/production.png');background-position:center 45%}}
+/* Le zoom portait sur la boîte elle-même : sa transformation emportait la
+   coupe avec elle. Le balayage se fait désormais sur l'image. */
+@keyframes evKen{from{background-position:center 38%}to{background-position:center 54%}}
+/* faisceaux et particules restent du côté photo : sur le côté uni ils
+   brouillaient la coupe */
+.ev-spots,.ev-parts{clip-path:polygon(var(--coupe-haut) 0,100% 0,100% 100%,var(--coupe-bas) 100%)}
+/* Le cadre est une boîte flexible alignée en bas : sur petit écran la bande
+   photo y devenait une colonne voisine du texte, large d'un demi-écran. */
+@media(max-width:980px){.phero{display:block;min-height:0}}
 .phero h1{letter-spacing:-3.5px}
 .phero h1 em{color:#FFE3B8}
 .phero .sub{color:rgba(255,255,255,.76)}
@@ -144,15 +164,19 @@
 </aside>
 
 
-<section class="phero">
+<section class="phero ph-coupe">
 <div class="phero-bg"></div>
 <div class="ev-spots" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="phero-veil"></div>
 <div class="ev-parts" aria-hidden="true"><i style="left:7%;animation-delay:0.0s"></i><i style="left:15%;animation-delay:0.7s"></i><i style="left:23%;animation-delay:1.4s"></i><i style="left:31%;animation-delay:2.1s"></i><i style="left:39%;animation-delay:2.8s"></i><i style="left:47%;animation-delay:3.5s"></i><i style="left:55%;animation-delay:4.2s"></i><i style="left:63%;animation-delay:4.9s"></i><i style="left:71%;animation-delay:5.6s"></i><i style="left:79%;animation-delay:6.3s"></i><i style="left:87%;animation-delay:7.0s"></i><i style="left:95%;animation-delay:7.7s"></i></div>
+<div class="ph-cut" aria-hidden="true"></div>
 <div class="wrap phero-inner">
 <a class="crumbs" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour à l'accueil</a>
 <h1 class="reveal">Make it<br/>an <em>event.</em></h1>
 <p class="sub reveal" style="--d:100ms">Nous donnons vie à vos événements. Organisation interne et prestations externes : REATM Events s'occupe de tout, de la première idée à la dernière lumière.</p>
+</div>
+<div class="ph-side">
+<div class="ph-nom reveal-raw"><b>REATM</b><em>Events</em></div>
 </div>
 </section>
 
@@ -257,7 +281,7 @@
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=40"></script>
+<script src="../js/reatm.js?v=41"></script>
 
 </body>
 </html>

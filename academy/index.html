@@ -12,71 +12,26 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');/* page toujours claire : la préférence enregistrée n'est pas appliquée ici */</script>
-<link rel="stylesheet" href="../css/reatm.css?v=40"/>
+<link rel="stylesheet" href="../css/reatm.css?v=41"/>
 <style>
 /* ===== ACADEMY — bleu + blanc, lumineuse et pédagogique ===== */
 .phero{background:#F7F8FA;color:#111111}
 html[data-theme="dark"] .phero{background:#0B0D12;color:#fff}
 /* ----- le cadre se partage en deux -----
-   Une diagonale sépare le texte, sur fond clair à gauche, de la photo de
-   cours à droite. Les deux bornes sont des variables : la coupe garde la
-   même pente quelle que soit la largeur, et le texte ne la franchit jamais. */
-/* en vw et non en % : la même valeur sert au découpage du fond et à la
-   largeur maximale du texte, qui sans cela se compareraient à deux
-   conteneurs différents */
-.phero{--coupe-haut:46vw;--coupe-bas:64vw}
-.phero-bg{
-  background-image:url('../assets/academy-cours.jpg');background-position:center 45%;opacity:1;
-  clip-path:polygon(var(--coupe-haut) 0,100% 0,100% 100%,var(--coupe-bas) 100%);
+   La mécanique de la coupe vit dans la feuille partagée (« CADRE EN BIAIS ») ;
+   la page n'en règle que les couleurs et l'image. */
+.phero{
+  --ph-h1:clamp(34px,5.4vw,80px);
+  --ph-trait:#2563EB;
+  --ph-encre:#93C5FD;
+  --ph-lien:#93C5FD;
+  --ph-voile:linear-gradient(115deg,rgba(8,13,26,.66) 0%,rgba(8,13,26,.38) 46%,rgba(8,13,26,.58) 100%),
+             radial-gradient(760px circle at 78% 24%,rgba(37,99,235,.26),transparent 68%);
 }
-/* le voile n'assombrit que le côté photo : il porte le nom en grand sans
-   toucher au côté texte, qui reste clair */
-.phero-veil{
-  clip-path:polygon(var(--coupe-haut) 0,100% 0,100% 100%,var(--coupe-bas) 100%);
-  background:
-    linear-gradient(115deg,rgba(8,13,26,.66) 0%,rgba(8,13,26,.38) 46%,rgba(8,13,26,.58) 100%),
-    radial-gradient(760px circle at 78% 24%,rgba(37,99,235,.26),transparent 68%);
-}
-/* le filet de la coupe, dans le bleu de l'Académie */
-.ph-cut{
-  position:absolute;inset:0;z-index:2;pointer-events:none;background:#2563EB;
-  clip-path:polygon(var(--coupe-haut) 0,calc(var(--coupe-haut) + 2px) 0,calc(var(--coupe-bas) + 2px) 100%,var(--coupe-bas) 100%);
-}
-/* ----- le nom du pôle, posé sur la photo -----
-   REATM au trait, Academy plein : les deux se lisent d'un coup sans
-   recouvrir le visuel. */
-/* le nom se dévoile comme le reste du cadre */
-.js .ph-nom{opacity:0;transform:translateY(20px);
-  transition:opacity .85s ease .12s,transform 1.05s cubic-bezier(.16,1,.3,1) .12s}
-.js .ph-nom.in{opacity:1;transform:none}
-.ph-side{
-  position:absolute;z-index:3;right:clamp(26px,4.4vw,88px);top:26%;
-  text-align:right;max-width:min(54vw,860px);
-}
-.ph-nom{
-  position:relative;pointer-events:none;
-  font-weight:800;letter-spacing:-3px;line-height:.9;
-}
-/* un halo sombre sous le nom : par endroits la photo est claire et le bleu
-   du pôle y perdait son contraste */
-.ph-nom::before{
-  content:"";position:absolute;inset:-22% -12%;z-index:-1;
-  background:radial-gradient(62% 58% at 58% 52%,rgba(6,11,22,.66),rgba(6,11,22,.28) 62%,transparent 78%);
-}
-.ph-nom b,.ph-nom em{display:block;font-style:normal;font-size:clamp(34px,7.4vw,132px)}
-.ph-nom b{color:transparent;-webkit-text-stroke:2.5px rgba(255,255,255,.92);filter:drop-shadow(0 6px 20px rgba(0,0,0,.5))}
-/* le bleu du pôle, dans sa déclinaison claire : le bleu plein s'éteindrait
-   sur le voile sombre, celui-ci garde près de neuf de contraste */
-.ph-nom em{color:#93C5FD;text-shadow:0 10px 36px rgba(0,0,0,.5)}
-/* Le texte reste du côté clair. La contrainte porte sur chaque élément et
-   non sur .phero-inner, qui est aussi le conteneur centré de la page : lui
-   donner une largeur maximale l'aurait recentré au milieu du cadre. */
-.phero .phero-inner>*{max-width:min(480px,calc(var(--coupe-haut) - 120px))}
-/* Le titre cède du terrain au nom du pôle, et le cadre démarre plus haut. */
-.phero h1{font-size:clamp(34px,5.4vw,80px);letter-spacing:-2.2px;margin-bottom:18px}
+.phero-bg{background-image:url('../assets/academy-cours.jpg');background-position:center 45%}
+@media(max-width:980px){.ph-side{background-image:url('../assets/academy-cours.jpg');background-position:center 45%}}
 /* les pastilles sont courtes : on leur laisse de quoi tenir sur une ligne */
 .phero .phero-inner>.ac-steps{max-width:min(560px,calc(var(--coupe-haut) - 70px))}
-.phero-inner{padding-top:clamp(40px,5.4vw,76px);padding-bottom:clamp(44px,5.6vw,80px)}
 .phero h1 em{color:#2563EB}
 .phero .sub{color:#4b5563}
 html[data-theme="dark"] .phero .sub{color:#9ca3af}
@@ -100,46 +55,6 @@ html[data-theme="dark"] .phero .crumbs{color:#9ca3af}
   transition:opacity .8s ease .42s,transform 1s cubic-bezier(.16,1,.3,1) .42s}
 .js .ph-anim--sub.in{opacity:1;transform:none}
 
-/* ----- les trois pôles, sous le titre -----
-   Une pastille, le nom du pôle, et un trait qui se trace au survol.
-   Chacun mène à sa carte, plus bas dans la page. */
-/* sur les pages de pôle, le nom de la formation prend la place des liens */
-.ph-sous{
-  margin-top:clamp(14px,1.8vw,22px);
-  font-size:clamp(12px,1.1vw,15px);font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.5);
-}
-.ph-poles{
-  display:flex;flex-wrap:wrap;justify-content:flex-end;
-  gap:clamp(14px,2vw,30px);margin-top:clamp(20px,2.4vw,32px);
-}
-.ph-poles a{
-  position:relative;display:inline-flex;align-items:center;gap:11px;padding:4px 0;
-  font-size:clamp(12px,1.05vw,15px);font-weight:700;letter-spacing:.3px;color:#fff;
-  text-shadow:0 4px 18px rgba(0,0,0,.5);
-  transition:opacity .7s ease,transform .9s cubic-bezier(.16,1,.3,1),color .3s ease;
-}
-.js .ph-poles a{opacity:0;transform:translateY(14px)}
-.js .ph-poles.in a{opacity:1;transform:none}
-.ph-poles a:nth-child(2){transition-delay:.09s}
-.ph-poles a:nth-child(3){transition-delay:.18s}
-.ph-poles .pt{
-  width:9px;height:9px;border-radius:50%;background:#93C5FD;flex:0 0 9px;
-  transition:transform .4s cubic-bezier(.34,1.5,.64,1);
-}
-.ph-poles a:hover{color:#93C5FD}
-.ph-poles a:hover .pt{transform:scale(1.45)}
-.ph-poles a::after{
-  content:"";position:absolute;left:20px;right:0;bottom:0;height:2px;border-radius:2px;background:#93C5FD;
-  transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1);
-}
-.ph-poles a:hover::after,.ph-poles a:focus-visible::after{transform:scaleX(1)}
-
-/* la carte visée se signale un instant quand on arrive dessus */
-.ac-poles article{scroll-margin-top:110px}
-@keyframes poleVise{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}
-  30%{box-shadow:0 0 0 5px rgba(37,99,235,.28)}}
-.ac-poles article:target{animation:poleVise 1.5s ease .1s 1;border-color:#2563EB}
 
 /* trois mots empilés, rythme pédagogique */
 .ac-steps{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
@@ -267,42 +182,12 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 .ac-cta .btn-acc{background:#2563EB;color:#fff}
 .ac-cta .btn-acc:hover{box-shadow:0 16px 34px rgba(37,99,235,.3)}
 @media(max-width:980px){
-  /* Trop étroit pour une coupe en biais : la photo quitte le fond du cadre
-     et devient une bande à part, sous le texte. Elle garde une arête en
-     biais, le nom en grand et les liens par-dessus — la même composition
-     que sur grand écran, pivotée d'un quart de tour. */
-  .phero{background:#F7F8FA}
-  .phero-bg,.phero-veil,.ph-cut{display:none}
-  .phero-inner{padding-bottom:clamp(28px,6vw,44px)}
-  .phero .phero-inner>*{max-width:none}
   /* la largeur calée sur la coupe en biais n'a plus lieu d'être : à 390 px
      elle valait 46vw, soit 179 px, et chaque repère tombait sur sa ligne */
   .phero .phero-inner>.ac-steps{max-width:none}
-  .phero .sub{max-width:620px}
   /* les repères tiennent deux par ligne au lieu de se casser en deux */
   .ac-steps{gap:8px}
   .ac-steps span{white-space:nowrap;font-size:10px;letter-spacing:1.2px;padding:9px 14px}
-
-  .ph-side{
-    /* position:relative conserve right/top du mode absolu : on les neutralise,
-       sans quoi la bande glisse hors du cadre par la gauche. */
-    position:relative;right:auto;top:auto;max-width:none;text-align:left;isolation:isolate;
-    padding:clamp(58px,14vw,92px) clamp(18px,3.2vw,64px) clamp(34px,7vw,52px);
-    background:url('../assets/academy-cours.jpg') center 45%/cover no-repeat;
-    clip-path:polygon(0 30px,100% 0,100% 100%,0 100%);
-  }
-  .ph-side::before{
-    content:"";position:absolute;inset:0;z-index:-1;
-    background:linear-gradient(165deg,rgba(8,13,26,.76),rgba(8,13,26,.54) 55%,rgba(8,13,26,.7));
-  }
-  .ph-nom{display:block}
-  .ph-nom::before{display:none}
-  .ph-nom b,.ph-nom em{font-size:clamp(42px,13.5vw,78px)}
-  .ph-sous{display:block}
-  .ph-poles{justify-content:flex-start;margin-top:clamp(18px,4.2vw,26px);gap:13px 22px}
-  .ph-poles a{color:#fff}
-  .ph-poles .pt,.ph-poles a::after{background:#93C5FD}
-  .ph-poles a:hover{color:#93C5FD}
 }
 @media(max-width:1080px){.ac-form{grid-template-columns:repeat(2,1fr)}.ac-poles{grid-template-columns:1fr}}
 @media(max-width:760px){.ac-form,.ac-dots,.ac-ses{grid-template-columns:1fr}.ac-dots .pin{position:static;margin-bottom:12px}.ac-rail{margin:26px 0 22px}}
@@ -382,7 +267,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </aside>
 
 
-<section class="phero">
+<section class="phero ph-coupe">
 <div class="phero-bg"></div><div class="phero-veil"></div><div class="ph-cut" aria-hidden="true"></div>
 <div class="wrap phero-inner">
 <a class="crumbs" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour à l'accueil</a>
@@ -392,7 +277,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </div>
 <div class="ph-side">
 <div class="ph-nom reveal-raw"><b>REATM</b><em>Academy</em></div>
-<nav class="ph-poles reveal-raw" aria-label="Les trois pôles"><a href="#pole-musique"><span class="pt"></span>Cours de musique</a><a href="#pole-media"><span class="pt"></span>Formation média</a><a href="#pole-biblio"><span class="pt"></span>Bibliothèque</a></nav>
+<nav class="ph-poles reveal-raw" aria-label="Les trois pôles"><a href="../formation-musicale/"><span class="pt"></span>Cours de musique</a><a href="../formation-media/"><span class="pt"></span>Formation média</a><a href="../bibliotheque/"><span class="pt"></span>Bibliothèque</a></nav>
 </div>
 </section>
 
@@ -490,7 +375,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=40"></script>
+<script src="../js/reatm.js?v=41"></script>
 <script>
 (function(){
   var el=document.getElementById('acLevels');
