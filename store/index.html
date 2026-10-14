@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('reatm-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=42"/>
+<link rel="stylesheet" href="../css/reatm.css?v=43"/>
 <style>
 /* ===== STORE — showroom : blanc, noir, gris. Clean avant tout ===== */
 .phero{background:#fff;color:#050505;border-bottom:1px solid #e6e6e6}
@@ -30,8 +30,11 @@ html[data-theme="dark"] .phero{background:#0a0a0a;color:#fff;border-bottom-color
   --ph-lien:#E8E8EA;
   --ph-voile:linear-gradient(115deg,rgba(8,8,10,.62) 0%,rgba(8,8,10,.32) 46%,rgba(8,8,10,.58) 100%);
 }
-.phero-bg{background-image:url('../assets/store.png');background-position:center 45%}
-@media(max-width:980px){.ph-side{background-image:url('../assets/store.png');background-position:center 45%}}
+/* store.png ne fait que 156 x 124 : passable derrière un voile à 10 %
+   d'opacité, mais flou depuis que la photo occupe la moitié du cadre.
+   Les vignettes du catalogue, elles, le gardent : à leur taille il tient. */
+.phero-bg{background-image:url('../assets/guitare.png');background-position:center 45%}
+@media(max-width:980px){.ph-side{background-image:url('../assets/guitare.png');background-position:center 45%}}
 /* sur fond sombre un filet noir disparaîtrait */
 html[data-theme="dark"] .phero{--ph-trait:#FFFFFF}
 .phero h1{letter-spacing:-3.5px;font-weight:800}
@@ -289,7 +292,7 @@ html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=42"></script>
+<script src="../js/reatm.js?v=43"></script>
 
 </body>
 </html>
