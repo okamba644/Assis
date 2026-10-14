@@ -210,17 +210,32 @@
       capNom.textContent=nom;
       cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in');
     }
-    sync();
-    if(reduce)return;
-    setInterval(function(){
+    /* Un pas, dans un sens ou dans l'autre. Le reste du cadre n'a pas à savoir
+       s'il vient du minuteur ou d'un clic. */
+    function pas(sens){
       t=(t%4)+1;
       gal.classList.remove('tx-1','tx-2','tx-3','tx-4');
       gal.classList.add('tx-'+t);
       slides[i].classList.remove('is-on');
-      i=(i+1)%slides.length;
+      i=(i+sens+slides.length)%slides.length;
       slides[i].classList.add('is-on');
       sync();
-    },3000);
+    }
+    sync();
+    /* Les flèches servent même quand l'animation est coupée : elles ne
+       défilent pas toutes seules, elles répondent à une intention. */
+    var minuteur=null;
+    function relance(){
+      if(reduce)return;
+      if(minuteur)clearInterval(minuteur);
+      minuteur=setInterval(function(){pas(1);},3000);
+    }
+    [['hsPrec',-1],['hsSuiv',1]].forEach(function(p){
+      var b=document.getElementById(p[0]);
+      if(!b)return;
+      b.addEventListener('click',function(){pas(p[1]);relance();});
+    });
+    relance();
   })();
 
   /* ---------- Effet magnétique sur les boutons ----------

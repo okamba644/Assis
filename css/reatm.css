@@ -322,9 +322,9 @@ html[data-theme="dark"] .hs-slide--studio{background-image:url('../assets/studio
    Chaque plan porte la photo de son entité, assombrie par le voile, et le nom
    par-dessus. Plus d'aplat ni de sigle : l'entité se reconnaît à son décor. */
 .hs-pl[data-ent="studio"]{background-image:url('../assets/studio-nuit.png')}
-.hs-pl[data-ent="house"]{background-image:url('../assets/studio-jour.png')}
 .hs-pl[data-ent="academy"]{background-image:url('../assets/academy-cours.jpg');background-position:center 45%}
-.hs-pl[data-ent="store"]{background-image:url('../assets/guitare.png')}
+/* l'image est en portrait : on la cale sur le mur d'instruments */
+.hs-pl[data-ent="store"]{background-image:url('../assets/store-salle.jpg');background-position:center 38%}
 .hs-pl[data-ent="production"]{background-image:url('../assets/casque.png')}
 .hs-pl[data-ent="events"]{background-image:url('../assets/production.png');background-position:center 45%}
 
@@ -363,7 +363,6 @@ html[data-theme="dark"] .hs-slide--studio{background-image:url('../assets/studio
    déclinaisons claires y gardent leur contraste. */
 .hs-main[data-ent="photo"]{--pl-ink:#FFFFFF}
 .hs-main[data-ent="studio"]{--pl-ink:#FF7A80}
-.hs-main[data-ent="house"]{--pl-ink:#FFFFFF}
 .hs-main[data-ent="academy"]{--pl-ink:#93C5FD}
 .hs-main[data-ent="store"]{--pl-ink:#E8E8EA}
 .hs-main[data-ent="production"]{--pl-ink:#FACC15}
@@ -375,6 +374,29 @@ html[data-theme="dark"] .hs-slide--studio{background-image:url('../assets/studio
 .hs-main.on-mark .hs-veil{opacity:1;transition:opacity .6s ease,background .6s ease;
   background:linear-gradient(115deg,rgba(6,8,12,.64) 0%,rgba(6,8,12,.40) 46%,rgba(6,8,12,.62) 100%)}
 .hs-veil{transition:opacity .6s ease}
+/* ----- avancer ou reculer à la main -----
+   Le cadre tourne seul ; les deux flèches ne font que devancer le minuteur,
+   qui repart de zéro à chaque clic. */
+.hs-nav{
+  position:absolute;z-index:7;top:50%;transform:translateY(-50%);
+  width:clamp(38px,3.2vw,46px);height:clamp(38px,3.2vw,46px);
+  display:grid;place-items:center;border:0;border-radius:50%;cursor:pointer;
+  background:rgba(10,12,16,.42);color:#fff;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 0 0 1px rgba(255,255,255,.22) inset;
+  /* visibles d'emblée, mais en retrait : une commande qu'il faut survoler
+     pour découvrir n'en est pas une */
+  opacity:.6;transition:opacity .35s ease,background-color .3s ease,transform .3s cubic-bezier(.34,1.4,.64,1);
+}
+.hs-prec{left:clamp(10px,1.1vw,18px)}
+.hs-suiv{right:clamp(10px,1.1vw,18px)}
+.hs-nav svg{width:46%;height:46%;fill:none;stroke:currentColor;stroke-width:2.4}
+.hs-main:hover .hs-nav,.hs-nav:hover,.hs-nav:focus-visible{opacity:1}
+.hs-nav:hover{background:rgba(10,12,16,.72)}
+.hs-prec:hover{transform:translateY(-50%) translateX(-2px)}
+.hs-suiv:hover{transform:translateY(-50%) translateX(2px)}
+.hs-nav:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(hover:none){.hs-nav{opacity:1}}
 .eq{position:absolute;left:20px;bottom:18px;z-index:6;display:flex;align-items:flex-end;gap:4px;height:26px;transition:opacity .5s ease}
 .hs-main.on-mark .eq{opacity:0}
 .eq i{display:block;width:4px;border-radius:3px;background:var(--yellow);animation:eqbar 1.1s ease-in-out infinite}
@@ -1036,7 +1058,14 @@ body[data-entity="studio"] .btn-acc:hover{background:#c5161c;box-shadow:0 16px 3
 /* Le texte reste du côté uni. La contrainte porte sur chaque élément et non
    sur .phero-inner, qui est aussi le conteneur centré de la page : lui donner
    une largeur maximale l'aurait recentré au milieu du cadre. */
-.ph-coupe .phero-inner{padding-top:clamp(40px,5.4vw,76px);padding-bottom:clamp(44px,5.6vw,80px)}
+/* ----- le fil d'Ariane -----
+   Il quitte la colonne de texte pour devenir un enfant direct du cadre : sur
+   petit écran il doit passer devant la bande photo, et seul un enfant du
+   cadre peut prendre son rang dans la colonne.
+   Le haut du cadre lui revient donc, la colonne de texte part de zéro, et la
+   marge basse du fil reste celle du fil : la composition ne change pas. */
+.ph-fil{position:relative;z-index:3;padding-top:clamp(40px,5.4vw,76px)}
+.ph-coupe .phero-inner{padding-top:0;padding-bottom:clamp(44px,5.6vw,80px)}
 .ph-coupe .phero-inner>*{max-width:min(var(--ph-col),calc(var(--coupe-haut) - 120px))}
 /* le titre cède du terrain au nom de l'entité */
 .ph-coupe h1{font-size:var(--ph-h1);letter-spacing:-2.2px;margin-bottom:18px}
@@ -1105,11 +1134,14 @@ body[data-entity="studio"] .btn-acc:hover{background:#c5161c;box-shadow:0 16px 3
 @media(max-width:980px){
   .ph-coupe{display:flex;flex-direction:column;align-items:stretch}
   .ph-coupe .phero-bg,.ph-coupe .phero-veil,.ph-cut{display:none}
-  .ph-coupe .phero-inner{padding-top:clamp(30px,6.5vw,46px);padding-bottom:clamp(28px,6vw,44px)}
+  /* le fil passe tout en haut, la bande suit, le texte vient après */
+  .ph-fil{order:-2;padding-top:clamp(16px,4vw,26px)}
+  .ph-fil .crumbs{margin-bottom:clamp(14px,3.4vw,20px)}
+  .ph-side{order:-1}
+  .ph-coupe .phero-inner{padding-top:clamp(26px,5.5vw,38px);padding-bottom:clamp(28px,6vw,44px)}
   .ph-coupe .phero-inner>*{max-width:none}
   .ph-coupe .sub{max-width:620px}
   .ph-side{
-    order:-1;
     /* position:relative conserve right/top du mode absolu : on les neutralise,
        sans quoi la bande glisse hors du cadre par la gauche. */
     position:relative;right:auto;top:auto;max-width:none;text-align:left;isolation:isolate;
