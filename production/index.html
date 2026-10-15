@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=48"/>
+<link rel="stylesheet" href="../css/reatm.css?v=49"/>
 <style>
 /* ===== PRODUCTION — jaune + blanc + noir, typographie massive ===== */
 .phero{background:#050505;color:#fff}
@@ -40,6 +40,40 @@
   background:linear-gradient(90deg,transparent,rgba(250,204,21,.10),transparent);
   animation:prSweep 7s ease-in-out infinite}
 @keyframes prSweep{0%{transform:rotate(14deg) translateX(-30%)}55%,100%{transform:rotate(14deg) translateX(460%)}}
+/* ----- le programme hebdomadaire -----
+   L'affiche à gauche, le détail à droite ; sous 900 px elles s'empilent.
+   Le jaune du pôle ne tient pas comme encre sur fond clair : il passe en or
+   sombre pour le texte, et reste plein là où il sert de fond. */
+.pr-prog{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(22px,3.2vw,48px);align-items:center}
+.prog-vue{margin:0;border-radius:20px;overflow:hidden;border:1px solid var(--border);
+  background:#0a0a0a;box-shadow:0 26px 60px rgba(0,0,0,.18)}
+html[data-theme="dark"] .prog-vue{box-shadow:0 26px 60px rgba(0,0,0,.6)}
+.prog-vue img{display:block;width:100%;height:auto;transition:transform 1s cubic-bezier(.16,1,.3,1)}
+.prog-vue:hover img{transform:scale(1.03)}
+.prog-corps .tagline{display:block;margin-bottom:12px;font-size:10.5px;font-weight:700;
+  letter-spacing:1.8px;text-transform:uppercase;color:#8a6d00}
+html[data-theme="dark"] .prog-corps .tagline{color:#FACC15}
+.prog-corps h3{font-size:clamp(26px,3.6vw,46px);font-weight:800;letter-spacing:-1.6px;line-height:1.05;margin-bottom:18px}
+.prog-verset{margin:0 0 22px;padding:2px 0 2px 18px;border-left:4px solid #FACC15;
+  font-size:14px;line-height:1.8;color:var(--muted);font-style:italic}
+.prog-verset cite{display:block;margin-top:8px;font-style:normal;font-weight:700;color:var(--text)}
+.prog-liste{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.prog-liste li{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  padding:9px 15px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+.prog-quand{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:10px}
+.prog-quand b{font-size:clamp(20px,2.4vw,30px);font-weight:800;letter-spacing:-1px;text-transform:uppercase}
+.prog-quand span{font-size:13px;color:var(--muted)}
+.prog-quand em{font-style:normal;font-weight:800;letter-spacing:.4px;
+  background:#FACC15;color:#111;border-radius:999px;padding:5px 13px;margin-left:4px}
+.prog-mot{font-size:13.6px;color:var(--muted);margin-bottom:8px}
+.prog-lieu{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);margin-bottom:26px}
+.prog-lieu i{color:#8a6d00}
+html[data-theme="dark"] .prog-lieu i{color:#FACC15}
+.prog-corps .btn-acc{background:#FACC15;color:#111}
+.prog-corps .btn-acc:hover{box-shadow:0 16px 34px rgba(250,204,21,.34)}
+#programmes{scroll-margin-top:86px}
+@media(max-width:900px){.pr-prog{grid-template-columns:1fr}}
+
 /* galerie de créations */
 .pr-gal{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(12px,1.4vw,20px)}
 .pr-gal article{
@@ -122,7 +156,7 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 </ul>
 <div class="hdr-actions">
 <button class="icon-btn" id="themeToggle" title="Changer de thème" aria-label="Changer de thème"><svg class="ic" id="themeIcon"><use href="#ic-moon"></use></svg></button>
-<a class="icon-btn hide-md" href="https://www.instagram.com/reatmrecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
+<a class="icon-btn hide-md" href="https://www.instagram.com/r_e_a_t_m/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
 <a class="icon-btn hide-md" href="https://wa.me/212651475341" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="ic"><use href="#ic-wa"></use></svg></a>
 <a class="btn btn-red hide-md" href="../#contact">Nous contacter <i class="fas fa-arrow-right"></i></a>
 <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNav">
@@ -149,7 +183,7 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 </ul>
 <div class="mnav-foot">
 <div class="mnav-soc">
-<a href="https://www.instagram.com/reatmrecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
+<a href="https://www.instagram.com/r_e_a_t_m/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
 <a href="https://wa.me/212651475341" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="ic"><use href="#ic-wa"></use></svg></a>
 <a href="#" aria-label="YouTube"><svg class="ic"><use href="#ic-yt"></use></svg></a>
 <a href="#" aria-label="TikTok"><svg class="ic"><use href="#ic-tt"></use></svg></a>
@@ -181,16 +215,35 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 </div>
 </section>
 
+<section class="sec" id="programmes">
+<div class="wrap">
+<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos programmes</h2><p class="sec-lead">Les rendez-vous que la maison porte et diffuse, semaine après semaine.</p></div></div>
+<article class="pr-prog">
+<figure class="prog-vue reveal"><img src="../assets/instants-de-prieres.webp" alt="Instants de Prières — REATM Records présente, tous les vendredis à partir de 21h00, 106 av. Allal Ben Abdellah, Rabat Ville" width="1080" height="1200" loading="lazy" decoding="async"/></figure>
+<div class="prog-corps reveal" style="--d:90ms">
+<span class="tagline">{IP} — Rendez-vous hebdomadaire</span>
+<h3>Instants de Prières <span aria-hidden="true">🔥</span></h3>
+<blockquote class="prog-verset">Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces.<cite>Philippiens 4.6</cite></blockquote>
+<ul class="prog-liste"><li>Prières</li><li>Adoration</li><li>Contemplation</li><li>Exhortation</li><li>Intercessions</li><li>Supplications</li></ul>
+<div class="prog-quand"><b>Tous les vendredis</b><span>à partir de <em>21h00</em></span></div>
+<p class="prog-mot">Un rendez-vous à ne pas manquer ✨</p>
+<p class="prog-lieu"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>106 av. Allal Ben Abdellah, Rabat Ville</p>
+<a class="btn btn-acc" href="https://wa.me/212651475341" target="_blank" rel="noopener">Rejoins-nous chaque vendredi <i class="fas fa-arrow-right"></i></a>
+</div>
+</article>
+</div>
+</section>
+
 <section class="sec">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos créations</h2><p class="sec-lead">Podcasts, émissions, programmes, courts métrages et contenus musicaux : les formats produits par la maison.</p></div></div>
+<div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">Nos créations</h2><p class="sec-lead">Podcasts, émissions, programmes, courts métrages et contenus musicaux : les formats produits par la maison.</p></div></div>
 <div class="pr-gal"><article class="s4 reveal" style="--d:0ms"><div class="im" style="background-image:url('../assets/casque.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2025</span><div class="info"><span class="cat">Podcasts</span><h3>Paroles &amp; formats</h3></div></article><article class=" reveal" style="--d:80ms"><div class="im" style="background-image:url('../assets/studio-nuit.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2025</span><div class="info"><span class="cat">Émissions</span><h3>Plateaux REATM</h3></div></article><article class=" reveal" style="--d:160ms"><div class="im" style="background-image:url('../assets/guitare.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2024</span><div class="info"><span class="cat">Programmes</span><h3>Temps de prière</h3></div></article><article class="s4 reveal" style="--d:240ms"><div class="im" style="background-image:url('../assets/production.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2024</span><div class="info"><span class="cat">Courts métrages</span><h3>Images &amp; récits</h3></div></article><article class="s3 reveal" style="--d:320ms"><div class="im" style="background-image:url('../assets/academie.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2025</span><div class="info"><span class="cat">Contenu musical</span><h3>Sorties du label</h3></div></article><article class="s3 reveal" style="--d:400ms"><div class="im" style="background-image:url('../assets/store.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">—</span><div class="info"><span class="cat">Autres créations</span><h3>Formats sur mesure</h3></div></article></div>
 </div>
 </section>
 
 <section class="sec pr-kitchen">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">REATM Home Kitchen</h2><p class="sec-lead">En plus des prestations pour nos clients, la maison produit ses propres contenus.</p></div></div>
+<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">REATM Home Kitchen</h2><p class="sec-lead">En plus des prestations pour nos clients, la maison produit ses propres contenus.</p></div></div>
 <div class="pgrid pgrid--3">
 <div class="pcard reveal"><span class="tagline">02 — Podcasts</span><h3>La parole, travaillée</h3><p>Captation multi-voix, montage et habillage sonore. Des formats pensés pour être écoutés jusqu'au bout.</p></div>
 <div class="pcard reveal" style="--d:90ms"><span class="tagline">03 — Émissions</span><h3>Des plateaux</h3><p>Écriture, tournage et post-production de nos propres émissions, en interne comme en prestation.</p></div>
@@ -259,7 +312,7 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 <div>
 <h4>Suivez-nous</h4>
 <div class="f-soc">
-<a href="https://www.instagram.com/reatmrecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
+<a href="https://www.instagram.com/r_e_a_t_m/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg class="ic"><use href="#ic-ig"></use></svg></a>
 <a href="https://wa.me/212651475341" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg class="ic"><use href="#ic-wa"></use></svg></a>
 <a href="#" aria-label="YouTube"><svg class="ic"><use href="#ic-yt"></use></svg></a>
 <a href="#" aria-label="TikTok"><svg class="ic"><use href="#ic-tt"></use></svg></a>
@@ -285,7 +338,7 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=48"></script>
+<script src="../js/reatm.js?v=49"></script>
 <script>
 (function(){
   var el=document.getElementById('prBuild');
