@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=50"/>
+<link rel="stylesheet" href="../css/reatm.css?v=51"/>
 <style>
 /* ===== PRODUCTION — jaune + blanc + noir, typographie massive ===== */
 .phero{background:#050505;color:#fff}
@@ -74,30 +74,6 @@ html[data-theme="dark"] .prog-lieu i{color:#FACC15}
 #programmes{scroll-margin-top:86px}
 @media(max-width:900px){.pr-prog{grid-template-columns:1fr}}
 
-/* galerie de créations */
-.pr-gal{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(12px,1.4vw,20px)}
-.pr-gal article{
-  position:relative;grid-column:span 2;border-radius:18px;overflow:hidden;min-height:260px;
-  background:#0d0d0d;isolation:isolate;
-  transition:transform .6s cubic-bezier(.16,1,.3,1),box-shadow .5s ease;
-}
-.pr-gal article.s4{grid-column:span 4;min-height:340px}
-.pr-gal article.s3{grid-column:span 3;min-height:300px}
-.pr-gal article:hover{transform:translateY(-10px);box-shadow:0 26px 56px rgba(250,204,21,.14)}
-.pr-gal .im{position:absolute;inset:0;background-size:cover;background-position:center;
-  transform:scale(1.02);filter:grayscale(1) contrast(1.05);
-  transition:transform 1.1s cubic-bezier(.16,1,.3,1),filter .6s ease}
-.pr-gal article:hover .im{transform:scale(1.14);filter:grayscale(0) contrast(1)}
-.pr-gal .vl{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,5,.1),rgba(5,5,5,.85));z-index:2}
-.pr-gal .lt{position:absolute;inset:0;z-index:3;opacity:0;background:linear-gradient(140deg,rgba(250,204,21,.20),transparent 62%);transition:opacity .55s ease}
-.pr-gal article:hover .lt{opacity:1}
-.pr-gal .info{position:absolute;left:20px;right:20px;bottom:18px;z-index:4;color:#fff}
-.pr-gal .cat{font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FACC15;display:block;margin-bottom:8px;
-  transform:translateY(8px);opacity:0;transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .45s ease}
-.pr-gal article:hover .cat{transform:none;opacity:1}
-.pr-gal h3{font-size:clamp(18px,2vw,25px);font-weight:800;letter-spacing:-.8px;text-transform:uppercase;line-height:1.05}
-.pr-gal .yr{position:absolute;right:18px;top:16px;z-index:4;font-size:12px;font-weight:700;letter-spacing:1.6px;color:rgba(255,255,255,.55)}
-.pr-gal article:hover .yr{color:#FACC15}
 /* lignes qui se construisent */
 .pr-build{display:flex;flex-direction:column;gap:7px;margin-top:22px}
 .pr-build i{height:3px;opacity:.75;border-radius:4px;background:#FACC15;width:14%;transition:width 1s cubic-bezier(.16,1,.3,1)}
@@ -120,8 +96,6 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 .pr-kitchen .pcard:hover{border-color:#FACC15;box-shadow:0 24px 50px rgba(250,204,21,.18)}
 .pr-cta{background:#050505;color:#fff}
 .pr-cta h2 em{font-style:normal;color:#FACC15}
-@media(max-width:1080px){.pr-gal{grid-template-columns:repeat(4,1fr)}.pr-gal article,.pr-gal article.s4,.pr-gal article.s3{grid-column:span 2;min-height:250px}}
-@media(max-width:700px){.pr-gal{grid-template-columns:1fr}.pr-gal article,.pr-gal article.s4,.pr-gal article.s3{grid-column:span 1;min-height:230px}}
 </style>
 </head>
 <body data-entity="production" style="--veil-in:#FACC15">
@@ -234,22 +208,15 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 </div>
 </section>
 
-<section class="sec">
-<div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">Nos créations</h2><p class="sec-lead">Podcasts, émissions, programmes, courts métrages et contenus musicaux : les formats produits par la maison.</p></div></div>
-<div class="pr-gal"><article class="s4 reveal" style="--d:0ms"><div class="im" style="background-image:url('../assets/casque.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2025</span><div class="info"><span class="cat">Podcasts</span><h3>Paroles &amp; formats</h3></div></article><article class=" reveal" style="--d:80ms"><div class="im" style="background-image:url('../assets/studio-nuit.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2025</span><div class="info"><span class="cat">Émissions</span><h3>Plateaux REATM</h3></div></article><article class=" reveal" style="--d:160ms"><div class="im" style="background-image:url('../assets/guitare.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2024</span><div class="info"><span class="cat">Programmes</span><h3>Temps de prière</h3></div></article><article class="s4 reveal" style="--d:240ms"><div class="im" style="background-image:url('../assets/production.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2024</span><div class="info"><span class="cat">Courts métrages</span><h3>Images &amp; récits</h3></div></article><article class="s3 reveal" style="--d:320ms"><div class="im" style="background-image:url('../assets/academie.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">2025</span><div class="info"><span class="cat">Contenu musical</span><h3>Sorties du label</h3></div></article><article class="s3 reveal" style="--d:400ms"><div class="im" style="background-image:url('../assets/store.png')"></div><div class="vl"></div><div class="lt"></div><span class="yr">—</span><div class="info"><span class="cat">Autres créations</span><h3>Formats sur mesure</h3></div></article></div>
-</div>
-</section>
-
 <section class="sec pr-kitchen">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">REATM Home Kitchen</h2><p class="sec-lead">En plus des prestations pour nos clients, la maison produit ses propres contenus.</p></div></div>
+<div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">REATM Home Kitchen</h2><p class="sec-lead">En plus des prestations pour nos clients, la maison produit ses propres contenus.</p></div></div>
 <div class="pgrid pgrid--3">
-<div class="pcard reveal"><span class="tagline">02 — Podcasts</span><h3>La parole, travaillée</h3><p>Captation multi-voix, montage et habillage sonore. Des formats pensés pour être écoutés jusqu'au bout.</p></div>
-<div class="pcard reveal" style="--d:90ms"><span class="tagline">03 — Émissions</span><h3>Des plateaux</h3><p>Écriture, tournage et post-production de nos propres émissions, en interne comme en prestation.</p></div>
-<div class="pcard reveal" style="--d:180ms"><span class="tagline">04 — Programmes</span><h3>Temps de prière</h3><p>Des programmes portés par la mission de la maison : promouvoir la musique, partager l'Évangile.</p></div>
-<div class="pcard reveal" style="--d:270ms"><span class="tagline">05 — Courts métrages</span><h3>Raconter en images</h3><p>De l'idée au montage final, des récits courts qui prolongent la musique.</p></div>
-<div class="pcard reveal" style="--d:360ms"><span class="tagline">06 — Contenu musical</span><h3>Les sorties</h3><p>Les projets musicaux produits par la maison, seuls ou en collaboration avec des artistes invités.</p></div>
+<div class="pcard reveal"><span class="tagline">01 — Podcasts</span><h3>La parole, travaillée</h3><p>Captation multi-voix, montage et habillage sonore. Des formats pensés pour être écoutés jusqu'au bout.</p></div>
+<div class="pcard reveal" style="--d:90ms"><span class="tagline">02 — Émissions</span><h3>Des plateaux</h3><p>Écriture, tournage et post-production de nos propres émissions, en interne comme en prestation.</p></div>
+<div class="pcard reveal" style="--d:180ms"><span class="tagline">03 — Programmes</span><h3>Temps de prière</h3><p>Des programmes portés par la mission de la maison : promouvoir la musique, partager l'Évangile.</p></div>
+<div class="pcard reveal" style="--d:270ms"><span class="tagline">04 — Courts métrages</span><h3>Raconter en images</h3><p>De l'idée au montage final, des récits courts qui prolongent la musique.</p></div>
+<div class="pcard reveal" style="--d:360ms"><span class="tagline">05 — Contenu musical</span><h3>Les sorties</h3><p>Les projets musicaux produits par la maison, seuls ou en collaboration avec des artistes invités.</p></div>
 <div class="pcard reveal" style="--d:450ms"><span class="tagline">Et aussi</span><h3>Formats sur mesure</h3><p>Une idée qui n'entre dans aucune case ? C'est souvent là que les meilleures choses commencent.</p></div>
 </div>
 </div>
@@ -338,7 +305,7 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=50"></script>
+<script src="../js/reatm.js?v=51"></script>
 <script>
 (function(){
   var el=document.getElementById('prBuild');
