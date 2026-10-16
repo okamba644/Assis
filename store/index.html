@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=54"/>
+<link rel="stylesheet" href="../css/reatm.css?v=55"/>
 <style>
 /* ===== STORE — showroom : blanc, noir, gris. Clean avant tout ===== */
 .phero{background:#fff;color:#050505;border-bottom:1px solid #e6e6e6}
@@ -30,11 +30,9 @@ html[data-theme="dark"] .phero{background:#0a0a0a;color:#fff;border-bottom-color
   --ph-lien:#E8E8EA;
   --ph-voile:linear-gradient(115deg,rgba(8,8,10,.62) 0%,rgba(8,8,10,.32) 46%,rgba(8,8,10,.58) 100%);
 }
-/* store.png ne fait que 156 x 124 : passable derrière un voile à 10 %
-   d'opacité, mais flou depuis que la photo occupe la moitié du cadre.
-   Les vignettes du catalogue, elles, le gardent : à leur taille il tient. */
-.phero-bg{background-image:url('../assets/guitare.png');background-position:center 45%}
-@media(max-width:980px){.ph-side{background-image:url('../assets/guitare.png');background-position:center 45%}}
+/* l'image est en portrait : on la cale sur le mur d'instruments */
+.phero-bg{background-image:url('../assets/store-showroom.webp');background-position:center 42%}
+@media(max-width:980px){.ph-side{background-image:url('../assets/store-showroom.webp');background-position:center 42%}}
 /* sur fond sombre un filet noir disparaîtrait */
 html[data-theme="dark"] .phero{--ph-trait:#FFFFFF}
 .phero h1{letter-spacing:-3.5px;font-weight:800}
@@ -111,19 +109,13 @@ html[data-theme="dark"] .prod .acts a:first-child{background:#fff;border-color:#
 .prod .acts a:last-child:hover{border-color:var(--text)}
 @media(hover:none){.prod .acts{opacity:1;transform:none}}
 
-/* modes d'acquisition */
-.st-modes{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:18px;overflow:hidden}
-.st-modes article{background:var(--bg);padding:clamp(24px,3vw,36px);transition:background-color .4s ease}
-.st-modes article:hover{background:var(--bg-alt)}
-.st-modes b{display:block;font-size:clamp(26px,3.4vw,42px);font-weight:800;letter-spacing:-1.6px;margin-bottom:10px}
-.st-modes p{font-size:13px;color:var(--muted);line-height:1.75}
 .st-cta{background:#111;color:#fff}
 html[data-theme="dark"] .st-cta{background:#fff;color:#050505}
 .st-cta .btn-acc{background:#fff;color:#111}
 html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
-@media(max-width:1080px){.prod{grid-template-columns:repeat(2,1fr)}.st-modes{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1080px){.prod{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:860px){.st-rachat{grid-template-columns:1fr}}
-@media(max-width:700px){.prod{grid-template-columns:1fr}.st-modes{grid-template-columns:1fr}}
+@media(max-width:700px){.prod{grid-template-columns:1fr}}
 </style>
 </head>
 <body data-entity="store" style="--veil-in:#111111">
@@ -218,7 +210,7 @@ html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
 
 <section class="sec" id="vente">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">En vente</h2><p class="sec-lead">Les instruments et le matériel que le Store cède, neufs ou d'occasion, avec le conseil qui va avec.</p></div></div>
+<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">En vente</h2><p class="sec-lead">Instruments et matériel, <b>neufs comme d'occasion</b>. Le Store cède ce qu'il a en stock, avec le conseil qui va avec.</p></div></div>
 <div class="prod"><article class="reveal" style="--d:0ms"><div class="shot"><div class="im" style="background-image:url('../assets/prod-guitare-acoustique.webp')"></div><span class="avail">Disponible</span></div><div class="body"><span class="cat">Instruments</span><h3>Guitare acoustique</h3><div class="ref">Table épicéa, housse incluse</div><div class="acts"><a href="../#contact">Acheter</a><a href="../#contact">Demander le prix</a></div></div></article><article class="reveal" style="--d:70ms"><div class="shot"><div class="im" style="background-image:url('../assets/prod-guitare-electro.webp')"></div><span class="avail">Disponible</span></div><div class="body"><span class="cat">Instruments</span><h3>Guitare électro-acoustique</h3><div class="ref">Préampli intégré, sortie jack</div><div class="acts"><a href="../#contact">Acheter</a><a href="../#contact">Demander le prix</a></div></div></article><article class="reveal" style="--d:140ms"><div class="shot"><div class="im" style="background-image:url('../assets/prod-piano-synthe.webp')"></div><span class="avail">Disponible</span></div><div class="body"><span class="cat">Instruments</span><h3>Piano synthé</h3><div class="ref">Clavier 61 touches, sons et pads</div><div class="acts"><a href="../#contact">Acheter</a><a href="../#contact">Demander le prix</a></div></div></article><article class="reveal" style="--d:210ms"><div class="shot"><div class="im" style="background-image:url('../assets/prod-micros-filaires.webp')"></div><span class="avail">Disponible</span></div><div class="body"><span class="cat">Sonorisation</span><h3>Micros filaires</h3><div class="ref">6 unités</div><div class="acts"><a href="../#contact">Acheter</a><a href="../#contact">Demander le prix</a></div></div></article></div>
 </div>
 </section>
@@ -232,7 +224,7 @@ html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
 
 <section class="sec" id="achat">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">Nous rachetons votre instrument</h2><p class="sec-lead">Un instrument qui dort chez vous a sa place ici. Dites-nous ce que vous avez, nous revenons vers vous avec une proposition.</p></div></div>
+<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">Nous rachetons instruments et matériel</h2><p class="sec-lead">Un instrument ou du matériel qui dort chez vous a sa place ici, <b>neuf comme d'occasion</b>. Dites-nous ce que vous avez, nous revenons vers vous avec une proposition.</p></div></div>
 <div class="st-rachat">
 <article class="rc-liste reveal">
 <h3>Ce que nous reprenons</h3>
@@ -240,7 +232,7 @@ html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
 <li><i class="fas fa-guitar" aria-hidden="true"></i>Guitares, basses et ukulélés</li>
 <li><i class="fas fa-keyboard" aria-hidden="true"></i>Claviers, pianos numériques et synthés</li>
 <li><i class="fas fa-drum" aria-hidden="true"></i>Batteries, percussions et cymbales</li>
-<li><i class="fas fa-sliders-h" aria-hidden="true"></i>Sonorisation : tables, enceintes, micros</li>
+<li><i class="fas fa-sliders-h" aria-hidden="true"></i>Sonorisation : tables, enceintes, micros</li><li><i class="fas fa-headphones" aria-hidden="true"></i>Matériel de studio : casques, interfaces, câbles</li>
 </ul>
 </article>
 <article class="rc-pas reveal" style="--d:90ms">
@@ -250,20 +242,8 @@ html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
 <li><b>02</b><span>Nous revenons vers vous avec une proposition de prix.</span></li>
 <li><b>03</b><span>Vous passez au showroom, on vérifie ensemble, et c'est réglé.</span></li>
 </ol>
-<a class="btn btn-acc" href="../#contact">Proposer mon instrument <i class="fas fa-arrow-right"></i></a>
+<a class="btn btn-acc" href="../#contact">Proposer mon matériel <i class="fas fa-arrow-right"></i></a>
 </article>
-</div>
-</div>
-</section>
-
-<section class="sec">
-<div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">04</span><div><h2 class="sec-title">Louer, acheter, vendre</h2><p class="sec-lead">Une seule adresse, une seule correspondance.</p></div></div>
-<div class="st-modes">
-<article class="reveal"><b>Louer</b><p>À la séance, à la journée ou pour la durée de votre événement. Le matériel part réglé et testé.</p></article>
-<article class="reveal" style="--d:90ms"><b>Acheter</b><p>Neuf ou d'occasion, avec le conseil qui va avec. On vous oriente vers ce dont vous avez réellement besoin.</p></article>
-<article class="reveal" style="--d:180ms"><b>Vendre</b><p>Vous avez du matériel qui dort ? Le Store le remet en circulation.</p></article>
-<article class="reveal" style="--d:270ms"><b>Couvrir</b><p>Soirée, activité, concert : sonorisation et instruments, livrés et installés.</p></article>
 </div>
 </div>
 </section>
@@ -351,7 +331,7 @@ html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=54"></script>
+<script src="../js/reatm.js?v=55"></script>
 
 </body>
 </html>
