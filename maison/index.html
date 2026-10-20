@@ -12,12 +12,14 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=67"/>
+<link rel="stylesheet" href="../css/reatm.css?v=71"/>
 <style>
 /* ===== LA MAISON — vue d'ensemble, waveform géante ===== */
 .phero{background:#050505;color:#fff;overflow:hidden}
 .phero-veil{background:radial-gradient(900px circle at 22% 28%,rgba(225,27,34,.20),transparent 62%),radial-gradient(760px circle at 82% 70%,rgba(245,182,13,.16),transparent 62%)}
 .phero h1{letter-spacing:-3.4px}
+/* serré en grand, desserré en petit : sinon le crénage mange l'espace entre les mots */
+@media(max-width:700px){.phero h1{letter-spacing:-1.6px}}
 .services{background:transparent}
 .phero h1 em{color:#e11b22}
 .phero .sub{color:rgba(255,255,255,.74)}
@@ -408,7 +410,7 @@
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=67"></script>
+<script src="../js/reatm.js?v=71"></script>
 <script>
 /* ===== Aperçu des pôles : le bloc change tout seul =====
    Les cinq plans sont dans la page, empilés ; on ne fait que déplacer la

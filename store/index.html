@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=67"/>
+<link rel="stylesheet" href="../css/reatm.css?v=71"/>
 <style>
 /* ===== STORE — showroom : blanc, noir, gris. Clean avant tout ===== */
 .phero{background:#fff;color:#050505;border-bottom:1px solid #e6e6e6}
@@ -36,6 +36,8 @@ html[data-theme="dark"] .phero{background:#0a0a0a;color:#fff;border-bottom-color
 /* sur fond sombre un filet noir disparaîtrait */
 html[data-theme="dark"] .phero{--ph-trait:#FFFFFF}
 .phero h1{letter-spacing:-3.5px;font-weight:800}
+/* serré en grand, desserré en petit : sinon le crénage mange l'espace entre les mots */
+@media(max-width:700px){.phero h1{letter-spacing:-1.6px}}
 .phero h1 em{color:#8A8A8A}
 .phero .sub{color:#5b5b5b}
 html[data-theme="dark"] .phero .sub{color:#b4b4b4}
@@ -331,7 +333,7 @@ html[data-theme="dark"] .st-cta .btn-acc{background:#111;color:#fff}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=67"></script>
+<script src="../js/reatm.js?v=71"></script>
 
 </body>
 </html>
