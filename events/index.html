@@ -12,13 +12,23 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=71"/>
+<link rel="stylesheet" href="../css/reatm.css?v=72"/>
 <style>
 /* ===== EVENTS — la scène : noir, blanc, lumière ===== */
 /* Deux enfants dans le fil désormais, le fil d'Ariane et la colonne de
    texte : en ligne ils se partageraient la largeur. */
 .phero{background:#050505;color:#fff;min-height:82vh;
   display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch}
+/* Le nom posé sur la photo est calé à 26 % de la hauteur du héros (.ph-side,
+   top:26%). Le bloc de gauche partait du bas et retombait donc plus bas que lui :
+   on l'accroche au même repère, calculé sur la même hauteur de référence. */
+@media(min-width:981px){
+  .phero{justify-content:flex-start}
+  /* line-height:0 supprime la demi-interligne de la ligne qui porte le fil
+     d'Ariane ; sans elle il retomberait 3 px sous le repère. Le lien garde
+     la sienne, son texte n'est pas touché. */
+  .ph-fil{padding-top:calc(82vh * .26);line-height:0}
+}
 /* ----- le cadre se partage en deux -----
    La mécanique de la coupe vit dans la feuille partagée (« CADRE EN BIAIS ») ;
    la page n'en règle que les couleurs et l'image. */
@@ -333,7 +343,7 @@
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=71"></script>
+<script src="../js/reatm.js?v=72"></script>
 
 </body>
 </html>
