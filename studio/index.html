@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=66"/>
+<link rel="stylesheet" href="../css/reatm.css?v=67"/>
 <style>
 /* ===== STUDIO — sombre, sonore, technique ===== */
 .phero{background:#050505;color:#fff}
@@ -45,8 +45,11 @@
   background:radial-gradient(440px circle at var(--mx,50%) var(--my,40%),rgba(225,27,34,.20),transparent 70%)}
 .st-wave{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 clamp(18px,3.2vw,64px) 26px;--wh:70px;opacity:.5}
 .st-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-.st-meta span{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:9px 16px;border-radius:999px;border:1px solid rgba(225,27,34,.45);color:#fff}
-.st-meta span:first-child{background:#e11b22;border-color:#e11b22}
+.st-meta a{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;padding:9px 16px;border-radius:999px;border:1px solid rgba(225,27,34,.45);color:#fff}
+.st-meta a:first-child{background:#e11b22;border-color:#e11b22}
+.st-meta a{transition:background-color .35s ease,border-color .35s ease,color .35s ease}
+.st-meta a:hover,.st-meta a:focus-visible{background:#e11b22;border-color:#e11b22;color:#fff}
+#st-enregistrement,#st-production,#st-location-espace,#st-repetition{scroll-margin-top:86px}
 .st-serv{background:#0E0E0E;color:#fff}
 html[data-theme="light"] .st-serv{background:#F2F2F3;color:#111}
 .st-serv .sec-title{color:#fff}
@@ -172,7 +175,7 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 <div class="wrap phero-inner">
 <h1 class="reveal">Where sound<br/>comes <em>alive.</em></h1>
 <p class="sub reveal" style="--d:100ms">Votre espace d'enregistrement, de production et de répétition. Que vous soyez musicien, artiste ou producteur, notre équipe vous accompagne dans tous vos projets musicaux.</p>
-<div class="st-meta reveal" style="--d:180ms"><span>Enregistrement</span><span>Production</span><span>Location espace</span><span>Salle sessions de répétition</span></div>
+<nav class="st-meta reveal" style="--d:180ms" aria-label="Les prestations du Studio"><a href="#st-enregistrement">Enregistrement</a><a href="#st-production">Production</a><a href="#st-location-espace">Location espace</a><a href="#st-repetition">Salle sessions de répétition</a></nav>
 </div>
 <div class="st-wave"><div class="wavebar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
 <div class="ph-side">
@@ -185,7 +188,7 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 <div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos prestations</h2><p class="sec-lead">Quatre façons de passer par le studio : y enregistrer, y produire, le louer, ou venir y répéter.</p></div></div>
 <div class="st-split">
 <ul class="lines"><li class="reveal" style="--d:0ms"><b>01</b><span>Enregistrement</span></li><li class="reveal" style="--d:45ms"><b>02</b><span>Production musicale</span></li><li class="reveal" style="--d:90ms"><b>03</b><span>Podcast &amp; émission</span></li><li class="reveal" style="--d:135ms"><b>04</b><span>Arrangement</span></li><li class="reveal" style="--d:180ms"><b>05</b><span>Editing</span></li><li class="reveal" style="--d:225ms"><b>06</b><span>Mixage</span></li><li class="reveal" style="--d:270ms"><b>07</b><span>Mastering</span></li><li class="reveal" style="--d:315ms"><b>08</b><span>Répétition</span></li></ul>
-<div class="pgrid pgrid--2"><div class="pcard reveal" style="--d:0ms"><span class="tagline">Prestation</span><h3>Enregistrement</h3><p>Pose de voix sur instrumental, voix et instruments, podcast et émission.</p></div><div class="pcard reveal" style="--d:70ms"><span class="tagline">Prestation</span><h3>Production</h3><p>Session de création, arrangement, editing, mixage et mastering.</p></div><div class="pcard reveal" style="--d:140ms"><span class="tagline">Prestation</span><h3>Location espace</h3><p>Le studio se loue pour vos sessions privées, seul ou en groupe.</p></div><div class="pcard reveal" style="--d:210ms"><span class="tagline">Prestation</span><h3>Salle sessions de répétition</h3><p>Batterie, guitares, basse, piano et micros à disposition, à l'heure.</p></div></div>
+<div class="pgrid pgrid--2"><div class="pcard reveal" id="st-enregistrement" style="--d:0ms"><span class="tagline">Prestation</span><h3>Enregistrement</h3><p>Pose de voix sur instrumental, voix et instruments, podcast et émission.</p></div><div class="pcard reveal" id="st-production" style="--d:70ms"><span class="tagline">Prestation</span><h3>Production</h3><p>Session de création, arrangement, editing, mixage et mastering.</p></div><div class="pcard reveal" id="st-location-espace" style="--d:140ms"><span class="tagline">Prestation</span><h3>Location espace</h3><p>Le studio se loue pour vos sessions privées, seul ou en groupe.</p></div><div class="pcard reveal" id="st-repetition" style="--d:210ms"><span class="tagline">Prestation</span><h3>Salle sessions de répétition</h3><p>Batterie, guitares, basse, piano et micros à disposition, à l'heure.</p></div></div>
 </div>
 </div>
 </section>
@@ -279,7 +282,7 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=66"></script>
+<script src="../js/reatm.js?v=67"></script>
 <script>
 (function(){
   var h=document.getElementById('stLight');

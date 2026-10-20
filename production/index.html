@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=66"/>
+<link rel="stylesheet" href="../css/reatm.css?v=67"/>
 <style>
 /* ===== PRODUCTION — jaune + blanc + noir, typographie massive ===== */
 .phero{background:#050505;color:#fff}
@@ -96,6 +96,14 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 .pr-kitchen .pcard:hover{border-color:#FACC15;box-shadow:0 24px 50px rgba(250,204,21,.18)}
 .pr-cta{background:#050505;color:#fff}
 .pr-cta h2 em{font-style:normal;color:#FACC15}
+
+.pr-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.pr-meta a{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+  padding:9px 16px;border-radius:999px;border:1px solid rgba(250,204,21,.45);color:#fff;
+  transition:background-color .35s ease,border-color .35s ease,color .35s ease}
+.pr-meta a:first-child{background:var(--acc);border-color:var(--acc);color:#050505}
+.pr-meta a:hover,.pr-meta a:focus-visible{background:var(--acc);border-color:var(--acc);color:#050505}
+#pr-creation,#pr-programmes,#pr-realisations,#pr-emissions{scroll-margin-top:86px}
 </style>
 </head>
 <body data-entity="production" style="--veil-in:#FACC15">
@@ -177,6 +185,7 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 <div class="wrap phero-inner">
 <h1 class="reveal">L'idée<br/>devient <em>création.</em></h1>
 <p class="sub reveal" style="--d:100ms">L'espace créatif de REATM. La cuisine de la maison, là où les idées deviennent des formats — la REATM Home Kitchen.</p>
+<nav class="pr-meta reveal" style="--d:180ms" aria-label="Les prestations de Prod"><a href="#pr-creation">Création contenu</a><a href="#pr-programmes">Programmes</a><a href="#pr-realisations">Réalisations</a><a href="#pr-emissions">Émissions</a></nav>
 <div class="pr-build" id="prBuild" aria-hidden="true"><i></i><i></i><i></i></div>
 </div>
 <div class="ph-side">
@@ -207,10 +216,10 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 <div class="wrap">
 <div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">Nos prestations</h2><p class="sec-lead">Quatre façons de produire, pour nos clients comme pour la maison elle-même — la REATM Home Kitchen.</p></div></div>
 <div class="pgrid pgrid--2">
-<div class="pcard reveal" style="--d:0ms"><span class="tagline">01</span><h3>Création contenu</h3><p>De l'idée au montage : écriture, direction artistique et habillage, pour nos clients comme pour la maison.</p></div>
-<div class="pcard reveal" style="--d:90ms"><span class="tagline">02</span><h3>Programmes</h3><p>Les formats réguliers portés par la mission de la maison, dont Instants de Prières chaque vendredi.</p></div>
-<div class="pcard reveal" style="--d:180ms"><span class="tagline">03</span><h3>Réalisations</h3><p>Tournage, captation et post-production : courts métrages, clips et images qui prolongent la musique.</p></div>
-<div class="pcard reveal" style="--d:270ms"><span class="tagline">04</span><h3>Émissions</h3><p>Écriture, tournage et post-production de nos plateaux et podcasts, en interne comme en prestation.</p></div>
+<div class="pcard reveal" id="pr-creation" style="--d:0ms"><span class="tagline">01</span><h3>Création contenu</h3><p>De l'idée au montage : écriture, direction artistique et habillage, pour nos clients comme pour la maison.</p></div>
+<div class="pcard reveal" id="pr-programmes" style="--d:90ms"><span class="tagline">02</span><h3>Programmes</h3><p>Les formats réguliers portés par la mission de la maison, dont Instants de Prières chaque vendredi.</p></div>
+<div class="pcard reveal" id="pr-realisations" style="--d:180ms"><span class="tagline">03</span><h3>Réalisations</h3><p>Tournage, captation et post-production : courts métrages, clips et images qui prolongent la musique.</p></div>
+<div class="pcard reveal" id="pr-emissions" style="--d:270ms"><span class="tagline">04</span><h3>Émissions</h3><p>Écriture, tournage et post-production de nos plateaux et podcasts, en interne comme en prestation.</p></div>
 </div>
 </div>
 </section>
@@ -295,7 +304,7 @@ html[data-theme="dark"] .pr-kitchen .pcard .tagline{color:#FACC15}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=66"></script>
+<script src="../js/reatm.js?v=67"></script>
 <script>
 (function(){
   var el=document.getElementById('prBuild');
