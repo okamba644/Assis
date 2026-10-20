@@ -1144,6 +1144,62 @@ body[data-entity="studio"] .btn-acc:hover{background:#c5161c;box-shadow:0 16px 3
   .ph-poles{justify-content:flex-start;margin-top:clamp(18px,4.2vw,26px);gap:13px 22px}
 }
 
+/* =================== VISIONNEUSE =====================
+   Plusieurs vues d'un même objet. Le déclencheur porte data-vues, une liste
+   de chemins séparés par des barres verticales ; la visionneuse est montée
+   une seule fois pour toute la page, par le script. */
+.shot[data-vues]{cursor:zoom-in}
+.vues-n{
+  position:absolute;right:12px;bottom:12px;z-index:2;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  padding:6px 10px;border-radius:6px;background:rgba(10,12,16,.72);color:#fff;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:background-color .3s ease;
+}
+.shot[data-vues]:hover .vues-n{background:rgba(10,12,16,.92)}
+.lb{position:fixed;inset:0;z-index:400;display:grid;place-items:center;padding:clamp(12px,3vw,40px)}
+.lb[hidden]{display:none}
+.lb-fond{position:absolute;inset:0;background:rgba(6,8,12,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.lb-boite{
+  position:relative;z-index:1;width:min(980px,100%);max-height:100%;
+  display:flex;flex-direction:column;gap:clamp(10px,1.6vw,18px);color:#fff;
+}
+.lb-titre{font-size:clamp(16px,2vw,22px);font-weight:800;letter-spacing:-.6px;padding-right:48px}
+.lb-vue{position:relative;flex:1;min-height:0;display:grid;place-items:center}
+.lb-vue img{
+  max-width:100%;max-height:min(68vh,660px);width:auto;height:auto;display:block;
+  border-radius:16px;box-shadow:0 30px 70px rgba(0,0,0,.5);background:#111;
+}
+.lb-x,.lb-nav{
+  position:absolute;z-index:2;display:grid;place-items:center;border:0;cursor:pointer;
+  border-radius:50%;background:rgba(255,255,255,.14);color:#fff;
+  box-shadow:0 0 0 1px rgba(255,255,255,.22) inset;
+  transition:background-color .3s ease,transform .3s cubic-bezier(.34,1.4,.64,1);
+}
+.lb-x{top:0;right:0;width:40px;height:40px}
+.lb-nav{top:50%;transform:translateY(-50%);width:clamp(40px,3.4vw,50px);height:clamp(40px,3.4vw,50px)}
+.lb-prec{left:clamp(-6px,-0.6vw,0px)}
+.lb-suiv{right:clamp(-6px,-0.6vw,0px)}
+.lb-x:hover,.lb-nav:hover{background:rgba(255,255,255,.3)}
+.lb-x svg,.lb-nav svg{width:44%;height:44%;fill:none;stroke:currentColor;stroke-width:2.4}
+.lb-x:focus-visible,.lb-nav:focus-visible,.lb-mini button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.lb-compte{font-size:12px;font-weight:700;letter-spacing:1.6px;color:rgba(255,255,255,.62);text-align:center}
+.lb-mini{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.lb-mini button{
+  width:64px;height:48px;padding:0;border:0;border-radius:8px;cursor:pointer;
+  background-size:cover;background-position:center;opacity:.5;
+  box-shadow:0 0 0 2px transparent;
+  transition:opacity .3s ease,box-shadow .3s ease;
+}
+.lb-mini button:hover{opacity:.85}
+.lb-mini button[aria-current="true"]{opacity:1;box-shadow:0 0 0 2px #fff}
+body.lb-ouvert{overflow:hidden}
+@media(max-width:700px){
+  .lb-mini button{width:52px;height:40px}
+  .lb-prec{left:4px}.lb-suiv{right:4px}
+}
+
 /* =================== TRANSITION DE PAGE =================== */
 .veil{position:fixed;inset:0;z-index:500;pointer-events:none;background:var(--acc);opacity:0;transition:opacity .55s ease}
 html.tx-leaving .veil{opacity:1}

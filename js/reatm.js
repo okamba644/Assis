@@ -257,6 +257,87 @@
     },{passive:true});
   }
 
+  /* ---------- Visionneuse : plusieurs vues d'un même objet ----------
+     Un déclencheur porte data-vues, la liste de ses images séparées par des
+     barres verticales. La visionneuse est montée une seule fois et sert
+     tous les déclencheurs de la page. */
+  (function(){
+    var ouvreurs=document.querySelectorAll('[data-vues]');
+    if(!ouvreurs.length)return;
+
+    var lb=document.createElement('div');
+    lb.className='lb'; lb.hidden=true;
+    lb.setAttribute('role','dialog'); lb.setAttribute('aria-modal','true');
+    lb.setAttribute('aria-labelledby','lbTitre');
+    lb.innerHTML=
+      '<div class="lb-fond"></div><div class="lb-boite">'
+      +'<h3 class="lb-titre" id="lbTitre"></h3>'
+      +'<button class="lb-x" type="button" aria-label="Fermer la visionneuse">'
+      +'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>'
+      +'<div class="lb-vue"><img alt=""/>'
+      +'<button class="lb-nav lb-prec" type="button" aria-label="Vue précédente">'
+      +'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+      +'<button class="lb-nav lb-suiv" type="button" aria-label="Vue suivante">'
+      +'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+      +'</div><p class="lb-compte" role="status" aria-live="polite"></p><div class="lb-mini"></div></div>';
+    document.body.appendChild(lb);
+
+    var img=lb.querySelector('.lb-vue img'), titre=lb.querySelector('.lb-titre'),
+        compte=lb.querySelector('.lb-compte'), mini=lb.querySelector('.lb-mini'),
+        prec=lb.querySelector('.lb-prec'), suiv=lb.querySelector('.lb-suiv');
+    var vues=[], i=0, nom='', rendu=null;
+
+    function montre(n){
+      i=(n+vues.length)%vues.length;
+      img.src=vues[i];
+      img.alt=nom+' — vue '+(i+1)+' sur '+vues.length;
+      compte.textContent=(i+1)+' / '+vues.length;
+      [].forEach.call(mini.children,function(b,k){b.setAttribute('aria-current',String(k===i));});
+    }
+    function ouvre(d){
+      vues=d.getAttribute('data-vues').split('|').filter(Boolean);
+      nom=d.getAttribute('data-nom')||'';
+      titre.textContent=nom;
+      mini.innerHTML='';
+      /* une seule vue : les commandes de défilement n'auraient rien à faire */
+      var plusieurs=vues.length>1;
+      prec.hidden=suiv.hidden=!plusieurs;
+      compte.hidden=!plusieurs;
+      vues.forEach(function(u,k){
+        if(!plusieurs)return;
+        var b=document.createElement('button');
+        b.type='button'; b.style.backgroundImage='url("'+u+'")';
+        b.setAttribute('aria-label','Vue '+(k+1));
+        b.addEventListener('click',function(){montre(k);});
+        mini.appendChild(b);
+      });
+      montre(0);
+      rendu=d;
+      lb.hidden=false;
+      document.body.classList.add('lb-ouvert');
+      lb.querySelector('.lb-x').focus();
+    }
+    function ferme(){
+      lb.hidden=true;
+      document.body.classList.remove('lb-ouvert');
+      if(rendu&&rendu.focus)rendu.focus();
+      rendu=null;
+    }
+    [].forEach.call(ouvreurs,function(d){
+      d.addEventListener('click',function(){ouvre(d);});
+    });
+    lb.querySelector('.lb-x').addEventListener('click',ferme);
+    lb.querySelector('.lb-fond').addEventListener('click',ferme);
+    prec.addEventListener('click',function(){montre(i-1);});
+    suiv.addEventListener('click',function(){montre(i+1);});
+    document.addEventListener('keydown',function(e){
+      if(lb.hidden)return;
+      if(e.key==='Escape')ferme();
+      else if(e.key==='ArrowLeft'&&vues.length>1)montre(i-1);
+      else if(e.key==='ArrowRight'&&vues.length>1)montre(i+1);
+    });
+  })();
+
   /* ---------- Arrivée sur une page : le voile de l'entité se retire ---------- */
   if(document.querySelector('.veil-in')){
     requestAnimationFrame(function(){
