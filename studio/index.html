@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=73"/>
+<link rel="stylesheet" href="../css/reatm.css?v=76"/>
 <style>
 /* ===== STUDIO — sombre, sonore, technique ===== */
 .phero{background:#050505;color:#fff}
@@ -66,8 +66,27 @@ html[data-theme="light"] .st-serv .pcard{background:#fff;border-color:#e3e3e3}
 .st-serv .pcard p{color:rgba(255,255,255,.66)}
 html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 
+/* 01 — une seule liste : chaque numéro porte son détail, au lieu d'un
+   sommaire à gauche répétant des cartes à droite. */
+.lines--det li{align-items:baseline;padding:22px 6px;gap:clamp(14px,2vw,28px)}
+.lines--det .det{display:grid;grid-template-columns:minmax(220px,300px) 1fr;
+  gap:clamp(10px,2vw,32px);align-items:baseline;flex:1}
+.lines--det .det p{font-size:14.5px;font-weight:400;line-height:1.75;letter-spacing:0;
+  color:rgba(255,255,255,.62);transition:color .3s ease}
+html[data-theme="light"] .lines--det .det p{color:#5b5b5b}
+/* le survol teinte le titre, pas le détail : il resterait illisible */
+.lines--det li:hover .det p{color:rgba(255,255,255,.78)}
+html[data-theme="light"] .lines--det li:hover .det p{color:#444}
+@media(max-width:820px){.lines--det .det{grid-template-columns:1fr;gap:6px}}
+/* Sur écran tactile le survol se fige après un appui. Le titre passerait
+   alors au rouge : 4,03 sur fond sombre, sous le seuil AA de 4,5 à la
+   taille qu'il a sur petit écran. On réserve l'effet au pointeur. */
+@media(hover:none){
+  .lines--det li:hover{padding-left:6px;color:inherit}
+  .lines--det li:hover b{color:var(--muted)}
+}
+
 /* 02 — la section qui était blanche passe au noir : le studio est un lieu sombre */
-.st-split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);align-items:start}
 .st-gear{background:#050505;color:#fff}
 .st-gear .sec-title,.st-gear .sec-lead{color:#fff}
 .st-gear .sec-lead{color:rgba(255,255,255,.66)}
@@ -84,7 +103,7 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 .gear span{font-size:13.6px;font-weight:500;line-height:1.75;color:rgba(255,255,255,.82)}
 .st-cta{background:#050505;color:#fff;border-top:1px solid rgba(255,255,255,.1)}
 .st-cta .wavebar{--wh:34px;justify-content:center;margin-bottom:30px;opacity:.6}
-@media(max-width:900px){.st-split{grid-template-columns:1fr}.gear{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.gear{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.gear{grid-template-columns:1fr}}
 
 /* l'onde reste du côté texte, elle ne traverse pas la coupe */
@@ -186,10 +205,7 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 <section class="sec st-serv">
 <div class="wrap">
 <div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos prestations</h2><p class="sec-lead">Quatre façons de passer par le studio : y enregistrer, y produire, le louer, ou venir y répéter.</p></div></div>
-<div class="st-split">
-<ul class="lines"><li class="reveal" style="--d:0ms"><b>01</b><span>Enregistrement</span></li><li class="reveal" style="--d:45ms"><b>02</b><span>Production</span></li><li class="reveal" style="--d:90ms"><b>03</b><span>Location espace</span></li><li class="reveal" style="--d:135ms"><b>04</b><span>Salle sessions de répétition</span></li></ul>
-<div class="pgrid pgrid--2"><div class="pcard reveal" id="st-enregistrement" style="--d:0ms"><span class="tagline">Prestation</span><h3>Enregistrement</h3><p>Pose de voix sur instrumental, voix et instruments, podcast et émission.</p></div><div class="pcard reveal" id="st-production" style="--d:70ms"><span class="tagline">Prestation</span><h3>Production</h3><p>Session de création, arrangement, editing, mixage et mastering.</p></div><div class="pcard reveal" id="st-location-espace" style="--d:140ms"><span class="tagline">Prestation</span><h3>Location espace</h3><p>Le studio se loue pour vos sessions privées, seul ou en groupe.</p></div><div class="pcard reveal" id="st-repetition" style="--d:210ms"><span class="tagline">Prestation</span><h3>Salle sessions de répétition</h3><p>Batterie, guitares, basse, piano et micros à disposition, à l'heure.</p></div></div>
-</div>
+<ul class="lines lines--det"><li class="reveal" id="st-enregistrement" style="--d:0ms"><b>01</b><div class="det"><span>Enregistrement</span><p>Pose de voix sur instrumental, voix et instruments, podcast et émission.</p></div></li><li class="reveal" id="st-production" style="--d:70ms"><b>02</b><div class="det"><span>Production</span><p>Session de création, arrangement, editing, mixage et mastering.</p></div></li><li class="reveal" id="st-location-espace" style="--d:140ms"><b>03</b><div class="det"><span>Location espace</span><p>Le studio se loue pour vos sessions privées, seul ou en groupe.</p></div></li><li class="reveal" id="st-repetition" style="--d:210ms"><b>04</b><div class="det"><span>Salle sessions de répétition</span><p>Batterie, guitares, basse, piano et micros à disposition, à l'heure.</p></div></li></ul>
 </div>
 </section>
 
@@ -282,7 +298,7 @@ html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=73"></script>
+<script src="../js/reatm.js?v=76"></script>
 <script>
 (function(){
   var h=document.getElementById('stLight');
