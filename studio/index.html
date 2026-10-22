@@ -12,7 +12,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Caveat:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <script>document.documentElement.classList.add('js');try{var r=document.documentElement;if(!r.hasAttribute('data-theme-lock')){var t=localStorage.getItem('reatm-theme');if(t){r.setAttribute('data-theme',t);}}}catch(e){}</script>
-<link rel="stylesheet" href="../css/reatm.css?v=76"/>
+<link rel="stylesheet" href="../css/reatm.css?v=78"/>
 <style>
 /* ===== STUDIO — sombre, sonore, technique ===== */
 .phero{background:#050505;color:#fff}
@@ -66,25 +66,16 @@ html[data-theme="light"] .st-serv .pcard{background:#fff;border-color:#e3e3e3}
 .st-serv .pcard p{color:rgba(255,255,255,.66)}
 html[data-theme="light"] .st-serv .pcard p{color:#5b5b5b}
 
-/* 01 — une seule liste : chaque numéro porte son détail, au lieu d'un
-   sommaire à gauche répétant des cartes à droite. */
-.lines--det li{align-items:baseline;padding:22px 6px;gap:clamp(14px,2vw,28px)}
-.lines--det .det{display:grid;grid-template-columns:minmax(220px,300px) 1fr;
-  gap:clamp(10px,2vw,32px);align-items:baseline;flex:1}
-.lines--det .det p{font-size:14.5px;font-weight:400;line-height:1.75;letter-spacing:0;
-  color:rgba(255,255,255,.62);transition:color .3s ease}
-html[data-theme="light"] .lines--det .det p{color:#5b5b5b}
-/* le survol teinte le titre, pas le détail : il resterait illisible */
-.lines--det li:hover .det p{color:rgba(255,255,255,.78)}
-html[data-theme="light"] .lines--det li:hover .det p{color:#444}
-@media(max-width:820px){.lines--det .det{grid-template-columns:1fr;gap:6px}}
-/* Sur écran tactile le survol se fige après un appui. Le titre passerait
-   alors au rouge : 4,03 sur fond sombre, sous le seuil AA de 4,5 à la
-   taille qu'il a sur petit écran. On réserve l'effet au pointeur. */
-@media(hover:none){
-  .lines--det li:hover{padding-left:6px;color:inherit}
-  .lines--det li:hover b{color:var(--muted)}
-}
+/* 01 à 04 — chaque prestation prend son grand numéro et son détail,
+   au lieu d'un en-tête unique suivi d'une liste. */
+.st-presta .sec-head{margin-bottom:0;padding:clamp(26px,3.4vw,42px) 0;
+  border-bottom:1px solid rgba(255,255,255,.12)}
+html[data-theme="light"] .st-presta .sec-head{border-bottom-color:#e3e3e3}
+.st-presta .sec-head:first-child{padding-top:0}
+.st-presta .sec-head:last-child{border-bottom:0;padding-bottom:0}
+/* « 01 » est plus étroit que « 04 » : sans largeur commune, les quatre titres
+   ne démarrent pas au même endroit. En em, elle suit la taille du numéro. */
+.st-presta .sec-num{min-width:1.35em}
 
 /* 02 — la section qui était blanche passe au noir : le studio est un lieu sombre */
 .st-gear{background:#050505;color:#fff}
@@ -204,14 +195,18 @@ html[data-theme="light"] .lines--det li:hover .det p{color:#444}
 
 <section class="sec st-serv">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos prestations</h2><p class="sec-lead">Quatre façons de passer par le studio : y enregistrer, y produire, le louer, ou venir y répéter.</p></div></div>
-<ul class="lines lines--det"><li class="reveal" id="st-enregistrement" style="--d:0ms"><b>01</b><div class="det"><span>Enregistrement</span><p>Pose de voix sur instrumental, voix et instruments, podcast et émission.</p></div></li><li class="reveal" id="st-production" style="--d:70ms"><b>02</b><div class="det"><span>Production</span><p>Session de création, arrangement, editing, mixage et mastering.</p></div></li><li class="reveal" id="st-location-espace" style="--d:140ms"><b>03</b><div class="det"><span>Location espace</span><p>Le studio se loue pour vos sessions privées, seul ou en groupe.</p></div></li><li class="reveal" id="st-repetition" style="--d:210ms"><b>04</b><div class="det"><span>Salle sessions de répétition</span><p>Batterie, guitares, basse, piano et micros à disposition, à l'heure.</p></div></li></ul>
+<div class="st-presta">
+<div class="sec-head reveal" id="st-enregistrement" style="--d:0ms"><span class="sec-num">01</span><div><h2 class="sec-title">Enregistrement</h2><p class="sec-lead">Pose de voix sur instrumental, voix et instruments, podcast et émission. Le studio est réglé avant votre arrivée : vous n'avez qu'à jouer.</p></div></div>
+<div class="sec-head reveal" id="st-production" style="--d:70ms"><span class="sec-num">02</span><div><h2 class="sec-title">Production</h2><p class="sec-lead">Session de création, arrangement, editing, mixage et mastering. De la première maquette au master prêt pour la scène, la radio et les plateformes.</p></div></div>
+<div class="sec-head reveal" id="st-location-espace" style="--d:140ms"><span class="sec-num">03</span><div><h2 class="sec-title">Location espace</h2><p class="sec-lead">Le studio se loue pour vos sessions privées, seul ou en groupe. Vous disposez du lieu et du matériel, à l'heure ou à la journée.</p></div></div>
+<div class="sec-head reveal" id="st-repetition" style="--d:210ms"><span class="sec-num">04</span><div><h2 class="sec-title">Salle sessions de répétition</h2><p class="sec-lead">Batterie, guitares, basse, piano et micros à disposition, à l'heure. Un espace équipé pour préparer la scène ou la séance.</p></div></div>
+</div>
 </div>
 </section>
 
 <section class="sec st-gear">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">02</span><div><h2 class="sec-title">Comment se passe une session</h2><p class="sec-lead">De votre arrivée au fichier final, quatre temps et un interlocuteur unique.</p></div></div>
+<div class="sec-head reveal"><span class="sec-num">05</span><div><h2 class="sec-title">Comment se passe une session</h2><p class="sec-lead">De votre arrivée au fichier final, quatre temps et un interlocuteur unique.</p></div></div>
 <div class="gear"><div class="reveal" style="--d:0ms"><b>01 — Préparation</b><span>On cale l'intention, le tempo et la tonalité. Vous arrivez, tout est déjà en place.</span></div><div class="reveal" style="--d:80ms"><b>02 — Prise</b><span>Voix et instruments, autant de passes qu'il faut. On garde la meilleure.</span></div><div class="reveal" style="--d:160ms"><b>03 — Mixage</b><span>L'équilibre, l'espace et la profondeur. Vous écoutez, on ajuste avec vous.</span></div><div class="reveal" style="--d:240ms"><b>04 — Livraison</b><span>Le master part prêt pour la scène, la radio et les plateformes.</span></div></div>
 <p class="sec-lead reveal" style="margin-top:26px">Tout le matériel est vérifié et réglé avant votre arrivée. Vous n'avez qu'à jouer.</p>
 </div>
@@ -298,7 +293,7 @@ html[data-theme="light"] .lines--det li:hover .det p{color:#444}
 </footer>
 
 <button class="fab" id="fab" aria-label="Revenir en haut"><i class="fas fa-arrow-up"></i></button>
-<script src="../js/reatm.js?v=76"></script>
+<script src="../js/reatm.js?v=78"></script>
 <script>
 (function(){
   var h=document.getElementById('stLight');
