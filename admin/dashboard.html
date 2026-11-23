@@ -10,7 +10,7 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-<link rel="stylesheet" href="admin.css?v=2"/>
+<link rel="stylesheet" href="admin.css?v=3"/>
 <script>
   // garde posée avant le premier rendu : pas connecté → retour au login,
   // sans même laisser entrevoir le tableau de bord.
@@ -24,65 +24,75 @@
 <div class="bg-halos" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="bg-grain" aria-hidden="true"></div>
 
-<div class="stage">
-  <div class="topbar">
-    <div class="wordmark"><span class="dot"></span><b>REATM</b><span>Admin</span></div>
-    <button class="btn-ghost" id="logoutBtn">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Se déconnecter
-    </button>
-  </div>
-
-  <!-- ===== Porte d'accès au dépôt : tant qu'aucun jeton valide n'est
-       enregistré, rien d'autre ne s'affiche. ===== -->
-  <div class="gate glass" id="gate">
-    <h2>Connecter le dépôt GitHub</h2>
-    <p>Pour publier directement sur le site, le tableau de bord écrit dans le dépôt <code>okamba644/REATM-RECORDS</code> avec un jeton que vous seul détenez. Il reste dans ce navigateur, il n'est envoyé qu'à GitHub.</p>
-    <ol>
-      <li>Sur GitHub : <b>Settings → Developer settings → Fine-grained tokens → Generate new token</b>.</li>
-      <li><b>Repository access</b> : seulement <code>okamba644/REATM-RECORDS</code>.</li>
-      <li><b>Permissions → Contents</b> : <code>Read and write</code>.</li>
-      <li>Collez le jeton ci-dessous.</li>
-    </ol>
-    <div class="form-row">
-      <label for="tokenInput">Jeton d'accès personnel</label>
-      <div class="token-row">
-        <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off"/>
-        <button class="btn-main" id="tokenSave" style="width:auto;margin:0;padding:13px 22px">
-          <span class="label">Connecter</span><span class="spin" aria-hidden="true"></span>
-        </button>
-      </div>
+<!-- ===== Porte d'accès au dépôt : tant qu'aucun jeton valide n'est
+     enregistré, rien d'autre ne s'affiche. ===== -->
+<div class="gate glass" id="gate">
+  <h2>Connecter le dépôt GitHub</h2>
+  <p>Pour publier directement sur le site, le tableau de bord écrit dans le dépôt <code>okamba644/REATM-RECORDS</code> avec un jeton que vous seul détenez. Il reste dans ce navigateur, il n'est envoyé qu'à GitHub.</p>
+  <ol>
+    <li>Sur GitHub : <b>Settings → Developer settings → Fine-grained tokens → Generate new token</b>.</li>
+    <li><b>Repository access</b> : seulement <code>okamba644/REATM-RECORDS</code>.</li>
+    <li><b>Permissions → Contents</b> : <code>Read and write</code>.</li>
+    <li>Collez le jeton ci-dessous.</li>
+  </ol>
+  <div class="form-row">
+    <label for="tokenInput">Jeton d'accès personnel</label>
+    <div class="token-row">
+      <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off"/>
+      <button class="btn-main" id="tokenSave" style="width:auto;margin:0;padding:13px 22px">
+        <span class="label">Connecter</span><span class="spin" aria-hidden="true"></span>
+      </button>
     </div>
-    <p id="gateMsg" style="font-size:12px;color:var(--muted);margin:14px 0 0"></p>
   </div>
+  <p id="gateMsg" style="font-size:12px;color:var(--muted);margin:14px 0 0"></p>
+</div>
 
-  <!-- ===== Le tableau de bord lui-même, masqué tant que la porte est ouverte ===== -->
-  <div class="dash" id="dash" hidden>
-    <div class="dash-head">
-      <div>
-        <h1>Catalogue &amp; événements</h1>
-        <p>Chaque publication part directement sur <b>REATM RECORDS</b> — visible sur le site en quelques minutes.</p>
-      </div>
+<!-- ===== Le tableau de bord lui-même : une barre latérale, un contenu.
+     Masqué tant que la porte à jeton est ouverte. ===== -->
+<div class="shell" id="dash" hidden>
+  <aside class="side">
+    <div class="side-brand"><span class="dot"></span><b>REATM</b><span>Admin</span></div>
+    <nav class="side-nav">
+      <button class="side-link active" data-tab="instruments">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
+        Instruments
+      </button>
+      <button class="side-link" data-tab="events">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2.4" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        Événements
+      </button>
+    </nav>
+    <div class="side-foot">
       <button class="btn-ghost" id="tokenForget">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0M12 18v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         Changer de jeton
       </button>
+      <button class="btn-ghost" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Se déconnecter
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-head">
+      <h1 id="mainTitle">Instruments</h1>
+      <p id="mainLead">Chaque publication part directement sur <b>REATM RECORDS</b> — visible sur le site en quelques minutes.</p>
     </div>
 
-    <div class="tabs">
-      <button class="tab active" data-tab="instruments">Instruments</button>
-      <button class="tab" data-tab="events">Événements</button>
-    </div>
-
-    <!-- ----- Onglet Instruments ----- -->
+    <!-- ----- Instruments : achat, location, vente (reprise) ----- -->
     <section class="panel active" id="panel-instruments">
       <div class="grid-2">
         <div class="card glass">
+          <div class="edit-banner" id="instEditBanner" hidden>
+            <span>Modification de <b id="instEditNom"></b></span>
+            <button type="button" id="instCancelEdit">Annuler</button>
+          </div>
           <h2 id="instTitle">Ajouter un instrument</h2>
           <p class="hint" id="instHint">Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.</p>
 
           <form id="instForm">
-            <div class="form-row">
+            <div class="form-row" id="instSegRow">
               <label>Rubrique</label>
               <div class="seg seg-3" id="instSeg">
                 <button type="button" data-val="achat" class="on">Achat</button>
@@ -112,6 +122,7 @@
 
               <div class="form-row">
                 <label>Photos — la première est la vignette</label>
+                <div class="existing-photos" id="instExisting"></div>
                 <div class="drop" id="instDrop">
                   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
                   <p><b>Cliquez</b> ou déposez des photos ici</p>
@@ -149,23 +160,27 @@
 
         <div class="card glass">
           <h2>Déjà en ligne</h2>
-          <p class="hint">Lu en direct depuis le site publié.</p>
+          <p class="hint">Lu en direct depuis le site publié — modifiez ou retirez ce qui existe.</p>
           <div class="cat-list" id="instList"><div class="cat-loading">Chargement du catalogue…</div></div>
         </div>
       </div>
     </section>
 
-    <!-- ----- Onglet Événements ----- -->
+    <!-- ----- Événements ----- -->
     <section class="panel" id="panel-events">
       <div class="grid-2">
         <div class="card glass">
-          <h2>Annoncer un événement</h2>
-          <p class="hint">Il rejoint « Prestations internes » sur la page Events, en tête — au-dessus des précédents.</p>
+          <div class="edit-banner" id="evtEditBanner" hidden>
+            <span>Modification de <b id="evtEditNom"></b></span>
+            <button type="button" id="evtCancelEdit">Annuler</button>
+          </div>
+          <h2 id="evtTitleLabel">Annoncer un événement</h2>
+          <p class="hint" id="evtHint">Il rejoint « Prestations internes » sur la page Events, en tête — au-dessus des précédents.</p>
 
           <form id="evtForm">
             <div class="form-row">
               <label for="evtTitre">Titre</label>
-              <input type="text" id="evtTitre" placeholder="Ex. Nuit Acoustique" required/>
+              <input type="text" id="evtTitre" placeholder="Ex. Nuit Acoustique"/>
             </div>
 
             <div class="form-grid2">
@@ -181,7 +196,7 @@
 
             <div class="form-row">
               <label for="evtDesc">Description</label>
-              <textarea id="evtDesc" placeholder="Une ou deux phrases sur l'événement…" required></textarea>
+              <textarea id="evtDesc" placeholder="Une ou deux phrases sur l'événement…"></textarea>
             </div>
 
             <div class="form-row">
@@ -191,6 +206,7 @@
 
             <div class="form-row">
               <label>Affiche</label>
+              <div class="existing-photos" id="evtExisting"></div>
               <div class="drop" id="evtDrop">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
                 <p><b>Cliquez</b> ou déposez l'affiche ici</p>
@@ -200,23 +216,30 @@
             </div>
 
             <button type="submit" class="btn-main" id="evtSubmit">
-              <span class="label">Publier sur le site</span><span class="spin" aria-hidden="true"></span>
+              <span class="label" id="evtSubmitLabel">Publier sur le site</span><span class="spin" aria-hidden="true"></span>
             </button>
           </form>
         </div>
 
-        <div class="card glass">
-          <h2>Journal</h2>
-          <p class="hint">Le détail de chaque publication, dans l'ordre.</p>
-          <div class="log" id="log"><div class="log-empty">Rien publié pour l'instant.</div></div>
+        <div>
+          <div class="card glass" style="margin-bottom:20px">
+            <h2>Déjà en ligne</h2>
+            <p class="hint">Les annonces de « Prestations internes ».</p>
+            <div class="cat-list" id="evtList"><div class="cat-loading">Chargement…</div></div>
+          </div>
+          <div class="card glass">
+            <h2>Journal</h2>
+            <p class="hint">Le détail de chaque action, dans l'ordre.</p>
+            <div class="log" id="log"><div class="log-empty">Rien publié pour l'instant.</div></div>
+          </div>
         </div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <div class="toast-wrap" id="toastWrap"></div>
 
-<script src="admin-dashboard.js?v=2"></script>
+<script src="admin-dashboard.js?v=3"></script>
 </body>
 </html>

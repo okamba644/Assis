@@ -153,6 +153,24 @@
     });
   }
 
+  // retire un fichier devenu inutile (photo remplacée ou fiche supprimée) ;
+  // du seul nettoyage, jamais bloquant pour l'action principale.
+  function ghDeleteFileQuiet(path, message) {
+    return fetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + path + '?ref=' + BRANCH, { headers: ghHeaders() })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j) return;
+        return fetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + path, {
+          method: 'DELETE', headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
+          body: JSON.stringify({ message: message, sha: j.sha, branch: BRANCH })
+        });
+      })
+      .catch(function () { /* le fichier reste orphelin dans assets/ : sans conséquence visible */ });
+  }
+  function ghDeleteFilesQuiet(paths, message) {
+    return paths.reduce(function (chain, p) { return chain.then(function () { return ghDeleteFileQuiet(p, message); }); }, Promise.resolve());
+  }
+
   // ===================== images : redimension + conversion côté client =====================
 
   function fileToImage(file) {
@@ -195,7 +213,7 @@
   // téléverse une photo redimensionnée, renvoie son chemin définitif dans assets/
   function publishImage(file, slug, index) {
     return resizeToBlob(file, 1200).then(function (res) {
-      var tag = Date.now().toString(36).slice(-5);
+      var tag = Date.now().toString(36).slice(-5) + Math.floor(Math.random() * 36).toString(36);
       var path = 'assets/' + slug + '-' + tag + (index ? '-' + index : '') + '.' + res.ext;
       return blobToBase64(res.blob).then(function (b64) {
         return ghPutImage(path, b64, 'Admin : ajoute la photo ' + path)
@@ -204,13 +222,20 @@
     });
   }
 
+  function uploadSeries(files, slug) {
+    var uploads = files.map(function (f, i) { return function () { return publishImage(f, slug, files.length > 1 ? i + 1 : ''); }; });
+    return uploads.reduce(function (chain, step) {
+      return chain.then(function (acc) { return step().then(function (path) { acc.push(path); return acc; }); });
+    }, Promise.resolve([]));
+  }
+
   // ===================== porte d'accès (jeton) =====================
 
   var gate = document.getElementById('gate'), dash = document.getElementById('dash');
   var tokenInput = document.getElementById('tokenInput'), tokenSave = document.getElementById('tokenSave');
   var gateMsg = document.getElementById('gateMsg');
 
-  function openDash() { gate.hidden = true; dash.hidden = false; loadCatalogue(); }
+  function openDash() { gate.hidden = true; dash.hidden = false; loadCatalogue(); loadEvents(); }
 
   function tryToken(token, silent) {
     tokenSave.classList.add('is-loading'); tokenSave.disabled = true;
@@ -240,17 +265,22 @@
   });
 
   var savedToken = getToken();
-  if (savedToken) tryToken(savedToken, true).then(function () {
-    if (gate.hidden !== true) { /* jeton invalide : la porte reste affichée */ }
-  });
+  if (savedToken) tryToken(savedToken, true);
 
-  // ===================== onglets =====================
-  document.querySelectorAll('.tab').forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+  // ===================== navigation (barre latérale) =====================
+  var TAB_INFO = {
+    instruments: { titre: 'Instruments', lead: 'Chaque publication part directement sur <b>REATM RECORDS</b> — visible sur le site en quelques minutes.' },
+    events: { titre: 'Événements', lead: 'Les annonces rejoignent « Prestations internes » sur la page Events.' }
+  };
+  document.querySelectorAll('.side-link').forEach(function (link) {
+    link.addEventListener('click', function () {
+      document.querySelectorAll('.side-link').forEach(function (l) { l.classList.remove('active'); });
       document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
-      tab.classList.add('active');
-      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+      link.classList.add('active');
+      document.getElementById('panel-' + link.dataset.tab).classList.add('active');
+      var info = TAB_INFO[link.dataset.tab];
+      document.getElementById('mainTitle').textContent = info.titre;
+      document.getElementById('mainLead').innerHTML = info.lead;
     });
   });
 
@@ -261,18 +291,15 @@
     var previews = document.getElementById(previewsId);
     var files = [];
 
-    function render() {
-      previews.innerHTML = '';
-      files.forEach(function (f, i) {
-        var box = document.createElement('div'); box.className = 'preview';
-        var img = document.createElement('img'); img.src = URL.createObjectURL(f);
-        box.appendChild(img);
-        if (i === 0) { var n1 = document.createElement('span'); n1.className = 'n1'; n1.textContent = 'Vignette'; box.appendChild(n1); }
-        var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.innerHTML = '&times;';
-        rm.addEventListener('click', function () { files.splice(i, 1); render(); });
-        box.appendChild(rm);
-        previews.appendChild(box);
-      });
+    function render() { previews.innerHTML = ''; files.forEach(addPreview); }
+    function addPreview(f, i) {
+      var box = document.createElement('div'); box.className = 'preview';
+      var img = document.createElement('img'); img.src = URL.createObjectURL(f);
+      box.appendChild(img);
+      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.innerHTML = '&times;';
+      rm.addEventListener('click', function () { files.splice(i, 1); render(); });
+      box.appendChild(rm);
+      previews.appendChild(box);
     }
 
     function addFiles(list) {
@@ -296,8 +323,23 @@
   var instFiles = wireDrop('instDrop', 'instFiles', 'instPreviews', true);
   var evtFiles = wireDrop('evtDrop', 'evtFiles', 'evtPreviews', false);
 
-  // ===================== rubrique : Achat / Location / Vente =====================
+  // chips des photos déjà en ligne (modification) : on peut en retirer, pas en ajouter ici
+  function renderExistingChips(containerId, paths, onRemove) {
+    var el = document.getElementById(containerId);
+    el.innerHTML = '';
+    paths.forEach(function (p, i) {
+      var box = document.createElement('div'); box.className = 'preview';
+      var img = document.createElement('img'); img.src = '../' + p;
+      box.appendChild(img);
+      if (i === 0) { var n1 = document.createElement('span'); n1.className = 'n1'; n1.textContent = 'Vignette'; box.appendChild(n1); }
+      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.innerHTML = '&times;';
+      rm.addEventListener('click', function () { onRemove(i); });
+      box.appendChild(rm);
+      el.appendChild(box);
+    });
+  }
 
+  // ===================== segmenté Achat / Location / Vente =====================
   var instSectionId = 'achat';
   var rachatIcon = 'guitar';
 
@@ -312,15 +354,18 @@
     document.getElementById('instFieldsFiche').hidden = estRachat;
     document.getElementById('instFieldsRachat').hidden = !estRachat;
     document.getElementById('segHint').textContent = SEG_HINTS[instSectionId];
-    document.getElementById('instTitle').textContent = estRachat ? 'Ajouter une reprise' : 'Ajouter un instrument';
-    document.getElementById('instHint').textContent = estRachat
-      ? 'Elle rejoint « Ce que nous reprenons », en tête de liste, sur la page Store.'
-      : 'Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.';
-    document.getElementById('instSubmitLabel').textContent = estRachat ? 'Ajouter à la reprise' : 'Publier sur le site';
+    if (!editingInst && !editingRachat) {
+      document.getElementById('instTitle').textContent = estRachat ? 'Ajouter une reprise' : 'Ajouter un instrument';
+      document.getElementById('instHint').textContent = estRachat
+        ? 'Elle rejoint « Ce que nous reprenons », en tête de liste, sur la page Store.'
+        : 'Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.';
+      document.getElementById('instSubmitLabel').textContent = estRachat ? 'Ajouter à la reprise' : 'Publier sur le site';
+    }
   }
 
   document.querySelectorAll('#instSeg button').forEach(function (b) {
     b.addEventListener('click', function () {
+      if (editingInst || editingRachat) return; // la rubrique d'une fiche existante ne se change pas ici
       document.querySelectorAll('#instSeg button').forEach(function (x) { x.classList.remove('on'); });
       b.classList.add('on');
       instSectionId = b.dataset.val;
@@ -345,97 +390,222 @@
     rachatIcon = val;
     document.querySelectorAll('#rachatIcon button').forEach(function (b) { b.classList.toggle('on', b.dataset.icon === val); });
   }
+  function lockInstSeg(lock) {
+    document.getElementById('instSeg').classList.toggle('is-busy', lock);
+    document.getElementById('instSegRow').style.opacity = lock ? '.55' : '';
+  }
+
+  // ===================== état de modification =====================
+  var editingInst = null;   // { section, nom, vues:[...] } — fiche achat/location en cours d'édition
+  var editingRachat = null; // { texte } — ligne de reprise en cours d'édition
+  var editingEvt = null;    // { titre, img } — événement en cours d'édition
+  var instExistingVues = [];
+  var evtExistingImg = null;
 
   function resetInstForm() {
     document.getElementById('instForm').reset();
     instFiles.reset();
     setInstSection('achat');
     setRachatIcon('guitar');
+    lockInstSeg(false);
+    editingInst = null; editingRachat = null; instExistingVues = [];
+    renderExistingChips('instExisting', [], function () {});
+    document.getElementById('instEditBanner').hidden = true;
+    document.getElementById('instTitle').textContent = 'Ajouter un instrument';
+    document.getElementById('instHint').textContent = 'Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.';
+    document.getElementById('instSubmitLabel').textContent = 'Publier sur le site';
   }
 
-  // ===================== formulaire : fiche (achat / location) =====================
+  function resetEvtForm() {
+    document.getElementById('evtForm').reset();
+    document.getElementById('evtTag').value = 'À venir';
+    document.getElementById('evtEtat').value = 'Coming soon — date, lieu et programmation à venir.';
+    document.getElementById('evtBouton').value = 'Être prévenu';
+    evtFiles.reset();
+    editingEvt = null; evtExistingImg = null;
+    renderExistingChips('evtExisting', [], function () {});
+    document.getElementById('evtEditBanner').hidden = true;
+    document.getElementById('evtTitleLabel').textContent = 'Annoncer un événement';
+    document.getElementById('evtHint').textContent = 'Il rejoint « Prestations internes » sur la page Events, en tête — au-dessus des précédents.';
+    document.getElementById('evtSubmitLabel').textContent = 'Publier sur le site';
+  }
 
-  function publierFiche(btn, rowWait) {
+  document.getElementById('instCancelEdit').addEventListener('click', resetInstForm);
+  document.getElementById('evtCancelEdit').addEventListener('click', resetEvtForm);
+
+  // ===================== repérer un bloc existant dans le HTML frais =====================
+
+  // un <article> ne contient jamais un autre <article> : un non-glouton suffit
+  function locateArticle(html, sectionId, nom) {
+    var secIdx = html.indexOf('id="' + sectionId + '"');
+    if (secIdx < 0) return null;
+    var secEnd = html.indexOf('</section>', secIdx);
+    var zone = html.slice(secIdx, secEnd);
+    var re = /<article class="reveal"[^>]*>[\s\S]*?<\/article>/g;
+    var m, nomEsc = escHtml(nom);
+    while ((m = re.exec(zone))) {
+      if (m[0].indexOf('<h3>' + nomEsc + '</h3>') !== -1) {
+        return { start: secIdx + m.index, end: secIdx + m.index + m[0].length, html: m[0] };
+      }
+    }
+    return null;
+  }
+
+  function locateRachatLi(html, texte) {
+    var secIdx = html.indexOf('id="vente"');
+    if (secIdx < 0) return null;
+    var ulIdx = html.indexOf('<ul>', secIdx);
+    var ulEnd = html.indexOf('</ul>', ulIdx);
+    var zone = html.slice(ulIdx, ulEnd);
+    var re = /<li>[\s\S]*?<\/li>/g;
+    var m, texteEsc = escHtml(texte);
+    while ((m = re.exec(zone))) {
+      if (m[0].indexOf('>' + texteEsc + '</li>') !== -1) {
+        return { start: ulIdx + m.index, end: ulIdx + m.index + m[0].length, html: m[0] };
+      }
+    }
+    return null;
+  }
+
+  // l'unique niveau imbriqué (.aff-texte) ferme juste avant .ev-affiche :
+  // deux </div> consécutifs marquent donc la vraie fin du bloc.
+  function locateEvAffiche(html, titre) {
+    var secIdx = html.indexOf('id="internes"');
+    if (secIdx < 0) return null;
+    var secEnd = html.indexOf('</section>', secIdx);
+    var zone = html.slice(secIdx, secEnd);
+    var re = /<div class="ev-affiche">[\s\S]*?<\/div>\s*<\/div>/g;
+    var m, titreEsc = escHtml(titre);
+    while ((m = re.exec(zone))) {
+      if (m[0].indexOf('<h3>' + titreEsc + '</h3>') !== -1) {
+        return { start: secIdx + m.index, end: secIdx + m.index + m[0].length, html: m[0] };
+      }
+    }
+    return null;
+  }
+
+  function keepDelay(blocHtml) {
+    var m = /--d:(\d+)ms/.exec(blocHtml);
+    return m ? m[1] : '0';
+  }
+
+  // ===================== construction du balisage =====================
+
+  function buildFicheArticle(nom, cat, ref, section, vues, delayMs) {
+    var nomEsc = escHtml(nom), catEsc = escHtml(cat), refEsc = escHtml(ref);
+    var acts;
+    if (section === 'achat') {
+      acts = '<a href="' + waLink('Bonjour REATM Store, je suis intéressé(e) par : ' + nom + ' (en vente). Est-il encore disponible ?') + '" target="_blank" rel="noopener">Acheter</a>' +
+             '<a href="' + waLink('Bonjour REATM Store, pouvez-vous me donner le prix de : ' + nom + ' ?') + '" target="_blank" rel="noopener">Demander le prix</a>';
+    } else {
+      acts = '<a href="' + waLink('Bonjour REATM Store, je souhaite louer : ' + nom + '. Quelles sont vos disponibilités ?') + '" target="_blank" rel="noopener">Louer</a>' +
+             '<a href="' + waLink('Bonjour REATM Store, je souhaite un devis pour la location de : ' + nom + '.') + '" target="_blank" rel="noopener">Demander un devis</a>';
+    }
+    var shot;
+    if (vues.length > 1) {
+      var joined = vues.map(function (p) { return '../' + p; }).join('|');
+      shot = '<button class="shot" type="button" data-nom="' + nomEsc + '" data-vues="' + joined + '" aria-label="Voir les ' + vues.length + ' vues de ' + nomEsc + '">' +
+             '<div class="im" style="background-image:url(\'../' + vues[0] + '\')"></div>' +
+             '<span class="avail">Disponible</span><span class="vues-n">' + vues.length + ' vues</span></button>';
+    } else {
+      shot = '<div class="shot"><div class="im" style="background-image:url(\'../' + vues[0] + '\')"></div><span class="avail">Disponible</span></div>';
+    }
+    return '<article class="reveal" style="--d:' + (delayMs || '0') + 'ms">' + shot +
+      '<div class="body"><span class="cat">' + catEsc + '</span><h3>' + nomEsc + '</h3>' +
+      '<div class="ref">' + refEsc + '</div><div class="acts">' + acts + '</div></div></article>';
+  }
+
+  function buildRachatLi(texte, icone) {
+    return '<li><i class="fas fa-' + icone + '" aria-hidden="true"></i>' + escHtml(texte) + '</li>';
+  }
+
+  function buildEvAffiche(titre, tag, etat, desc, boutonTxt, imgPath, delayMs) {
+    var titreEsc = escHtml(titre), tagEsc = escHtml(tag), etatEsc = escHtml(etat), descEsc = escHtml(desc), boutonEsc = escHtml(boutonTxt);
+    var message = 'Bonjour REATM Events, prévenez-moi dès que la date de ' + titre + ' est fixée.';
+    return '<div class="ev-affiche">' +
+      '<figure class="aff-vue reveal"><img src="../' + imgPath + '" alt="' + titreEsc + '" loading="lazy" decoding="async"/></figure>' +
+      '<div class="aff-texte reveal" style="--d:' + (delayMs || '90') + 'ms"><span class="tagline">' + tagEsc + '</span><h3>' + titreEsc + '</h3>' +
+      '<p>' + descEsc + '</p>' +
+      (etatEsc ? '<p class="aff-etat"><span class="pt" aria-hidden="true"></span>' + etatEsc + '</p>' : '') +
+      '<a class="btn btn-acc" href="' + waLink(message) + '" target="_blank" rel="noopener">' + boutonEsc + ' <i class="fas fa-arrow-right"></i></a>' +
+      '</div></div>';
+  }
+
+  // ===================== formulaire : fiche (ajout OU modification) =====================
+
+  function publierFiche() {
     var nom = document.getElementById('instNom').value.trim();
     var cat = document.getElementById('instCat').value.trim();
     var ref = document.getElementById('instRef').value.trim();
-    var files = instFiles.get();
+    var nouvelles = instFiles.get();
+    var totalPhotos = instExistingVues.length + nouvelles.length;
     if (!nom || !cat || !ref) { toast('err', 'Remplissez le nom, la catégorie et le détail.'); return null; }
-    if (!files.length) { toast('err', 'Ajoutez au moins une photo.'); return null; }
+    if (!totalPhotos) { toast('err', 'Gardez ou ajoutez au moins une photo.'); return null; }
 
+    var section = instSectionId;
+    var modif = editingInst;
     var slug = slugify(nom);
-    var uploads = files.map(function (f, i) { return function () { return publishImage(f, slug, files.length > 1 ? i + 1 : ''); }; });
-    return uploads.reduce(function (chain, step) {
-      return chain.then(function (acc) { return step().then(function (path) { acc.push(path); return acc; }); });
-    }, Promise.resolve([]))
-      .then(function (vues) {
-        return ghGetFile('store/index.html').then(function (file) {
-          var html = file.text;
-          var nomEsc = escHtml(nom), catEsc = escHtml(cat), refEsc = escHtml(ref);
-          var acts;
-          if (instSectionId === 'achat') {
-            acts = '<a href="' + waLink('Bonjour REATM Store, je suis intéressé(e) par : ' + nom + ' (en vente). Est-il encore disponible ?') + '" target="_blank" rel="noopener">Acheter</a>' +
-                   '<a href="' + waLink('Bonjour REATM Store, pouvez-vous me donner le prix de : ' + nom + ' ?') + '" target="_blank" rel="noopener">Demander le prix</a>';
-          } else {
-            acts = '<a href="' + waLink('Bonjour REATM Store, je souhaite louer : ' + nom + '. Quelles sont vos disponibilités ?') + '" target="_blank" rel="noopener">Louer</a>' +
-                   '<a href="' + waLink('Bonjour REATM Store, je souhaite un devis pour la location de : ' + nom + '.') + '" target="_blank" rel="noopener">Demander un devis</a>';
-          }
-          var shot;
-          if (vues.length > 1) {
-            var joined = vues.map(function (p) { return '../' + p; }).join('|');
-            shot = '<button class="shot" type="button" data-nom="' + nomEsc + '" data-vues="' + joined + '" aria-label="Voir les ' + vues.length + ' vues de ' + nomEsc + '">' +
-                   '<div class="im" style="background-image:url(\'../' + vues[0] + '\')"></div>' +
-                   '<span class="avail">Disponible</span><span class="vues-n">' + vues.length + ' vues</span></button>';
-          } else {
-            shot = '<div class="shot"><div class="im" style="background-image:url(\'../' + vues[0] + '\')"></div><span class="avail">Disponible</span></div>';
-          }
-          var article = '<article class="reveal" style="--d:0ms">' + shot +
-            '<div class="body"><span class="cat">' + catEsc + '</span><h3>' + nomEsc + '</h3>' +
-            '<div class="ref">' + refEsc + '</div><div class="acts">' + acts + '</div></div></article>';
 
-          var secIdx = html.indexOf('id="' + instSectionId + '"');
-          if (secIdx < 0) throw new Error('Rubrique #' + instSectionId + ' introuvable dans store/index.html.');
+    return uploadSeries(nouvelles, slug).then(function (nouvellesVues) {
+      var vues = instExistingVues.concat(nouvellesVues);
+      return ghGetFile('store/index.html').then(function (file) {
+        var html = file.text, bloc, delay = '0', retirees = [];
+        if (modif) {
+          var loc = locateArticle(html, modif.section, modif.nom);
+          if (!loc) throw new Error('Cette fiche n’a pas été retrouvée : elle a peut-être déjà été modifiée ailleurs.');
+          delay = keepDelay(loc.html);
+          retirees = modif.vues.filter(function (v) { return instExistingVues.indexOf(v) === -1; });
+          bloc = buildFicheArticle(nom, cat, ref, section, vues, delay);
+          html = html.slice(0, loc.start) + bloc + html.slice(loc.end);
+        } else {
+          bloc = buildFicheArticle(nom, cat, ref, section, vues, '0');
+          var secIdx = html.indexOf('id="' + section + '"');
+          if (secIdx < 0) throw new Error('Rubrique #' + section + ' introuvable dans store/index.html.');
           var prodIdx = html.indexOf('<div class="prod">', secIdx);
-          if (prodIdx < 0) throw new Error('Grille de fiches introuvable dans #' + instSectionId + '.');
+          if (prodIdx < 0) throw new Error('Grille de fiches introuvable dans #' + section + '.');
           var at = prodIdx + '<div class="prod">'.length;
-          html = html.slice(0, at) + article + html.slice(at);
-
-          return ghPutFile('store/index.html', html, file.sha, 'Admin : ajoute ' + nom + ' (' + instSectionId + ')');
-        });
-      })
-      .then(function () {
-        logRow('ok', nom, instSectionId === 'achat' ? 'en vente' : 'en location');
-        toast('ok', '« ' + nom + ' » est en ligne.');
-        resetInstForm();
-        loadCatalogue();
-      })
-      .catch(function (err) { logRow('err', nom, err.message); toast('err', err.message); });
+          html = html.slice(0, at) + bloc + html.slice(at);
+        }
+        var msg = modif ? 'Admin : modifie ' + nom : 'Admin : ajoute ' + nom + ' (' + section + ')';
+        return ghPutFile('store/index.html', html, file.sha, msg).then(function () { return retirees; });
+      });
+    }).then(function (retirees) {
+      if (retirees && retirees.length) ghDeleteFilesQuiet(retirees, 'Admin : retire une photo remplacée de ' + nom);
+      logRow('ok', nom, modif ? 'modifié' : (section === 'achat' ? 'en vente' : 'en location'));
+      toast('ok', '« ' + nom + ' » ' + (modif ? 'a été mis à jour.' : 'est en ligne.'));
+      resetInstForm();
+      loadCatalogue();
+    }).catch(function (err) { logRow('err', nom, err.message); toast('err', err.message); });
   }
 
-  // ===================== formulaire : reprise (vente) =====================
-
-  function publierRachat(btn, rowWait) {
+  function publierRachat() {
     var texte = document.getElementById('rachatTexte').value.trim();
     if (!texte) { toast('err', 'Décrivez ce que vous reprenez.'); return null; }
+    var modif = editingRachat;
 
     return ghGetFile('store/index.html').then(function (file) {
       var html = file.text;
-      var texteEsc = escHtml(texte);
-      var li = '<li><i class="fas fa-' + rachatIcon + '" aria-hidden="true"></i>' + texteEsc + '</li>';
-
-      var secIdx = html.indexOf('id="vente"');
-      if (secIdx < 0) throw new Error('Rubrique Vente introuvable dans store/index.html.');
-      var ulIdx = html.indexOf('<ul>', secIdx);
-      if (ulIdx < 0) throw new Error('Liste « Ce que nous reprenons » introuvable.');
-      var at = ulIdx + '<ul>'.length;
-      html = html.slice(0, at) + '\n' + li + html.slice(at);
-
-      return ghPutFile('store/index.html', html, file.sha, 'Admin : ajoute « ' + texte + ' » à la reprise');
+      var li = buildRachatLi(texte, rachatIcon);
+      if (modif) {
+        var loc = locateRachatLi(html, modif.texte);
+        if (!loc) throw new Error('Cette reprise n’a pas été retrouvée : elle a peut-être déjà été modifiée ailleurs.');
+        html = html.slice(0, loc.start) + li + html.slice(loc.end);
+      } else {
+        var secIdx = html.indexOf('id="vente"');
+        if (secIdx < 0) throw new Error('Rubrique Vente introuvable dans store/index.html.');
+        var ulIdx = html.indexOf('<ul>', secIdx);
+        if (ulIdx < 0) throw new Error('Liste « Ce que nous reprenons » introuvable.');
+        var at = ulIdx + '<ul>'.length;
+        html = html.slice(0, at) + '\n' + li + html.slice(at);
+      }
+      var msg = modif ? 'Admin : modifie la reprise « ' + texte + ' »' : 'Admin : ajoute « ' + texte + ' » à la reprise';
+      return ghPutFile('store/index.html', html, file.sha, msg);
     })
       .then(function () {
-        logRow('ok', texte, 'ajouté à la reprise');
-        toast('ok', '« ' + texte + ' » rejoint la reprise.');
+        logRow('ok', texte, modif ? 'reprise modifiée' : 'ajoutée à la reprise');
+        toast('ok', '« ' + texte + ' » ' + (modif ? 'mise à jour.' : 'rejoint la reprise.'));
         resetInstForm();
+        loadCatalogue();
       })
       .catch(function (err) { logRow('err', texte, err.message); toast('err', err.message); });
   }
@@ -443,15 +613,96 @@
   document.getElementById('instForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var btn = document.getElementById('instSubmit');
-    var libelle = instSectionId === 'vente' ? document.getElementById('rachatTexte').value.trim() : document.getElementById('instNom').value.trim();
-    var rowWait = logRow('wait', libelle || '…', 'publication en cours…');
-    var tache = instSectionId === 'vente' ? publierRachat(btn, rowWait) : publierFiche(btn, rowWait);
-    if (!tache) { rowWait.remove(); return; }
+    var tache = instSectionId === 'vente' ? publierRachat() : publierFiche();
+    if (!tache) return;
     btn.classList.add('is-loading'); btn.disabled = true;
-    tache.finally(function () { rowWait.remove(); btn.classList.remove('is-loading'); btn.disabled = false; });
+    tache.finally(function () { btn.classList.remove('is-loading'); btn.disabled = false; });
   });
 
-  // ===================== formulaire : nouvel événement =====================
+  // ===================== modifier / supprimer une fiche ou une reprise =====================
+
+  function entrerEditionFiche(row) {
+    resetInstForm();
+    editingInst = { section: row.section, nom: row.nom, vues: row.vues.slice() };
+    instExistingVues = row.vues.slice();
+    setInstSection(row.section);
+    lockInstSeg(true);
+    document.getElementById('instNom').value = row.nom;
+    document.getElementById('instCat').value = row.cat;
+    document.getElementById('instRef').value = row.ref;
+    function retirer(i) {
+      instExistingVues.splice(i, 1);
+      renderExistingChips('instExisting', instExistingVues, retirer);
+    }
+    renderExistingChips('instExisting', instExistingVues, retirer);
+    document.getElementById('instEditBanner').hidden = false;
+    document.getElementById('instEditNom').textContent = row.nom;
+    document.getElementById('instTitle').textContent = 'Modifier cet instrument';
+    document.getElementById('instHint').textContent = 'Les modifications remplacent la fiche en place, sans changer sa position.';
+    document.getElementById('instSubmitLabel').textContent = 'Enregistrer les modifications';
+    document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function entrerEditionRachat(row) {
+    resetInstForm();
+    editingRachat = { texte: row.nom };
+    setInstSection('vente');
+    lockInstSeg(true);
+    document.getElementById('rachatTexte').value = row.nom;
+    setRachatIcon(row.icone || 'guitar');
+    document.getElementById('instEditBanner').hidden = false;
+    document.getElementById('instEditNom').textContent = row.nom;
+    document.getElementById('instTitle').textContent = 'Modifier cette reprise';
+    document.getElementById('instHint').textContent = 'La ligne est remplacée en place dans « Ce que nous reprenons ».';
+    document.getElementById('instSubmitLabel').textContent = 'Enregistrer les modifications';
+    document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function supprimerFiche(row) {
+    return ghGetFile('store/index.html').then(function (file) {
+      var html = file.text;
+      var loc = locateArticle(html, row.section, row.nom);
+      if (!loc) throw new Error('Fiche introuvable — elle a peut-être déjà été retirée.');
+      html = html.slice(0, loc.start) + html.slice(loc.end);
+      return ghPutFile('store/index.html', html, file.sha, 'Admin : supprime ' + row.nom);
+    }).then(function () {
+      if (row.vues && row.vues.length) ghDeleteFilesQuiet(row.vues, 'Admin : nettoie les photos de ' + row.nom);
+      logRow('ok', row.nom, 'supprimé');
+      toast('ok', '« ' + row.nom + ' » a été retiré.');
+      loadCatalogue();
+    }).catch(function (err) { logRow('err', row.nom, err.message); toast('err', err.message); });
+  }
+
+  function supprimerRachat(row) {
+    return ghGetFile('store/index.html').then(function (file) {
+      var html = file.text;
+      var loc = locateRachatLi(html, row.nom);
+      if (!loc) throw new Error('Reprise introuvable — elle a peut-être déjà été retirée.');
+      html = html.slice(0, loc.start) + html.slice(loc.end);
+      return ghPutFile('store/index.html', html, file.sha, 'Admin : supprime la reprise « ' + row.nom + ' »');
+    }).then(function () {
+      logRow('ok', row.nom, 'reprise retirée');
+      toast('ok', '« ' + row.nom + ' » a été retiré de la reprise.');
+      loadCatalogue();
+    }).catch(function (err) { logRow('err', row.nom, err.message); toast('err', err.message); });
+  }
+
+  // un clic arme la confirmation (4 s), le second déclenche l'action —
+  // une suppression ne doit jamais partir d'un seul clic accidentel.
+  var SVG_TRASH = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m2 0v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function armerConfirmation(btn, onConfirm) {
+    if (btn.classList.contains('confirm')) {
+      clearTimeout(btn._timer);
+      btn.disabled = true;
+      onConfirm().finally(function () { btn.disabled = false; });
+      return;
+    }
+    btn.classList.add('confirm');
+    btn.innerHTML = 'Confirmer ?';
+    btn._timer = setTimeout(function () { btn.classList.remove('confirm'); btn.innerHTML = SVG_TRASH; }, 4000);
+  }
+
+  // ===================== formulaire : événement (ajout OU modification) =====================
 
   document.getElementById('evtForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -461,102 +712,185 @@
     var etat = document.getElementById('evtEtat').value.trim();
     var desc = document.getElementById('evtDesc').value.trim();
     var boutonTxt = document.getElementById('evtBouton').value.trim() || 'Être prévenu';
-    var files = evtFiles.get();
+    var nouvelles = evtFiles.get();
+    var modif = editingEvt;
+
     if (!titre || !desc) { toast('err', 'Donnez au moins un titre et une description.'); return; }
-    if (!files.length) { toast('err', 'Ajoutez une affiche.'); return; }
+    if (!evtExistingImg && !nouvelles.length) { toast('err', 'Ajoutez une affiche.'); return; }
 
     btn.classList.add('is-loading'); btn.disabled = true;
     var slug = slugify(titre);
-    var rowWait = logRow('wait', titre, 'publication en cours…');
+    var ancienneImg = modif ? modif.img : null;
 
-    publishImage(files[0], slug, '')
-      .then(function (chemin) {
+    (nouvelles.length ? publishImage(nouvelles[0], slug, '') : Promise.resolve(evtExistingImg))
+      .then(function (imgPath) {
         return ghGetFile('events/index.html').then(function (file) {
-          var html = file.text;
-          var titreEsc = escHtml(titre), tagEsc = escHtml(tag), etatEsc = escHtml(etat), descEsc = escHtml(desc), boutonEsc = escHtml(boutonTxt);
-          var message = 'Bonjour REATM Events, prévenez-moi dès que la date de ' + titre + ' est fixée.';
-          var bloc = '<div class="ev-affiche">' +
-            '<figure class="aff-vue reveal"><img src="../' + chemin + '" alt="' + titreEsc + '" loading="lazy" decoding="async"/></figure>' +
-            '<div class="aff-texte reveal" style="--d:90ms"><span class="tagline">' + tagEsc + '</span><h3>' + titreEsc + '</h3>' +
-            '<p>' + descEsc + '</p>' +
-            (etatEsc ? '<p class="aff-etat"><span class="pt" aria-hidden="true"></span>' + etatEsc + '</p>' : '') +
-            '<a class="btn btn-acc" href="' + waLink(message) + '" target="_blank" rel="noopener">' + boutonEsc + ' <i class="fas fa-arrow-right"></i></a>' +
-            '</div></div>';
-
-          var secIdx = html.indexOf('id="internes"');
-          if (secIdx < 0) throw new Error('Rubrique « Prestations internes » introuvable.');
-          var at = html.indexOf('<div class="ev-affiche">', secIdx);
-          if (at < 0) throw new Error('Emplacement d’insertion introuvable dans events/index.html.');
-          html = html.slice(0, at) + bloc + '\n' + html.slice(at);
-
-          return ghPutFile('events/index.html', html, file.sha, 'Admin : ajoute l’événement ' + titre);
+          var html = file.text, delay = '90';
+          var bloc;
+          if (modif) {
+            var loc = locateEvAffiche(html, modif.titre);
+            if (!loc) throw new Error('Cet événement n’a pas été retrouvé : il a peut-être déjà été modifié ailleurs.');
+            delay = keepDelay(loc.html);
+            bloc = buildEvAffiche(titre, tag, etat, desc, boutonTxt, imgPath, delay);
+            html = html.slice(0, loc.start) + bloc + html.slice(loc.end);
+          } else {
+            bloc = buildEvAffiche(titre, tag, etat, desc, boutonTxt, imgPath, '90');
+            var secIdx = html.indexOf('id="internes"');
+            if (secIdx < 0) throw new Error('Rubrique « Prestations internes » introuvable.');
+            var at = html.indexOf('<div class="ev-affiche">', secIdx);
+            if (at < 0) throw new Error('Emplacement d’insertion introuvable dans events/index.html.');
+            html = html.slice(0, at) + bloc + '\n' + html.slice(at);
+          }
+          var msg = modif ? 'Admin : modifie l’événement ' + titre : 'Admin : ajoute l’événement ' + titre;
+          return ghPutFile('events/index.html', html, file.sha, msg).then(function () { return imgPath; });
         });
       })
-      .then(function () {
-        rowWait.remove();
-        logRow('ok', titre, 'événement publié');
-        toast('ok', '« ' + titre + ' » est en ligne.');
-        document.getElementById('evtForm').reset();
-        document.getElementById('evtTag').value = 'À venir';
-        document.getElementById('evtEtat').value = 'Coming soon — date, lieu et programmation à venir.';
-        document.getElementById('evtBouton').value = 'Être prévenu';
-        evtFiles.reset();
+      .then(function (imgPath) {
+        if (ancienneImg && ancienneImg !== imgPath) ghDeleteFileQuiet(ancienneImg, 'Admin : retire l’ancienne affiche de ' + titre);
+        logRow('ok', titre, modif ? 'événement modifié' : 'événement publié');
+        toast('ok', '« ' + titre + ' » ' + (modif ? 'a été mis à jour.' : 'est en ligne.'));
+        resetEvtForm();
+        loadEvents();
       })
       .catch(function (err) {
-        rowWait.remove();
         logRow('err', titre, err.message);
         toast('err', err.message);
       })
       .finally(function () { btn.classList.remove('is-loading'); btn.disabled = false; });
   });
 
-  // ===================== catalogue existant (lecture seule) =====================
+  function entrerEditionEvt(row) {
+    resetEvtForm();
+    editingEvt = { titre: row.nom, img: row.img };
+    evtExistingImg = row.img;
+    document.getElementById('evtTitre').value = row.nom;
+    document.getElementById('evtTag').value = row.tag || '';
+    document.getElementById('evtEtat').value = row.etat || '';
+    document.getElementById('evtDesc').value = row.desc || '';
+    document.getElementById('evtBouton').value = row.bouton || 'Être prévenu';
+    function retirer() { evtExistingImg = null; renderExistingChips('evtExisting', [], retirer); }
+    renderExistingChips('evtExisting', row.img ? [row.img] : [], retirer);
+    document.getElementById('evtEditBanner').hidden = false;
+    document.getElementById('evtEditNom').textContent = row.nom;
+    document.getElementById('evtTitleLabel').textContent = 'Modifier cet événement';
+    document.getElementById('evtHint').textContent = 'Les modifications remplacent l’annonce en place, sans changer sa position.';
+    document.getElementById('evtSubmitLabel').textContent = 'Enregistrer les modifications';
+    document.querySelectorAll('.card')[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function supprimerEvt(row) {
+    return ghGetFile('events/index.html').then(function (file) {
+      var html = file.text;
+      var loc = locateEvAffiche(html, row.nom);
+      if (!loc) throw new Error('Événement introuvable — il a peut-être déjà été retiré.');
+      html = html.slice(0, loc.start) + html.slice(loc.end);
+      return ghPutFile('events/index.html', html, file.sha, 'Admin : supprime l’événement ' + row.nom);
+    }).then(function () {
+      if (row.img) ghDeleteFileQuiet(row.img, 'Admin : nettoie l’affiche de ' + row.nom);
+      logRow('ok', row.nom, 'événement retiré');
+      toast('ok', '« ' + row.nom + ' » a été retiré.');
+      loadEvents();
+    }).catch(function (err) { logRow('err', row.nom, err.message); toast('err', err.message); });
+  }
+
+  // ===================== catalogue existant : instruments + reprises =====================
+
+  function iconeBouton(titre) {
+    return '<button type="button" class="edit" title="Modifier ' + titre + '" aria-label="Modifier ' + titre + '">' +
+      '<svg viewBox="0 0 24 24" fill="none"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>' +
+      '<button type="button" class="del" title="Supprimer ' + titre + '" aria-label="Supprimer ' + titre + '">' + SVG_TRASH + '</button>';
+  }
 
   function loadCatalogue() {
     var list = document.getElementById('instList');
     ghGetFile('store/index.html').then(function (file) {
       var doc = new DOMParser().parseFromString(file.text, 'text/html');
       var rows = [];
-      // les deux rubriques à fiches : chacune garde son vrai nom
       [['achat', 'Achat'], ['location', 'Location']].forEach(function (pair) {
         var section = doc.getElementById(pair[0]);
         if (!section) return;
         section.querySelectorAll('.prod article').forEach(function (art) {
-          var h3 = art.querySelector('h3'), cat = art.querySelector('.cat'), im = art.querySelector('.im');
+          var h3 = art.querySelector('h3'), cat = art.querySelector('.cat'), ref = art.querySelector('.ref'), im = art.querySelector('.im');
           var bg = im ? im.getAttribute('style').match(/url\(['"]?([^'")]+)/) : null;
+          var vuesAttr = art.querySelector('[data-vues]');
+          var vues = vuesAttr ? vuesAttr.getAttribute('data-vues').split('|') : (bg ? [bg[1]] : []);
+          // le fichier stocke des chemins relatifs à store/ ('../assets/...') ; en interne
+          // (comparaisons, envoi à GitHub) on ne manipule que des chemins relatifs au dépôt.
+          vues = vues.map(function (v) { return v.replace(/^\.\.\//, ''); });
           rows.push({
-            nom: h3 ? h3.textContent : '—',
-            cat: cat ? cat.textContent : '',
-            tag: pair[1],
-            // admin/ et store/ sont au même niveau sous la racine : le chemin
-            // relatif à store/index.html ('../assets/...') vaut aussi tel quel ici
-            img: bg ? bg[1] : '',
-            icone: null
+            type: 'fiche', section: pair[0], tag: pair[1],
+            nom: h3 ? h3.textContent : '—', cat: cat ? cat.textContent : '', ref: ref ? ref.textContent : '',
+            img: vues[0] || '', vues: vues
           });
         });
       });
-      // la rubrique Vente n'a pas de fiches, mais une liste de ce qui est repris
       var rachat = doc.querySelector('#vente .rc-liste ul');
       if (rachat) {
         rachat.querySelectorAll('li').forEach(function (li) {
           var i = li.querySelector('i');
-          rows.push({
-            nom: li.textContent.trim(), cat: 'Reprise', tag: 'Vente',
-            img: '', icone: i ? i.className.replace('fas fa-', '').trim() : 'music'
-          });
+          rows.push({ type: 'rachat', tag: 'Vente', nom: li.textContent.trim(), cat: 'Reprise', icone: i ? i.className.replace('fas fa-', '').trim() : 'music' });
         });
       }
       list.innerHTML = '';
       if (!rows.length) { list.innerHTML = '<div class="cat-loading">Catalogue vide.</div>'; return; }
       rows.forEach(function (r) {
         var row = document.createElement('div'); row.className = 'cat-item';
-        var vignette = r.icone
+        var vignette = r.type === 'rachat'
           ? '<span class="th th-icon"><i class="fas fa-' + r.icone + '"></i></span>'
-          : '<span class="th" style="background-image:url(\'' + r.img + '\')"></span>';
-        row.innerHTML = vignette + '<span class="tx"><b></b><span></span></span><span class="tag"></span>';
+          : '<span class="th" style="background-image:url(\'../' + r.img + '\')"></span>';
+        row.innerHTML = vignette + '<span class="tx"><b></b><span></span></span><span class="tag"></span><span class="acts2"></span>';
         row.querySelector('.tx b').textContent = r.nom;
         row.querySelector('.tx span').textContent = r.cat;
         row.querySelector('.tag').textContent = r.tag;
+        row.querySelector('.acts2').innerHTML = iconeBouton(r.nom);
+        row.querySelector('.acts2 .edit').addEventListener('click', function () {
+          if (r.type === 'rachat') entrerEditionRachat(r); else entrerEditionFiche(r);
+        });
+        row.querySelector('.acts2 .del').addEventListener('click', function (e) {
+          armerConfirmation(e.currentTarget, function () {
+            row.classList.add('is-busy');
+            return r.type === 'rachat' ? supprimerRachat(r) : supprimerFiche(r);
+          });
+        });
+        list.appendChild(row);
+      });
+    }).catch(function (err) {
+      list.innerHTML = '<div class="cat-loading">Lecture impossible : ' + escHtml(err.message) + '</div>';
+    });
+  }
+
+  // ===================== catalogue existant : événements =====================
+
+  function loadEvents() {
+    var list = document.getElementById('evtList');
+    ghGetFile('events/index.html').then(function (file) {
+      var doc = new DOMParser().parseFromString(file.text, 'text/html');
+      var rows = [];
+      var section = doc.getElementById('internes');
+      if (section) {
+        section.querySelectorAll('.ev-affiche').forEach(function (bloc) {
+          var h3 = bloc.querySelector('h3'), tagEl = bloc.querySelector('.tagline'), p = bloc.querySelector('p:not(.aff-etat)');
+          var etat = bloc.querySelector('.aff-etat'), btn = bloc.querySelector('.btn-acc'), img = bloc.querySelector('img');
+          rows.push({
+            nom: h3 ? h3.textContent : '—', tag: tagEl ? tagEl.textContent : '', desc: p ? p.textContent : '',
+            etat: etat ? etat.textContent.trim() : '', bouton: btn ? btn.textContent.trim() : '',
+            img: img ? img.getAttribute('src').replace(/^\.\.\//, '') : ''
+          });
+        });
+      }
+      list.innerHTML = '';
+      if (!rows.length) { list.innerHTML = '<div class="cat-loading">Aucun événement.</div>'; return; }
+      rows.forEach(function (r) {
+        var row = document.createElement('div'); row.className = 'cat-item';
+        row.innerHTML = '<span class="th" style="background-image:url(\'../' + r.img + '\')"></span>' +
+          '<span class="tx"><b></b><span></span></span><span class="acts2"></span>';
+        row.querySelector('.tx b').textContent = r.nom;
+        row.querySelector('.tx span').textContent = r.tag;
+        row.querySelector('.acts2').innerHTML = iconeBouton(r.nom);
+        row.querySelector('.acts2 .edit').addEventListener('click', function () { entrerEditionEvt(r); });
+        row.querySelector('.acts2 .del').addEventListener('click', function (e) {
+          armerConfirmation(e.currentTarget, function () { row.classList.add('is-busy'); return supprimerEvt(r); });
+        });
         list.appendChild(row);
       });
     }).catch(function (err) {
