@@ -71,6 +71,18 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  // GitHub répond par un message technique quand le jeton n'a pas la bonne
+  // permission ; on le remplace par la cause probable et la façon de la lever.
+  function friendlyGhError(raw) {
+    if (/Resource not accessible by (personal access token|integration)/i.test(raw)) {
+      return 'Le jeton ne peut pas écrire ici. Sur GitHub : Settings → Developer settings → ' +
+        'Fine-grained tokens, modifiez-le — Repository access doit inclure ' + OWNER + '/' + REPO +
+        ', et Permissions → Contents doit être « Read and write » (pas Read-only).';
+    }
+    if (/Bad credentials/i.test(raw)) return 'Ce jeton n’est plus valide. Changez de jeton et collez-en un nouveau.';
+    return raw;
+  }
+
   function waLink(message) {
     // encodeURIComponent laisse ! ' ( ) * en clair ; le reste du site les
     // encode (%28, %29…) — on s'aligne pour produire des liens identiques.
@@ -98,6 +110,14 @@
     }).then(function (r) {
       if (!r.ok) throw new Error(r.status === 404 ? 'Dépôt introuvable avec ce jeton (vérifiez son accès).' : 'Jeton refusé (' + r.status + ').');
       return r.json();
+    }).then(function (repo) {
+      // le jeton voit le dépôt, mais lire n'est pas écrire : un jeton à lecture
+      // seule passerait ce test et échouerait plus tard, en silence, sur le
+      // premier envoi. GitHub renvoie l'autorisation réelle dans .permissions.
+      if (repo.permissions && repo.permissions.push === false) {
+        throw new Error('Ce jeton peut lire ' + OWNER + '/' + REPO + ' mais pas y écrire. Sur GitHub, modifiez-le : Permissions → Contents doit être « Read and write », pas « Read-only ».');
+      }
+      return repo;
     });
   }
 
@@ -117,7 +137,7 @@
       method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
       body: JSON.stringify({ message: message, content: utf8ToBase64(text), sha: sha, branch: BRANCH })
     }).then(function (r) {
-      if (!r.ok) return r.json().then(function (j) { throw new Error('Écriture de ' + path + ' refusée : ' + (j.message || r.status)); });
+      if (!r.ok) return r.json().then(function (j) { throw new Error('Écriture de ' + path + ' refusée : ' + friendlyGhError(j.message || String(r.status))); });
       return r.json();
     });
   }
@@ -128,7 +148,7 @@
       method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
       body: JSON.stringify({ message: message, content: base64, branch: BRANCH })
     }).then(function (r) {
-      if (!r.ok) return r.json().then(function (j) { throw new Error('Envoi de ' + path + ' refusé : ' + (j.message || r.status)); });
+      if (!r.ok) return r.json().then(function (j) { throw new Error('Envoi de ' + path + ' refusé : ' + friendlyGhError(j.message || String(r.status))); });
       return r.json();
     });
   }
@@ -276,35 +296,76 @@
   var instFiles = wireDrop('instDrop', 'instFiles', 'instPreviews', true);
   var evtFiles = wireDrop('evtDrop', 'evtFiles', 'evtPreviews', false);
 
-  // ===================== segmenté Vente / Location =====================
-  var instSectionId = 'location';
+  // ===================== rubrique : Achat / Location / Vente =====================
+
+  var instSectionId = 'achat';
+  var rachatIcon = 'guitar';
+
+  var SEG_HINTS = {
+    achat: 'Le Store vend cet instrument — neuf ou d’occasion.',
+    location: 'Il part en location, à l’heure ou à la journée.',
+    vente: 'Un client vous le propose : ça rejoint « Ce que nous reprenons ».'
+  };
+
+  function syncInstFields() {
+    var estRachat = instSectionId === 'vente';
+    document.getElementById('instFieldsFiche').hidden = estRachat;
+    document.getElementById('instFieldsRachat').hidden = !estRachat;
+    document.getElementById('segHint').textContent = SEG_HINTS[instSectionId];
+    document.getElementById('instTitle').textContent = estRachat ? 'Ajouter une reprise' : 'Ajouter un instrument';
+    document.getElementById('instHint').textContent = estRachat
+      ? 'Elle rejoint « Ce que nous reprenons », en tête de liste, sur la page Store.'
+      : 'Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.';
+    document.getElementById('instSubmitLabel').textContent = estRachat ? 'Ajouter à la reprise' : 'Publier sur le site';
+  }
+
   document.querySelectorAll('#instSeg button').forEach(function (b) {
     b.addEventListener('click', function () {
       document.querySelectorAll('#instSeg button').forEach(function (x) { x.classList.remove('on'); });
       b.classList.add('on');
       instSectionId = b.dataset.val;
+      syncInstFields();
     });
   });
 
-  // ===================== formulaire : nouvel instrument =====================
+  document.querySelectorAll('#rachatIcon button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#rachatIcon button').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      rachatIcon = b.dataset.icon;
+    });
+  });
 
-  document.getElementById('instForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var btn = document.getElementById('instSubmit');
+  function setInstSection(val) {
+    instSectionId = val;
+    document.querySelectorAll('#instSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.val === val); });
+    syncInstFields();
+  }
+  function setRachatIcon(val) {
+    rachatIcon = val;
+    document.querySelectorAll('#rachatIcon button').forEach(function (b) { b.classList.toggle('on', b.dataset.icon === val); });
+  }
+
+  function resetInstForm() {
+    document.getElementById('instForm').reset();
+    instFiles.reset();
+    setInstSection('achat');
+    setRachatIcon('guitar');
+  }
+
+  // ===================== formulaire : fiche (achat / location) =====================
+
+  function publierFiche(btn, rowWait) {
     var nom = document.getElementById('instNom').value.trim();
     var cat = document.getElementById('instCat').value.trim();
     var ref = document.getElementById('instRef').value.trim();
     var files = instFiles.get();
-    if (!nom || !cat || !ref) { toast('err', 'Remplissez le nom, la catégorie et le détail.'); return; }
-    if (!files.length) { toast('err', 'Ajoutez au moins une photo.'); return; }
+    if (!nom || !cat || !ref) { toast('err', 'Remplissez le nom, la catégorie et le détail.'); return null; }
+    if (!files.length) { toast('err', 'Ajoutez au moins une photo.'); return null; }
 
-    btn.classList.add('is-loading'); btn.disabled = true;
     var slug = slugify(nom);
-    var rowWait = logRow('wait', nom, 'publication en cours…');
-
     var uploads = files.map(function (f, i) { return function () { return publishImage(f, slug, files.length > 1 ? i + 1 : ''); }; });
-    // en série : chaque dépôt de fichier est un commit, autant les enchaîner proprement
-    uploads.reduce(function (chain, step) {
+    return uploads.reduce(function (chain, step) {
       return chain.then(function (acc) { return step().then(function (path) { acc.push(path); return acc; }); });
     }, Promise.resolve([]))
       .then(function (vues) {
@@ -343,19 +404,51 @@
         });
       })
       .then(function () {
-        rowWait.remove();
         logRow('ok', nom, instSectionId === 'achat' ? 'en vente' : 'en location');
-        toast('ok', '« ' + nom + ' » est en ligne.');
-        document.getElementById('instForm').reset();
-        instFiles.reset();
+        toast('ok', '« ' + nom + ' » est en ligne.');
+        resetInstForm();
         loadCatalogue();
       })
-      .catch(function (err) {
-        rowWait.remove();
-        logRow('err', nom, err.message);
-        toast('err', err.message);
+      .catch(function (err) { logRow('err', nom, err.message); toast('err', err.message); });
+  }
+
+  // ===================== formulaire : reprise (vente) =====================
+
+  function publierRachat(btn, rowWait) {
+    var texte = document.getElementById('rachatTexte').value.trim();
+    if (!texte) { toast('err', 'Décrivez ce que vous reprenez.'); return null; }
+
+    return ghGetFile('store/index.html').then(function (file) {
+      var html = file.text;
+      var texteEsc = escHtml(texte);
+      var li = '<li><i class="fas fa-' + rachatIcon + '" aria-hidden="true"></i>' + texteEsc + '</li>';
+
+      var secIdx = html.indexOf('id="vente"');
+      if (secIdx < 0) throw new Error('Rubrique Vente introuvable dans store/index.html.');
+      var ulIdx = html.indexOf('<ul>', secIdx);
+      if (ulIdx < 0) throw new Error('Liste « Ce que nous reprenons » introuvable.');
+      var at = ulIdx + '<ul>'.length;
+      html = html.slice(0, at) + '\n' + li + html.slice(at);
+
+      return ghPutFile('store/index.html', html, file.sha, 'Admin : ajoute « ' + texte + ' » à la reprise');
+    })
+      .then(function () {
+        logRow('ok', texte, 'ajouté à la reprise');
+        toast('ok', '« ' + texte + ' » rejoint la reprise.');
+        resetInstForm();
       })
-      .finally(function () { btn.classList.remove('is-loading'); btn.disabled = false; });
+      .catch(function (err) { logRow('err', texte, err.message); toast('err', err.message); });
+  }
+
+  document.getElementById('instForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('instSubmit');
+    var libelle = instSectionId === 'vente' ? document.getElementById('rachatTexte').value.trim() : document.getElementById('instNom').value.trim();
+    var rowWait = logRow('wait', libelle || '…', 'publication en cours…');
+    var tache = instSectionId === 'vente' ? publierRachat(btn, rowWait) : publierFiche(btn, rowWait);
+    if (!tache) { rowWait.remove(); return; }
+    btn.classList.add('is-loading'); btn.disabled = true;
+    tache.finally(function () { rowWait.remove(); btn.classList.remove('is-loading'); btn.disabled = false; });
   });
 
   // ===================== formulaire : nouvel événement =====================
@@ -391,7 +484,7 @@
             '</div></div>';
 
           var secIdx = html.indexOf('id="internes"');
-          if (secIdx < 0) throw new Error('Rubrique « Prestations internes » introuvable.');
+          if (secIdx < 0) throw new Error('Rubrique « Prestations internes » introuvable.');
           var at = html.indexOf('<div class="ev-affiche">', secIdx);
           if (at < 0) throw new Error('Emplacement d’insertion introuvable dans events/index.html.');
           html = html.slice(0, at) + bloc + '\n' + html.slice(at);
@@ -402,7 +495,7 @@
       .then(function () {
         rowWait.remove();
         logRow('ok', titre, 'événement publié');
-        toast('ok', '« ' + titre + ' » est en ligne.');
+        toast('ok', '« ' + titre + ' » est en ligne.');
         document.getElementById('evtForm').reset();
         document.getElementById('evtTag').value = 'À venir';
         document.getElementById('evtEtat').value = 'Coming soon — date, lieu et programmation à venir.';
@@ -424,8 +517,9 @@
     ghGetFile('store/index.html').then(function (file) {
       var doc = new DOMParser().parseFromString(file.text, 'text/html');
       var rows = [];
-      ['achat', 'location'].forEach(function (id) {
-        var section = doc.getElementById(id);
+      // les deux rubriques à fiches : chacune garde son vrai nom
+      [['achat', 'Achat'], ['location', 'Location']].forEach(function (pair) {
+        var section = doc.getElementById(pair[0]);
         if (!section) return;
         section.querySelectorAll('.prod article').forEach(function (art) {
           var h3 = art.querySelector('h3'), cat = art.querySelector('.cat'), im = art.querySelector('.im');
@@ -433,19 +527,33 @@
           rows.push({
             nom: h3 ? h3.textContent : '—',
             cat: cat ? cat.textContent : '',
-            tag: id === 'achat' ? 'Vente' : 'Location',
+            tag: pair[1],
             // admin/ et store/ sont au même niveau sous la racine : le chemin
             // relatif à store/index.html ('../assets/...') vaut aussi tel quel ici
-            img: bg ? bg[1] : ''
+            img: bg ? bg[1] : '',
+            icone: null
           });
         });
       });
+      // la rubrique Vente n'a pas de fiches, mais une liste de ce qui est repris
+      var rachat = doc.querySelector('#vente .rc-liste ul');
+      if (rachat) {
+        rachat.querySelectorAll('li').forEach(function (li) {
+          var i = li.querySelector('i');
+          rows.push({
+            nom: li.textContent.trim(), cat: 'Reprise', tag: 'Vente',
+            img: '', icone: i ? i.className.replace('fas fa-', '').trim() : 'music'
+          });
+        });
+      }
       list.innerHTML = '';
       if (!rows.length) { list.innerHTML = '<div class="cat-loading">Catalogue vide.</div>'; return; }
       rows.forEach(function (r) {
         var row = document.createElement('div'); row.className = 'cat-item';
-        row.innerHTML = '<span class="th" style="background-image:url(\'' + r.img + '\')"></span>' +
-          '<span class="tx"><b></b><span></span></span><span class="tag"></span>';
+        var vignette = r.icone
+          ? '<span class="th th-icon"><i class="fas fa-' + r.icone + '"></i></span>'
+          : '<span class="th" style="background-image:url(\'' + r.img + '\')"></span>';
+        row.innerHTML = vignette + '<span class="tx"><b></b><span></span></span><span class="tag"></span>';
         row.querySelector('.tx b').textContent = r.nom;
         row.querySelector('.tx span').textContent = r.cat;
         row.querySelector('.tag').textContent = r.tag;
@@ -455,4 +563,6 @@
       list.innerHTML = '<div class="cat-loading">Lecture impossible : ' + escHtml(err.message) + '</div>';
     });
   }
+
+  syncInstFields();
 })();

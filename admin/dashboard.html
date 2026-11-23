@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 <link rel="stylesheet" href="admin.css"/>
 <script>
   // garde posée avant le premier rendu : pas connecté → retour au login,
@@ -77,46 +78,71 @@
     <section class="panel active" id="panel-instruments">
       <div class="grid-2">
         <div class="card glass">
-          <h2>Ajouter un instrument</h2>
-          <p class="hint">Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.</p>
+          <h2 id="instTitle">Ajouter un instrument</h2>
+          <p class="hint" id="instHint">Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.</p>
 
           <form id="instForm">
             <div class="form-row">
               <label>Rubrique</label>
-              <div class="seg" id="instSeg">
-                <button type="button" data-val="location" class="on">Location</button>
-                <button type="button" data-val="achat">Vente</button>
+              <div class="seg seg-3" id="instSeg">
+                <button type="button" data-val="achat" class="on">Achat</button>
+                <button type="button" data-val="location">Location</button>
+                <button type="button" data-val="vente">Vente</button>
               </div>
+              <p class="seg-hint" id="segHint">Le Store vend cet instrument — neuf ou d'occasion.</p>
             </div>
 
-            <div class="form-grid2">
+            <!-- Achat / Location : une fiche avec photos, comme les autres du catalogue -->
+            <div id="instFieldsFiche">
+              <div class="form-grid2">
+                <div class="form-row">
+                  <label for="instNom">Nom de l'instrument</label>
+                  <input type="text" id="instNom" placeholder="Ex. Guitare Takamine"/>
+                </div>
+                <div class="form-row">
+                  <label for="instCat">Catégorie</label>
+                  <input type="text" id="instCat" placeholder="Ex. Guitares"/>
+                </div>
+              </div>
+
               <div class="form-row">
-                <label for="instNom">Nom de l'instrument</label>
-                <input type="text" id="instNom" placeholder="Ex. Guitare Takamine" required/>
+                <label for="instRef">Détail (sous le titre)</label>
+                <input type="text" id="instRef" placeholder="Ex. 61 touches, pan coupé, préampli…"/>
+              </div>
+
+              <div class="form-row">
+                <label>Photos — la première est la vignette</label>
+                <div class="drop" id="instDrop">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                  <p><b>Cliquez</b> ou déposez des photos ici</p>
+                  <input type="file" id="instFiles" accept="image/*" multiple/>
+                </div>
+                <div class="previews" id="instPreviews"></div>
+              </div>
+            </div>
+
+            <!-- Vente (rachat) : pas de fiche ni de photo, une ligne dans « Ce que nous reprenons » -->
+            <div id="instFieldsRachat" hidden>
+              <div class="form-row">
+                <label for="rachatTexte">Ce que vous reprenez</label>
+                <input type="text" id="rachatTexte" placeholder="Ex. Flûtes, clarinettes et instruments à vent"/>
               </div>
               <div class="form-row">
-                <label for="instCat">Catégorie</label>
-                <input type="text" id="instCat" placeholder="Ex. Guitares" required/>
+                <label>Icône</label>
+                <div class="icon-pick" id="rachatIcon">
+                  <button type="button" data-icon="guitar" class="on" aria-label="Guitare"><i class="fas fa-guitar"></i></button>
+                  <button type="button" data-icon="keyboard" aria-label="Clavier"><i class="fas fa-keyboard"></i></button>
+                  <button type="button" data-icon="drum" aria-label="Batterie"><i class="fas fa-drum"></i></button>
+                  <button type="button" data-icon="sliders-h" aria-label="Sonorisation"><i class="fas fa-sliders-h"></i></button>
+                  <button type="button" data-icon="headphones" aria-label="Studio"><i class="fas fa-headphones"></i></button>
+                  <button type="button" data-icon="microphone-alt" aria-label="Micro"><i class="fas fa-microphone-alt"></i></button>
+                  <button type="button" data-icon="music" aria-label="Musique"><i class="fas fa-music"></i></button>
+                </div>
               </div>
-            </div>
-
-            <div class="form-row">
-              <label for="instRef">Détail (sous le titre)</label>
-              <input type="text" id="instRef" placeholder="Ex. 61 touches, pan coupé, préampli…" required/>
-            </div>
-
-            <div class="form-row">
-              <label>Photos — la première est la vignette</label>
-              <div class="drop" id="instDrop">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-                <p><b>Cliquez</b> ou déposez des photos ici</p>
-                <input type="file" id="instFiles" accept="image/*" multiple/>
-              </div>
-              <div class="previews" id="instPreviews"></div>
             </div>
 
             <button type="submit" class="btn-main" id="instSubmit">
-              <span class="label">Publier sur le site</span><span class="spin" aria-hidden="true"></span>
+              <span class="label" id="instSubmitLabel">Publier sur le site</span><span class="spin" aria-hidden="true"></span>
             </button>
           </form>
         </div>
