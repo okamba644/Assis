@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Tableau de bord — REATM Admin</title>
+<link rel="icon" href="../assets/logo.png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="admin.css"/>
+<script>
+  // garde posée avant le premier rendu : pas connecté → retour au login,
+  // sans même laisser entrevoir le tableau de bord.
+  if (sessionStorage.getItem('reatm-admin-session') !== '1' && localStorage.getItem('reatm-admin-session') !== '1') {
+    location.replace('index.html');
+  }
+</script>
+</head>
+<body>
+
+<div class="bg-halos" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="bg-grain" aria-hidden="true"></div>
+
+<div class="stage">
+  <div class="topbar">
+    <div class="wordmark"><span class="dot"></span><b>REATM</b><span>Admin</span></div>
+    <button class="btn-ghost" id="logoutBtn">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Se déconnecter
+    </button>
+  </div>
+
+  <!-- ===== Porte d'accès au dépôt : tant qu'aucun jeton valide n'est
+       enregistré, rien d'autre ne s'affiche. ===== -->
+  <div class="gate glass" id="gate">
+    <h2>Connecter le dépôt GitHub</h2>
+    <p>Pour publier directement sur le site, le tableau de bord écrit dans le dépôt <code>okamba644/REATM-RECORDS</code> avec un jeton que vous seul détenez. Il reste dans ce navigateur, il n'est envoyé qu'à GitHub.</p>
+    <ol>
+      <li>Sur GitHub : <b>Settings → Developer settings → Fine-grained tokens → Generate new token</b>.</li>
+      <li><b>Repository access</b> : seulement <code>okamba644/REATM-RECORDS</code>.</li>
+      <li><b>Permissions → Contents</b> : <code>Read and write</code>.</li>
+      <li>Collez le jeton ci-dessous.</li>
+    </ol>
+    <div class="form-row">
+      <label for="tokenInput">Jeton d'accès personnel</label>
+      <div class="token-row">
+        <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off"/>
+        <button class="btn-main" id="tokenSave" style="width:auto;margin:0;padding:13px 22px">
+          <span class="label">Connecter</span><span class="spin" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+    <p id="gateMsg" style="font-size:12px;color:var(--muted);margin:14px 0 0"></p>
+  </div>
+
+  <!-- ===== Le tableau de bord lui-même, masqué tant que la porte est ouverte ===== -->
+  <div class="dash" id="dash" hidden>
+    <div class="dash-head">
+      <div>
+        <h1>Catalogue &amp; événements</h1>
+        <p>Chaque publication part directement sur <b>REATM RECORDS</b> — visible sur le site en quelques minutes.</p>
+      </div>
+      <button class="btn-ghost" id="tokenForget">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm6-3a6 6 0 0 1-12 0M12 18v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        Changer de jeton
+      </button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="instruments">Instruments</button>
+      <button class="tab" data-tab="events">Événements</button>
+    </div>
+
+    <!-- ----- Onglet Instruments ----- -->
+    <section class="panel active" id="panel-instruments">
+      <div class="grid-2">
+        <div class="card glass">
+          <h2>Ajouter un instrument</h2>
+          <p class="hint">Il apparaîtra en tête de sa rubrique sur la page Store, avec ses photos et les boutons WhatsApp déjà préremplis.</p>
+
+          <form id="instForm">
+            <div class="form-row">
+              <label>Rubrique</label>
+              <div class="seg" id="instSeg">
+                <button type="button" data-val="location" class="on">Location</button>
+                <button type="button" data-val="achat">Vente</button>
+              </div>
+            </div>
+
+            <div class="form-grid2">
+              <div class="form-row">
+                <label for="instNom">Nom de l'instrument</label>
+                <input type="text" id="instNom" placeholder="Ex. Guitare Takamine" required/>
+              </div>
+              <div class="form-row">
+                <label for="instCat">Catégorie</label>
+                <input type="text" id="instCat" placeholder="Ex. Guitares" required/>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="instRef">Détail (sous le titre)</label>
+              <input type="text" id="instRef" placeholder="Ex. 61 touches, pan coupé, préampli…" required/>
+            </div>
+
+            <div class="form-row">
+              <label>Photos — la première est la vignette</label>
+              <div class="drop" id="instDrop">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <p><b>Cliquez</b> ou déposez des photos ici</p>
+                <input type="file" id="instFiles" accept="image/*" multiple/>
+              </div>
+              <div class="previews" id="instPreviews"></div>
+            </div>
+
+            <button type="submit" class="btn-main" id="instSubmit">
+              <span class="label">Publier sur le site</span><span class="spin" aria-hidden="true"></span>
+            </button>
+          </form>
+        </div>
+
+        <div class="card glass">
+          <h2>Déjà en ligne</h2>
+          <p class="hint">Lu en direct depuis le site publié.</p>
+          <div class="cat-list" id="instList"><div class="cat-loading">Chargement du catalogue…</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----- Onglet Événements ----- -->
+    <section class="panel" id="panel-events">
+      <div class="grid-2">
+        <div class="card glass">
+          <h2>Annoncer un événement</h2>
+          <p class="hint">Il rejoint « Prestations internes » sur la page Events, en tête — au-dessus des précédents.</p>
+
+          <form id="evtForm">
+            <div class="form-row">
+              <label for="evtTitre">Titre</label>
+              <input type="text" id="evtTitre" placeholder="Ex. Nuit Acoustique" required/>
+            </div>
+
+            <div class="form-grid2">
+              <div class="form-row">
+                <label for="evtTag">Mention (au-dessus du titre)</label>
+                <input type="text" id="evtTag" placeholder="Ex. 2e édition" value="À venir"/>
+              </div>
+              <div class="form-row">
+                <label for="evtEtat">État / date</label>
+                <input type="text" id="evtEtat" placeholder="Ex. Coming soon — date à venir" value="Coming soon — date, lieu et programmation à venir."/>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label for="evtDesc">Description</label>
+              <textarea id="evtDesc" placeholder="Une ou deux phrases sur l'événement…" required></textarea>
+            </div>
+
+            <div class="form-row">
+              <label for="evtBouton">Texte du bouton WhatsApp</label>
+              <input type="text" id="evtBouton" value="Être prévenu"/>
+            </div>
+
+            <div class="form-row">
+              <label>Affiche</label>
+              <div class="drop" id="evtDrop">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <p><b>Cliquez</b> ou déposez l'affiche ici</p>
+                <input type="file" id="evtFiles" accept="image/*"/>
+              </div>
+              <div class="previews" id="evtPreviews"></div>
+            </div>
+
+            <button type="submit" class="btn-main" id="evtSubmit">
+              <span class="label">Publier sur le site</span><span class="spin" aria-hidden="true"></span>
+            </button>
+          </form>
+        </div>
+
+        <div class="card glass">
+          <h2>Journal</h2>
+          <p class="hint">Le détail de chaque publication, dans l'ordre.</p>
+          <div class="log" id="log"><div class="log-empty">Rien publié pour l'instant.</div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="admin-dashboard.js"></script>
+</body>
+</html>

@@ -96,6 +96,9 @@
 .aff-texte .btn-acc{background:#FFE3B8;color:#111}
 .aff-texte .btn-acc:hover{box-shadow:0 16px 34px rgba(255,227,184,.26)}
 @media(max-width:900px){.ev-affiche{grid-template-columns:1fr}}
+/* plusieurs événements peuvent maintenant s'empiler ici (voir l'admin) :
+   un filet les sépare, le premier n'en a pas besoin. */
+.ev-affiche + .ev-affiche{margin-top:48px;padding-top:48px;border-top:1px solid rgba(255,255,255,.12)}
 .ev-list{border-top:1px solid rgba(255,255,255,.12)}
 #internes,#externes{scroll-margin-top:86px}
 .ev-list a{
