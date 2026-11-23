@@ -80,7 +80,19 @@
         ', et Permissions → Contents doit être « Read and write » (pas Read-only).';
     }
     if (/Bad credentials/i.test(raw)) return 'Ce jeton n’est plus valide. Changez de jeton et collez-en un nouveau.';
+    if (/does not match/i.test(raw)) return 'Le fichier a changé entre-temps (une autre action vient de l’éditer). Réessayez — elle reprendra sur la version à jour.';
     return raw;
+  }
+
+  // sérialise les lectures-écritures d'un même fichier : deux actions lancées
+  // presque en même temps (deux suppressions, par exemple) se chevauchaient
+  // sinon, chacune relisant le fichier avant que l'autre n'ait écrit —
+  // la seconde se faisait alors refuser par GitHub (sha obsolète).
+  var fileQueues = Object.create(null);
+  function withFileLock(path, task) {
+    var run = (fileQueues[path] || Promise.resolve()).catch(function () {}).then(task);
+    fileQueues[path] = run;
+    return run;
   }
 
   function waLink(message) {
@@ -548,26 +560,28 @@
 
     return uploadSeries(nouvelles, slug).then(function (nouvellesVues) {
       var vues = instExistingVues.concat(nouvellesVues);
-      return ghGetFile('store/index.html').then(function (file) {
-        var html = file.text, bloc, delay = '0', retirees = [];
-        if (modif) {
-          var loc = locateArticle(html, modif.section, modif.nom);
-          if (!loc) throw new Error('Cette fiche n’a pas été retrouvée : elle a peut-être déjà été modifiée ailleurs.');
-          delay = keepDelay(loc.html);
-          retirees = modif.vues.filter(function (v) { return instExistingVues.indexOf(v) === -1; });
-          bloc = buildFicheArticle(nom, cat, ref, section, vues, delay);
-          html = html.slice(0, loc.start) + bloc + html.slice(loc.end);
-        } else {
-          bloc = buildFicheArticle(nom, cat, ref, section, vues, '0');
-          var secIdx = html.indexOf('id="' + section + '"');
-          if (secIdx < 0) throw new Error('Rubrique #' + section + ' introuvable dans store/index.html.');
-          var prodIdx = html.indexOf('<div class="prod">', secIdx);
-          if (prodIdx < 0) throw new Error('Grille de fiches introuvable dans #' + section + '.');
-          var at = prodIdx + '<div class="prod">'.length;
-          html = html.slice(0, at) + bloc + html.slice(at);
-        }
-        var msg = modif ? 'Admin : modifie ' + nom : 'Admin : ajoute ' + nom + ' (' + section + ')';
-        return ghPutFile('store/index.html', html, file.sha, msg).then(function () { return retirees; });
+      return withFileLock('store/index.html', function () {
+        return ghGetFile('store/index.html').then(function (file) {
+          var html = file.text, bloc, delay = '0', retirees = [];
+          if (modif) {
+            var loc = locateArticle(html, modif.section, modif.nom);
+            if (!loc) throw new Error('Cette fiche n’a pas été retrouvée : elle a peut-être déjà été modifiée ailleurs.');
+            delay = keepDelay(loc.html);
+            retirees = modif.vues.filter(function (v) { return instExistingVues.indexOf(v) === -1; });
+            bloc = buildFicheArticle(nom, cat, ref, section, vues, delay);
+            html = html.slice(0, loc.start) + bloc + html.slice(loc.end);
+          } else {
+            bloc = buildFicheArticle(nom, cat, ref, section, vues, '0');
+            var secIdx = html.indexOf('id="' + section + '"');
+            if (secIdx < 0) throw new Error('Rubrique #' + section + ' introuvable dans store/index.html.');
+            var prodIdx = html.indexOf('<div class="prod">', secIdx);
+            if (prodIdx < 0) throw new Error('Grille de fiches introuvable dans #' + section + '.');
+            var at = prodIdx + '<div class="prod">'.length;
+            html = html.slice(0, at) + bloc + html.slice(at);
+          }
+          var msg = modif ? 'Admin : modifie ' + nom : 'Admin : ajoute ' + nom + ' (' + section + ')';
+          return ghPutFile('store/index.html', html, file.sha, msg).then(function () { return retirees; });
+        });
       });
     }).then(function (retirees) {
       if (retirees && retirees.length) ghDeleteFilesQuiet(retirees, 'Admin : retire une photo remplacée de ' + nom);
@@ -583,23 +597,25 @@
     if (!texte) { toast('err', 'Décrivez ce que vous reprenez.'); return null; }
     var modif = editingRachat;
 
-    return ghGetFile('store/index.html').then(function (file) {
-      var html = file.text;
-      var li = buildRachatLi(texte, rachatIcon);
-      if (modif) {
-        var loc = locateRachatLi(html, modif.texte);
-        if (!loc) throw new Error('Cette reprise n’a pas été retrouvée : elle a peut-être déjà été modifiée ailleurs.');
-        html = html.slice(0, loc.start) + li + html.slice(loc.end);
-      } else {
-        var secIdx = html.indexOf('id="vente"');
-        if (secIdx < 0) throw new Error('Rubrique Vente introuvable dans store/index.html.');
-        var ulIdx = html.indexOf('<ul>', secIdx);
-        if (ulIdx < 0) throw new Error('Liste « Ce que nous reprenons » introuvable.');
-        var at = ulIdx + '<ul>'.length;
-        html = html.slice(0, at) + '\n' + li + html.slice(at);
-      }
-      var msg = modif ? 'Admin : modifie la reprise « ' + texte + ' »' : 'Admin : ajoute « ' + texte + ' » à la reprise';
-      return ghPutFile('store/index.html', html, file.sha, msg);
+    return withFileLock('store/index.html', function () {
+      return ghGetFile('store/index.html').then(function (file) {
+        var html = file.text;
+        var li = buildRachatLi(texte, rachatIcon);
+        if (modif) {
+          var loc = locateRachatLi(html, modif.texte);
+          if (!loc) throw new Error('Cette reprise n’a pas été retrouvée : elle a peut-être déjà été modifiée ailleurs.');
+          html = html.slice(0, loc.start) + li + html.slice(loc.end);
+        } else {
+          var secIdx = html.indexOf('id="vente"');
+          if (secIdx < 0) throw new Error('Rubrique Vente introuvable dans store/index.html.');
+          var ulIdx = html.indexOf('<ul>', secIdx);
+          if (ulIdx < 0) throw new Error('Liste « Ce que nous reprenons » introuvable.');
+          var at = ulIdx + '<ul>'.length;
+          html = html.slice(0, at) + '\n' + li + html.slice(at);
+        }
+        var msg = modif ? 'Admin : modifie la reprise « ' + texte + ' »' : 'Admin : ajoute « ' + texte + ' » à la reprise';
+        return ghPutFile('store/index.html', html, file.sha, msg);
+      });
     })
       .then(function () {
         logRow('ok', texte, modif ? 'reprise modifiée' : 'ajoutée à la reprise');
@@ -659,12 +675,14 @@
   }
 
   function supprimerFiche(row) {
-    return ghGetFile('store/index.html').then(function (file) {
-      var html = file.text;
-      var loc = locateArticle(html, row.section, row.nom);
-      if (!loc) throw new Error('Fiche introuvable — elle a peut-être déjà été retirée.');
-      html = html.slice(0, loc.start) + html.slice(loc.end);
-      return ghPutFile('store/index.html', html, file.sha, 'Admin : supprime ' + row.nom);
+    return withFileLock('store/index.html', function () {
+      return ghGetFile('store/index.html').then(function (file) {
+        var html = file.text;
+        var loc = locateArticle(html, row.section, row.nom);
+        if (!loc) throw new Error('Fiche introuvable — elle a peut-être déjà été retirée.');
+        html = html.slice(0, loc.start) + html.slice(loc.end);
+        return ghPutFile('store/index.html', html, file.sha, 'Admin : supprime ' + row.nom);
+      });
     }).then(function () {
       if (row.vues && row.vues.length) ghDeleteFilesQuiet(row.vues, 'Admin : nettoie les photos de ' + row.nom);
       logRow('ok', row.nom, 'supprimé');
@@ -674,12 +692,14 @@
   }
 
   function supprimerRachat(row) {
-    return ghGetFile('store/index.html').then(function (file) {
-      var html = file.text;
-      var loc = locateRachatLi(html, row.nom);
-      if (!loc) throw new Error('Reprise introuvable — elle a peut-être déjà été retirée.');
-      html = html.slice(0, loc.start) + html.slice(loc.end);
-      return ghPutFile('store/index.html', html, file.sha, 'Admin : supprime la reprise « ' + row.nom + ' »');
+    return withFileLock('store/index.html', function () {
+      return ghGetFile('store/index.html').then(function (file) {
+        var html = file.text;
+        var loc = locateRachatLi(html, row.nom);
+        if (!loc) throw new Error('Reprise introuvable — elle a peut-être déjà été retirée.');
+        html = html.slice(0, loc.start) + html.slice(loc.end);
+        return ghPutFile('store/index.html', html, file.sha, 'Admin : supprime la reprise « ' + row.nom + ' »');
+      });
     }).then(function () {
       logRow('ok', row.nom, 'reprise retirée');
       toast('ok', '« ' + row.nom + ' » a été retiré de la reprise.');
@@ -724,25 +744,27 @@
 
     (nouvelles.length ? publishImage(nouvelles[0], slug, '') : Promise.resolve(evtExistingImg))
       .then(function (imgPath) {
-        return ghGetFile('events/index.html').then(function (file) {
-          var html = file.text, delay = '90';
-          var bloc;
-          if (modif) {
-            var loc = locateEvAffiche(html, modif.titre);
-            if (!loc) throw new Error('Cet événement n’a pas été retrouvé : il a peut-être déjà été modifié ailleurs.');
-            delay = keepDelay(loc.html);
-            bloc = buildEvAffiche(titre, tag, etat, desc, boutonTxt, imgPath, delay);
-            html = html.slice(0, loc.start) + bloc + html.slice(loc.end);
-          } else {
-            bloc = buildEvAffiche(titre, tag, etat, desc, boutonTxt, imgPath, '90');
-            var secIdx = html.indexOf('id="internes"');
-            if (secIdx < 0) throw new Error('Rubrique « Prestations internes » introuvable.');
-            var at = html.indexOf('<div class="ev-affiche">', secIdx);
-            if (at < 0) throw new Error('Emplacement d’insertion introuvable dans events/index.html.');
-            html = html.slice(0, at) + bloc + '\n' + html.slice(at);
-          }
-          var msg = modif ? 'Admin : modifie l’événement ' + titre : 'Admin : ajoute l’événement ' + titre;
-          return ghPutFile('events/index.html', html, file.sha, msg).then(function () { return imgPath; });
+        return withFileLock('events/index.html', function () {
+          return ghGetFile('events/index.html').then(function (file) {
+            var html = file.text, delay = '90';
+            var bloc;
+            if (modif) {
+              var loc = locateEvAffiche(html, modif.titre);
+              if (!loc) throw new Error('Cet événement n’a pas été retrouvé : il a peut-être déjà été modifié ailleurs.');
+              delay = keepDelay(loc.html);
+              bloc = buildEvAffiche(titre, tag, etat, desc, boutonTxt, imgPath, delay);
+              html = html.slice(0, loc.start) + bloc + html.slice(loc.end);
+            } else {
+              bloc = buildEvAffiche(titre, tag, etat, desc, boutonTxt, imgPath, '90');
+              var secIdx = html.indexOf('id="internes"');
+              if (secIdx < 0) throw new Error('Rubrique « Prestations internes » introuvable.');
+              var at = html.indexOf('<div class="ev-affiche">', secIdx);
+              if (at < 0) throw new Error('Emplacement d’insertion introuvable dans events/index.html.');
+              html = html.slice(0, at) + bloc + '\n' + html.slice(at);
+            }
+            var msg = modif ? 'Admin : modifie l’événement ' + titre : 'Admin : ajoute l’événement ' + titre;
+            return ghPutFile('events/index.html', html, file.sha, msg).then(function () { return imgPath; });
+          });
         });
       })
       .then(function (imgPath) {
@@ -779,12 +801,14 @@
   }
 
   function supprimerEvt(row) {
-    return ghGetFile('events/index.html').then(function (file) {
-      var html = file.text;
-      var loc = locateEvAffiche(html, row.nom);
-      if (!loc) throw new Error('Événement introuvable — il a peut-être déjà été retiré.');
-      html = html.slice(0, loc.start) + html.slice(loc.end);
-      return ghPutFile('events/index.html', html, file.sha, 'Admin : supprime l’événement ' + row.nom);
+    return withFileLock('events/index.html', function () {
+      return ghGetFile('events/index.html').then(function (file) {
+        var html = file.text;
+        var loc = locateEvAffiche(html, row.nom);
+        if (!loc) throw new Error('Événement introuvable — il a peut-être déjà été retiré.');
+        html = html.slice(0, loc.start) + html.slice(loc.end);
+        return ghPutFile('events/index.html', html, file.sha, 'Admin : supprime l’événement ' + row.nom);
+      });
     }).then(function () {
       if (row.img) ghDeleteFileQuiet(row.img, 'Admin : nettoie l’affiche de ' + row.nom);
       logRow('ok', row.nom, 'événement retiré');
