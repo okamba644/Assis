@@ -202,7 +202,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 .ac-story .btn-acc{background:#2563EB;color:#fff}
 .ac-story .btn-acc:hover{box-shadow:0 16px 34px rgba(37,99,235,.3)}
 .as-wrap{display:flex;flex-direction:column;align-items:center;gap:22px}
-.as-stage{position:relative;width:min(100%,360px);aspect-ratio:1080/1200;border-radius:22px;overflow:hidden;
+.as-stage{position:relative;width:min(100%,480px);aspect-ratio:1080/1200;border-radius:22px;overflow:hidden;
   background:#111;box-shadow:0 30px 70px rgba(0,0,0,.45);cursor:pointer}
 .as-stage::before{content:"";position:absolute;top:0;left:0;right:0;height:56px;z-index:3;pointer-events:none;
   background:linear-gradient(180deg,rgba(0,0,0,.45),transparent)}
@@ -211,7 +211,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
   box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 .as-bars i b{display:block;height:100%;width:0;background:#fff;border-radius:3px}
 .as-bars i.done b{width:100%}
-.as-bars i.cur b{transition:width .25s linear}
+.as-bars i.cur b.run{width:100%;transition:width 4s linear}
 .as-frame{position:absolute;inset:0}
 .as-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
 .as-frame img.on{opacity:1}
@@ -228,7 +228,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 .as-count{font-size:12px;letter-spacing:.8px;color:#9aa3b2}
 @media(max-width:860px){
   .as-nav{display:none}
-  .as-stage{width:min(100%,320px)}
+  .as-stage{width:min(100%,360px)}
 }
 </style>
 </head>
@@ -324,7 +324,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 <div class="sec-head reveal reveal-x"><div><h2 class="sec-title">Pourquoi la musique ?</h2><p class="sec-lead">Avant même d'apprendre une note, tu en fais déjà. Glisse pour découvrir comment — jusqu'à ta première inscription.</p></div></div>
 <div class="as-wrap reveal reveal-zoom" style="--d:100ms">
 <div class="as-stage" id="asStage" role="group" aria-label="Pourquoi la musique : histoire en images">
-<div class="as-bars" id="asBars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="as-bars" id="asBars"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
 <div class="as-frame" id="asFrame"><img data-i="0" src="../assets/academy-musique/academy-musique-02.webp" alt="" loading="lazy"/><img data-i="1" src="../assets/academy-musique/academy-musique-03.webp" alt="" loading="lazy"/><img data-i="2" src="../assets/academy-musique/academy-musique-04.webp" alt="" loading="lazy"/><img data-i="3" src="../assets/academy-musique/academy-musique-05.webp" alt="" loading="lazy"/><img data-i="4" src="../assets/academy-musique/academy-musique-07.webp" alt="" loading="lazy"/><img data-i="5" src="../assets/academy-musique/academy-musique-08.webp" alt="" loading="lazy"/><img data-i="6" src="../assets/academy-musique/academy-musique-09.webp" alt="" loading="lazy"/><img data-i="7" src="../assets/academy-musique/academy-musique-10.webp" alt="" loading="lazy"/><img data-i="8" src="../assets/academy-musique/academy-musique-11.webp" alt="" loading="lazy"/><img data-i="9" src="../assets/academy-musique/academy-musique-12.webp" alt="" loading="lazy"/><img data-i="10" src="../assets/academy-musique/academy-musique-13.webp" alt="" loading="lazy"/><img data-i="11" src="../assets/academy-musique/academy-musique-14.webp" alt="" loading="lazy"/><img data-i="12" src="../assets/academy-musique/academy-musique-15.webp" alt="" loading="lazy"/><img data-i="13" src="../assets/academy-musique/academy-musique-16.webp" alt="" loading="lazy"/><img data-i="14" src="../assets/academy-musique/academy-musique-17.webp" alt="" loading="lazy"/><img data-i="15" src="../assets/academy-musique/academy-musique-18.webp" alt="" loading="lazy"/><img data-i="16" src="../assets/academy-musique/academy-musique-19.webp" alt="" loading="lazy"/><img data-i="17" src="../assets/academy-musique/academy-musique-20.webp" alt="" loading="lazy"/><img data-i="18" src="../assets/academy-musique/academy-musique-21.webp" alt="" loading="lazy"/><img data-i="19" src="../assets/academy-musique/academy-musique-22.webp" alt="" loading="lazy"/><img data-i="20" src="../assets/academy-musique/academy-musique-23.webp" alt="" loading="lazy"/><img data-i="21" src="../assets/academy-musique/academy-musique-24.webp" alt="" loading="lazy"/><img data-i="22" src="../assets/academy-musique/academy-musique-25.webp" alt="" loading="lazy"/><img data-i="23" src="../assets/academy-musique/academy-musique-26.webp" alt="" loading="lazy"/><img data-i="24" src="../assets/academy-musique/academy-musique-27.webp" alt="" loading="lazy"/><img data-i="25" src="../assets/academy-musique/academy-musique-28.webp" alt="" loading="lazy"/><img data-i="26" src="../assets/academy-musique/academy-musique-29.webp" alt="" loading="lazy"/><img data-i="27" src="../assets/academy-musique/academy-musique-30.webp" alt="" loading="lazy"/><img data-i="28" src="../assets/academy-musique/academy-musique-31.webp" alt="" loading="lazy"/><img data-i="29" src="../assets/academy-musique/academy-musique-32.webp" alt="" loading="lazy"/><img data-i="30" src="../assets/academy-musique/academy-musique-33.webp" alt="" loading="lazy"/><img data-i="31" src="../assets/academy-musique/academy-musique-34.webp" alt="" loading="lazy"/><img data-i="32" src="../assets/academy-musique/academy-musique-35.webp" alt="" loading="lazy"/><img data-i="33" src="../assets/academy-musique/academy-musique-36.webp" alt="" loading="lazy"/><img data-i="34" src="../assets/academy-musique/academy-musique-37.webp" alt="" loading="lazy"/><img data-i="35" src="../assets/academy-musique/academy-musique-38.webp" alt="" loading="lazy"/><img data-i="36" src="../assets/academy-musique/academy-musique-39.webp" alt="" loading="lazy"/><img data-i="37" src="../assets/academy-musique/academy-musique-40.webp" alt="" loading="lazy"/><img data-i="38" src="../assets/academy-musique/academy-musique-41.webp" alt="" loading="lazy"/></div>
 <div class="as-zones"><span class="z-prev"></span><span class="z-next"></span></div>
 <button class="as-nav as-prev" id="asPrev" type="button" aria-label="Image précédente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -465,28 +465,49 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
   var total=imgs.length;
   var i=0;
 
-  function sync(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var minuteur=null;
+
+  function sync(garderDefilement){
     imgs.forEach(function(im,idx){im.classList.toggle('on',idx===i);});
-    bars.forEach(function(b,idx){b.classList.toggle('done',idx<i);b.classList.toggle('cur',idx===i);});
+    bars.forEach(function(b,idx){
+      b.classList.toggle('done',idx<i);
+      b.classList.toggle('cur',idx===i);
+      var run=b.querySelector('b');
+      run.classList.remove('run');
+      if(idx===i){void run.offsetWidth;if(!garderDefilement)run.classList.add('run');}
+      else{run.style.width='';}
+    });
     if(count)count.textContent=(i+1)+' / '+total;
   }
-  function aller(idx){i=(idx+total)%total;sync();}
+  function relance(){
+    if(reduce)return;
+    if(minuteur)clearTimeout(minuteur);
+    minuteur=setTimeout(function(){aller(i+1);},4000);
+  }
+  function aller(idx){i=(idx+total)%total;sync();relance();}
 
   imgs[0].classList.add('on');
   sync();
+  relance();
 
   stage.querySelector('.z-prev').addEventListener('click',function(){aller(i-1);});
   stage.querySelector('.z-next').addEventListener('click',function(){aller(i+1);});
   document.getElementById('asPrev').addEventListener('click',function(e){e.stopPropagation();aller(i-1);});
   document.getElementById('asNext').addEventListener('click',function(e){e.stopPropagation();aller(i+1);});
 
+  /* le défilement auto fait une pause tant qu'on regarde le carrousel de près */
+  stage.addEventListener('pointerenter',function(){if(minuteur)clearTimeout(minuteur);});
+  stage.addEventListener('pointerleave',function(){relance();});
+
   /* glisser au doigt, comme sur une vraie story */
   var x0=null;
-  stage.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  stage.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;if(minuteur)clearTimeout(minuteur);},{passive:true});
   stage.addEventListener('touchend',function(e){
     if(x0===null)return;
     var dx=e.changedTouches[0].clientX-x0;
     if(Math.abs(dx)>40)aller(i+(dx<0?1:-1));
+    else relance();
     x0=null;
   },{passive:true});
 })();
