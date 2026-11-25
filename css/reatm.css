@@ -1370,6 +1370,9 @@ body[data-entity="production"] .brand-mark{background-image:url('../assets/mark-
 body[data-entity="store"] .brand-mark{background-image:url('../assets/mark-store.jpg')}
 body[data-entity="events"] .brand-mark{background-image:url('../assets/mark-events.jpg')}
 html[data-theme="dark"] body[data-entity] .brand-mark{box-shadow:0 2px 12px rgba(0,0,0,.5)}
+/* le badge Academy porte directement sa couleur de fond : pas besoin d'une ombre pour le détacher */
+body[data-entity="academy"] .brand-mark,
+html[data-theme="dark"] body[data-entity="academy"] .brand-mark{box-shadow:none}
 
 /* ===== L'IDENTITÉ DE LA MAISON, SUR L'ACCUEIL =====
    Sections numérotées : qui nous sommes, la vision, les valeurs. Elles
