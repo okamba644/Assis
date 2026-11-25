@@ -192,6 +192,44 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 @media(max-width:1080px){.ac-form{grid-template-columns:repeat(2,1fr)}.ac-poles{grid-template-columns:1fr}}
 @media(max-width:760px){.ac-form,.ac-dots,.ac-ses{grid-template-columns:1fr}.ac-dots .pin{position:static;margin-bottom:12px}.ac-rail{margin:26px 0 22px}}
 
+/* ===== Pourquoi la musique : carrousel façon story, juste après le héros ===== */
+.ac-story{background:#0B0D12;color:#fff;position:relative;overflow:hidden}
+.ac-story::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(760px circle at 85% 0%,rgba(37,99,235,.22),transparent 60%)}
+.ac-story .wrap{position:relative;z-index:2}
+.ac-story .sec-title{color:#fff}
+.ac-story .sec-lead{color:#9aa3b2}
+.ac-story .btn-acc{background:#2563EB;color:#fff}
+.ac-story .btn-acc:hover{box-shadow:0 16px 34px rgba(37,99,235,.3)}
+.as-wrap{display:flex;flex-direction:column;align-items:center;gap:22px}
+.as-stage{position:relative;width:min(100%,360px);aspect-ratio:1080/1200;border-radius:22px;overflow:hidden;
+  background:#111;box-shadow:0 30px 70px rgba(0,0,0,.45);cursor:pointer}
+.as-stage::before{content:"";position:absolute;top:0;left:0;right:0;height:56px;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.45),transparent)}
+.as-bars{position:absolute;top:12px;left:12px;right:12px;z-index:4;display:flex;gap:4px}
+.as-bars i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.35);overflow:hidden;display:block;
+  box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.as-bars i b{display:block;height:100%;width:0;background:#fff;border-radius:3px}
+.as-bars i.done b{width:100%}
+.as-bars i.cur b{transition:width .25s linear}
+.as-frame{position:absolute;inset:0}
+.as-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
+.as-frame img.on{opacity:1}
+.as-zones{position:absolute;inset:0;z-index:3;display:flex}
+.as-zones span{flex:1}
+.as-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:42px;height:42px;border-radius:50%;
+  border:none;background:rgba(10,12,18,.5);color:#fff;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);opacity:0;transition:opacity .3s ease,background .3s ease}
+@media(hover:hover){.as-nav{pointer-events:none}.as-stage:hover .as-nav{opacity:1;pointer-events:auto}}
+.as-nav:hover{background:rgba(37,99,235,.75)}
+.as-nav svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2}
+.as-prev{left:12px}
+.as-next{right:12px}
+.as-count{font-size:12px;letter-spacing:.8px;color:#9aa3b2}
+@media(max-width:860px){
+  .as-nav{display:none}
+  .as-stage{width:min(100%,320px)}
+}
 </style>
 </head>
 <body data-entity="academy" style="--veil-in:#2563EB">
@@ -278,6 +316,23 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 <div class="ph-nom reveal-raw"><b>REATM</b><em>Academy</em></div>
 <p class="ph-sous">Formation musicale</p>
 <nav class="ph-poles reveal-raw" aria-label="Les autres pôles"><a href="../formation-media/"><span class="pt"></span>Formation média</a><a href="../bibliotheque/"><span class="pt"></span>Bibliothèque</a></nav>
+</div>
+</section>
+
+<section class="sec ac-story" id="acStory">
+<div class="wrap">
+<div class="sec-head reveal reveal-x"><div><h2 class="sec-title">Pourquoi la musique ?</h2><p class="sec-lead">Avant même d'apprendre une note, tu en fais déjà. Glisse pour découvrir comment — jusqu'à ta première inscription.</p></div></div>
+<div class="as-wrap reveal reveal-zoom" style="--d:100ms">
+<div class="as-stage" id="asStage" role="group" aria-label="Pourquoi la musique : histoire en images">
+<div class="as-bars" id="asBars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="as-frame" id="asFrame"><img data-i="0" src="../assets/academy-musique/academy-musique-02.webp" alt="" loading="lazy"/><img data-i="1" src="../assets/academy-musique/academy-musique-03.webp" alt="" loading="lazy"/><img data-i="2" src="../assets/academy-musique/academy-musique-04.webp" alt="" loading="lazy"/><img data-i="3" src="../assets/academy-musique/academy-musique-05.webp" alt="" loading="lazy"/><img data-i="4" src="../assets/academy-musique/academy-musique-07.webp" alt="" loading="lazy"/><img data-i="5" src="../assets/academy-musique/academy-musique-08.webp" alt="" loading="lazy"/><img data-i="6" src="../assets/academy-musique/academy-musique-09.webp" alt="" loading="lazy"/><img data-i="7" src="../assets/academy-musique/academy-musique-10.webp" alt="" loading="lazy"/><img data-i="8" src="../assets/academy-musique/academy-musique-11.webp" alt="" loading="lazy"/><img data-i="9" src="../assets/academy-musique/academy-musique-12.webp" alt="" loading="lazy"/><img data-i="10" src="../assets/academy-musique/academy-musique-13.webp" alt="" loading="lazy"/><img data-i="11" src="../assets/academy-musique/academy-musique-14.webp" alt="" loading="lazy"/><img data-i="12" src="../assets/academy-musique/academy-musique-15.webp" alt="" loading="lazy"/><img data-i="13" src="../assets/academy-musique/academy-musique-16.webp" alt="" loading="lazy"/><img data-i="14" src="../assets/academy-musique/academy-musique-17.webp" alt="" loading="lazy"/><img data-i="15" src="../assets/academy-musique/academy-musique-18.webp" alt="" loading="lazy"/><img data-i="16" src="../assets/academy-musique/academy-musique-19.webp" alt="" loading="lazy"/><img data-i="17" src="../assets/academy-musique/academy-musique-20.webp" alt="" loading="lazy"/><img data-i="18" src="../assets/academy-musique/academy-musique-21.webp" alt="" loading="lazy"/><img data-i="19" src="../assets/academy-musique/academy-musique-22.webp" alt="" loading="lazy"/><img data-i="20" src="../assets/academy-musique/academy-musique-23.webp" alt="" loading="lazy"/><img data-i="21" src="../assets/academy-musique/academy-musique-24.webp" alt="" loading="lazy"/><img data-i="22" src="../assets/academy-musique/academy-musique-25.webp" alt="" loading="lazy"/><img data-i="23" src="../assets/academy-musique/academy-musique-26.webp" alt="" loading="lazy"/><img data-i="24" src="../assets/academy-musique/academy-musique-27.webp" alt="" loading="lazy"/><img data-i="25" src="../assets/academy-musique/academy-musique-28.webp" alt="" loading="lazy"/><img data-i="26" src="../assets/academy-musique/academy-musique-29.webp" alt="" loading="lazy"/><img data-i="27" src="../assets/academy-musique/academy-musique-30.webp" alt="" loading="lazy"/><img data-i="28" src="../assets/academy-musique/academy-musique-31.webp" alt="" loading="lazy"/><img data-i="29" src="../assets/academy-musique/academy-musique-32.webp" alt="" loading="lazy"/><img data-i="30" src="../assets/academy-musique/academy-musique-33.webp" alt="" loading="lazy"/><img data-i="31" src="../assets/academy-musique/academy-musique-34.webp" alt="" loading="lazy"/><img data-i="32" src="../assets/academy-musique/academy-musique-35.webp" alt="" loading="lazy"/><img data-i="33" src="../assets/academy-musique/academy-musique-36.webp" alt="" loading="lazy"/><img data-i="34" src="../assets/academy-musique/academy-musique-37.webp" alt="" loading="lazy"/><img data-i="35" src="../assets/academy-musique/academy-musique-38.webp" alt="" loading="lazy"/><img data-i="36" src="../assets/academy-musique/academy-musique-39.webp" alt="" loading="lazy"/><img data-i="37" src="../assets/academy-musique/academy-musique-40.webp" alt="" loading="lazy"/><img data-i="38" src="../assets/academy-musique/academy-musique-41.webp" alt="" loading="lazy"/></div>
+<div class="as-zones"><span class="z-prev"></span><span class="z-next"></span></div>
+<button class="as-nav as-prev" id="asPrev" type="button" aria-label="Image précédente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<button class="as-nav as-next" id="asNext" type="button" aria-label="Image suivante"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+<span class="as-count" id="asCount">1 / 39</span>
+<a class="btn btn-acc reveal" style="--d:180ms" href="https://wa.me/212651475341?text=Bonjour%20REATM%20Academy%2C%20je%20souhaite%20m%27inscrire%20%C3%A0%20la%20formation%20musicale." target="_blank" rel="noopener">Rejoindre REATM Académie <i class="fas fa-arrow-right"></i></a>
+</div>
 </div>
 </section>
 
@@ -398,6 +453,42 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
     en.forEach(function(e){if(e.isIntersecting){el.classList.add('in');io.disconnect();}});
   },{threshold:.35});
   io.observe(el);
+})();
+
+/* ---------- Carrousel « Pourquoi la musique » (façon story) ---------- */
+(function(){
+  var stage=document.getElementById('asStage');
+  if(!stage)return;
+  var imgs=stage.querySelectorAll('.as-frame img');
+  var bars=stage.querySelectorAll('.as-bars i');
+  var count=document.getElementById('asCount');
+  var total=imgs.length;
+  var i=0;
+
+  function sync(){
+    imgs.forEach(function(im,idx){im.classList.toggle('on',idx===i);});
+    bars.forEach(function(b,idx){b.classList.toggle('done',idx<i);b.classList.toggle('cur',idx===i);});
+    if(count)count.textContent=(i+1)+' / '+total;
+  }
+  function aller(idx){i=(idx+total)%total;sync();}
+
+  imgs[0].classList.add('on');
+  sync();
+
+  stage.querySelector('.z-prev').addEventListener('click',function(){aller(i-1);});
+  stage.querySelector('.z-next').addEventListener('click',function(){aller(i+1);});
+  document.getElementById('asPrev').addEventListener('click',function(e){e.stopPropagation();aller(i-1);});
+  document.getElementById('asNext').addEventListener('click',function(e){e.stopPropagation();aller(i+1);});
+
+  /* glisser au doigt, comme sur une vraie story */
+  var x0=null;
+  stage.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  stage.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>40)aller(i+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
 })();
 </script>
 </body>
