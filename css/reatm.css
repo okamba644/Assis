@@ -63,12 +63,20 @@ html[data-theme="dark"] .only-dark{display:block}
 html[data-theme="dark"] .only-light{display:none}
 
 /* ---------- Révélations au défilement ---------- */
-.js .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
+.js .reveal{opacity:0;transform:translateY(54px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
 .js .reveal.in{opacity:1;transform:none}
-.js .reveal-x{opacity:0;transform:translateX(-26px)}
+.js .reveal-x{opacity:0;transform:translateX(-64px)}
 .js .reveal-x.in{opacity:1;transform:none}
-.js .reveal-zoom{opacity:0;transform:scale(.94)}
+/* même entrée, depuis la droite : pour alterner le sens d'une liste à l'autre */
+.js .reveal-right{opacity:0;transform:translateX(64px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
+.js .reveal-right.in{opacity:1;transform:none}
+.js .reveal-zoom{opacity:0;transform:scale(.86)}
 .js .reveal-zoom.in{opacity:1;transform:none}
+/* une pointe de rotation, pour les vignettes qu'on veut voir « tomber en place » */
+.js .reveal-tilt{opacity:0;transform:translateY(46px) rotate(-4deg);transition:opacity .85s ease,transform 1s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
+.js .reveal-tilt.in{opacity:1;transform:none}
+.js .reveal-tilt-r{opacity:0;transform:translateY(46px) rotate(4deg);transition:opacity .85s ease,transform 1s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
+.js .reveal-tilt-r.in{opacity:1;transform:none}
 /* entrée en bascule 3D, réservée aux cartes */
 /* Le texte se dévoile derrière un masque qui remonte.
    Le recoupement porte sur un calque intérieur, jamais sur l'élément observé :
@@ -86,8 +94,10 @@ html[data-theme="dark"] .only-light{display:none}
 .js .reveal-line{transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
 .js .reveal-line.in{transform:scaleX(1)}
 /* une entrée latérale, pour les listes et les colonnes */
-.js .reveal-side{opacity:0;transform:translateX(-26px);transition:opacity .8s ease,transform .95s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
+.js .reveal-side{opacity:0;transform:translateX(-48px);transition:opacity .8s ease,transform .95s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
 .js .reveal-side.in{opacity:1;transform:none}
+.js .reveal-side-r{opacity:0;transform:translateX(48px);transition:opacity .8s ease,transform .95s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
+.js .reveal-side-r.in{opacity:1;transform:none}
 .js .reveal-card{opacity:0;transform:perspective(1100px) rotateX(11deg) translateY(52px);transform-origin:top center;
   transition:opacity .8s ease,transform 1s cubic-bezier(.16,1,.3,1);transition-delay:var(--d,0ms)}
 .js .reveal-card.in{opacity:1;transform:perspective(1100px) rotateX(0deg) translateY(0)}
@@ -912,7 +922,7 @@ footer .wrap{position:relative;z-index:2}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
-  .js .reveal,.js .reveal-x,.js .reveal-zoom{opacity:1!important;transform:none!important}
+  .js .reveal,.js .reveal-x,.js .reveal-right,.js .reveal-zoom,.js .reveal-side,.js .reveal-side-r,.js .reveal-tilt,.js .reveal-tilt-r{opacity:1!important;transform:none!important}
 }
 @media print{header,.fab,.f-aura,.mobile-nav{display:none!important}}
 
