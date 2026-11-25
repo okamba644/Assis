@@ -216,7 +216,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
   box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 .as-bars i b{display:block;height:100%;width:0;background:#fff;border-radius:3px}
 .as-bars i.done b{width:100%}
-.as-bars i.cur b.run{width:100%;transition:width 4s linear}
+.as-bars i.cur b.run{width:100%;transition:width 5s linear}
 .as-frame{position:absolute;inset:0}
 .as-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
 .as-frame img.on{opacity:1}
@@ -511,7 +511,7 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
   function relance(){
     if(reduce)return;
     if(minuteur)clearTimeout(minuteur);
-    minuteur=setTimeout(function(){aller(i+1);},4000);
+    minuteur=setTimeout(function(){aller(i+1);},5000);
   }
   function aller(idx){i=(idx+total)%total;sync();relance();}
   function choisirRubrique(idx){
