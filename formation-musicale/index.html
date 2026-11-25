@@ -236,6 +236,20 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
   .as-nav{display:none}
   .as-stage{width:min(100%,360px)}
 }
+
+/* ===== Extrait vidéo d'un vrai cours ===== */
+.av-wrap{display:flex;justify-content:center}
+.av-stage{position:relative;width:min(100%,380px);aspect-ratio:9/16;border-radius:22px;overflow:hidden;
+  background:#0B0D12;box-shadow:0 30px 70px rgba(0,0,0,.28)}
+.av-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.av-sound{position:absolute;right:14px;bottom:14px;z-index:2;width:42px;height:42px;border-radius:50%;
+  border:none;background:rgba(10,12,18,.55);color:#fff;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);cursor:pointer;transition:background .3s ease}
+.av-sound:hover{background:rgba(37,99,235,.75)}
+.av-sound svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2}
+.av-sound .off{display:none}
+.av-sound[aria-pressed="true"] .on{display:none}
+.av-sound[aria-pressed="true"] .off{display:block}
 </style>
 </head>
 <body data-entity="academy" style="--veil-in:#2563EB">
@@ -339,6 +353,21 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 </div>
 <span class="as-count" id="asCount">1 / 4</span>
 <a class="btn btn-acc reveal" style="--d:180ms" href="https://wa.me/212651475341?text=Bonjour%20REATM%20Academy%2C%20je%20souhaite%20m%27inscrire%20%C3%A0%20la%20formation%20musicale." target="_blank" rel="noopener">Rejoindre REATM Academy <i class="fas fa-arrow-right"></i></a>
+</div>
+</div>
+</section>
+
+<section class="sec ac-vid">
+<div class="wrap">
+<div class="sec-head reveal reveal-x"><div><h2 class="sec-title">Ça se passe vraiment comme ça</h2><p class="sec-lead">Un extrait d'un vrai cours à REATM Academy — des élèves qui apprennent leur instrument, en situation.</p></div></div>
+<div class="av-wrap reveal reveal-zoom" style="--d:100ms">
+<div class="av-stage" id="avStage">
+<video id="avVideo" src="../assets/academy-musique/academy-cours-video.mp4" poster="../assets/academy-musique/academy-cours-poster.jpg" muted loop playsinline preload="metadata"></video>
+<button class="av-sound" id="avSound" type="button" aria-label="Activer le son" aria-pressed="false">
+<svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4Z" stroke-linejoin="round"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19.3 5.7a9 9 0 0 1 0 12.6" stroke-linecap="round"/></svg>
+<svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4Z" stroke-linejoin="round"/><path d="M16 9l5 6M21 9l-5 6" stroke-linecap="round"/></svg>
+</button>
+</div>
 </div>
 </div>
 </section>
@@ -460,6 +489,29 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
     en.forEach(function(e){if(e.isIntersecting){el.classList.add('in');io.disconnect();}});
   },{threshold:.35});
   io.observe(el);
+})();
+
+/* ---------- Extrait vidéo : lecture dès qu'il entre à l'écran ---------- */
+(function(){
+  var video=document.getElementById('avVideo');
+  var btn=document.getElementById('avSound');
+  if(!video)return;
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(e){
+        if(e.isIntersecting)video.play().catch(function(){});
+        else video.pause();
+      });
+    },{threshold:.4});
+    io.observe(video);
+  }else{
+    video.play().catch(function(){});
+  }
+  if(btn)btn.addEventListener('click',function(){
+    video.muted=!video.muted;
+    btn.setAttribute('aria-pressed',String(!video.muted));
+    btn.setAttribute('aria-label',video.muted?'Activer le son':'Couper le son');
+  });
 })();
 
 /* ---------- Carrousel « Pourquoi la musique », en quatre rubriques ---------- */
