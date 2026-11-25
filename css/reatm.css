@@ -656,6 +656,7 @@ html[data-theme="dark"] .mission .brush2{background:linear-gradient(90deg,var(--
   font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;letter-spacing:-1px;
   transition:transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .4s ease}
 .mi .mic.ci-red{box-shadow:0 10px 24px rgba(225,27,34,.26)}
+.mz-five{color:var(--red);font-weight:800}
 .mi .mic.ci-yellow{box-shadow:0 10px 24px rgba(245,182,13,.26)}
 html[data-theme="dark"] .mi .mic{box-shadow:none}
 .mi strong{display:block;color:var(--text);font-size:15px;font-weight:700;margin-bottom:5px;letter-spacing:-.2px}
