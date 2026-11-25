@@ -222,6 +222,16 @@
       sync();
     }
     sync();
+    /* Cliquer sur le plan affiché envoie directement vers la page de
+       l'entité montrée (hors flèches de navigation). */
+    var LIENS_ENT={studio:'studio/',academy:'academy/',store:'store/',production:'production/',events:'events/'};
+    gal.style.cursor='pointer';
+    gal.addEventListener('click',function(e){
+      if(e.target.closest('.hs-nav'))return;
+      var ent=slides[i].getAttribute('data-ent');
+      var href=LIENS_ENT[ent];
+      if(href)location.href=href;
+    });
     /* Les flèches servent même quand l'animation est coupée : elles ne
        défilent pas toutes seules, elles répondent à une intention. */
     var minuteur=null;
