@@ -133,14 +133,29 @@
     });
   }
 
+  // une requête qui ne répond pas ne doit jamais laisser une liste bloquée
+  // sur « Chargement… » indéfiniment : passé ce délai, on abandonne et on le dit.
+  function avecDelai(promesse, ms, messageDepasse) {
+    var tempsEcoule = false;
+    var minuteur = setTimeout(function () { tempsEcoule = true; }, ms);
+    return promesse.then(
+      function (v) { clearTimeout(minuteur); if (tempsEcoule) throw new Error(messageDepasse); return v; },
+      function (e) { clearTimeout(minuteur); throw (tempsEcoule ? new Error(messageDepasse) : e); }
+    );
+  }
+
   // lit un fichier texte du dépôt : { text, sha }
   function ghGetFile(path) {
-    return fetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + path + '?ref=' + BRANCH, { headers: ghHeaders() })
-      .then(function (r) {
-        if (!r.ok) throw new Error('Lecture de ' + path + ' refusée (' + r.status + ').');
-        return r.json();
-      })
-      .then(function (j) { return { text: base64ToUtf8(j.content), sha: j.sha }; });
+    return avecDelai(
+      fetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + path + '?ref=' + BRANCH, { headers: ghHeaders() })
+        .then(function (r) {
+          if (!r.ok) throw new Error('Lecture de ' + path + ' refusée (' + r.status + ').');
+          return r.json();
+        })
+        .then(function (j) { return { text: base64ToUtf8(j.content), sha: j.sha }; }),
+      15000,
+      'Délai dépassé en lisant ' + path + ' — vérifiez votre connexion et réessayez.'
+    );
   }
 
   // écrit un fichier texte (sha requis : on modifie un fichier existant)
