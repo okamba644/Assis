@@ -1188,6 +1188,7 @@ body[data-entity="studio"] .btn-acc:hover{background:#c5161c;box-shadow:0 16px 3
   box-shadow:0 0 0 1px rgba(255,255,255,.22) inset;
   transition:background-color .3s ease,transform .3s cubic-bezier(.34,1.4,.64,1);
 }
+.lb-nav[hidden]{display:none}
 .lb-x{top:0;right:0;width:40px;height:40px}
 .lb-nav{top:50%;transform:translateY(-50%);width:clamp(40px,3.4vw,50px);height:clamp(40px,3.4vw,50px)}
 .lb-prec{left:clamp(-6px,-0.6vw,0px)}
