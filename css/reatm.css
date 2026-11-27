@@ -1349,6 +1349,8 @@ html[data-theme="dark"] body[data-entity="events"]{--logo-ink:#FFE3B8}
 
 /* le second mot du logotype nomme le pôle : REATM ACADEMY, REATM STUDIO… */
 body[data-entity]:not([data-entity="maison"]) .brand-txt .n2{color:var(--logo-ink)}
+/* à l'Academy, « REATM » prend la même couleur que « ACADEMY » : les deux mots forment un seul logotype */
+body[data-entity="academy"] .brand-txt .n1{color:var(--logo-ink)}
 
 /* ===== LE LOGO OFFICIEL DE CHAQUE PÔLE =====
    Sur la page d'un pôle, le sigle détouré laisse place au logo de ce pôle :
