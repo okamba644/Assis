@@ -170,11 +170,24 @@ html[data-theme="dark"] .ac-poles article>p{color:#8A8A8A}
 .ac-dots h3{font-size:18px;font-weight:700;margin-bottom:7px}
 .ac-dots p{font-size:13px;color:var(--muted);line-height:1.75}
 .ac-ses{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,2vw,26px)}
-.ac-ses article{border:1px solid var(--border);border-radius:20px;padding:clamp(24px,3vw,38px);background:var(--card);transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .4s ease}
+.ac-ses article{border:1px solid var(--border);border-radius:20px;padding:clamp(24px,3vw,38px);background:var(--card);transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .4s ease;position:relative}
 .ac-ses article:hover{transform:translateY(-7px);border-color:#2563EB}
 .ac-ses h3{font-size:clamp(19px,2.3vw,26px);font-weight:800;letter-spacing:-.6px;margin-bottom:6px}
 .ac-ses .big{font-size:clamp(32px,4.4vw,54px);font-weight:800;letter-spacing:-2px;color:#2563EB;line-height:1;margin:14px 0 10px}
+.ac-ses .big span{font-size:14px;font-weight:700;letter-spacing:0;color:var(--muted);margin-left:4px}
 .ac-ses p{font-size:13.4px;color:var(--muted);line-height:1.8}
+.ac-badge{display:inline-flex;margin-left:10px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  padding:5px 12px;border-radius:999px;background:#2563EB;color:#fff;vertical-align:middle}
+.ac-ses-3{grid-template-columns:repeat(3,1fr)}
+.ac-ses-3 article.featured{border-color:#2563EB;border-width:2px;background:#EFF6FF}
+html[data-theme="dark"] .ac-ses-3 article.featured{background:#101826}
+.ac-ses-tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;padding:5px 16px;border-radius:999px;background:#2563EB;color:#fff;white-space:nowrap}
+.ac-ses-3 article.featured h3{display:none}
+.ac-ses-rythme{font-size:13.4px;color:var(--muted);margin-bottom:14px}
+.ac-ses-perks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;border-top:1px solid var(--border);padding-top:14px}
+.ac-ses-perks li{font-size:13px;color:var(--text);display:flex;align-items:center;gap:9px}
+.ac-ses-perks i{color:#2563EB;font-size:11px}
 .ac-cta{background:#EFF6FF;color:#111111;position:relative;overflow:hidden}
 html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 .ac-cta::after{content:"";position:absolute;inset:0;pointer-events:none;
@@ -374,8 +387,8 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 
 <section class="sec" style="background:var(--bg-alt)">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos formations musicales</h2><p class="sec-lead">Quatre instruments, quatre professeurs. Un accompagnement personnalisé, quel que soit le point de départ.</p></div></div>
-<div class="ac-form"><article class="reveal" style="--d:0ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-music"></i><h3>Cours de voix</h3><p>Texture vocale, justesse, souffle, puissance et harmonies.</p></article><article class="reveal" style="--d:90ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-grip-lines-vertical"></i><h3>Cours de piano</h3><p>Lecture, accords, accompagnement et jeu libre.</p></article><article class="reveal" style="--d:180ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-guitar"></i><h3>Cours de guitare</h3><p>Acoustique, basse et guitare solo, du rythme au lead.</p></article><article class="reveal" style="--d:270ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-drum"></i><h3>Cours de batterie</h3><p>Tempo, coordination, grooves et placement.</p></article></div>
+<div class="sec-head reveal"><span class="sec-num">01</span><div><h2 class="sec-title">Nos formations musicales</h2><p class="sec-lead">Quatre instruments, quatre professeurs. Un accompagnement personnalisé, quel que soit le point de départ. <span class="ac-badge">Dès 5 ans</span></p></div></div>
+<div class="ac-form"><article class="reveal" style="--d:0ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-grip-lines-vertical"></i><h3>Cours de piano</h3><p>Lecture, accords, accompagnement et jeu libre.</p></article><article class="reveal" style="--d:90ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-guitar"></i><h3>Cours de guitare</h3><p>Acoustique, basse et guitare solo, du rythme au lead.</p></article><article class="reveal" style="--d:180ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-drum"></i><h3>Cours de batterie</h3><p>Tempo, coordination, grooves et placement.</p></article><article class="reveal" style="--d:270ms"><svg class="ring" viewBox="0 0 34 34" aria-hidden="true"><circle class="bg" cx="17" cy="17" r="14"/><circle class="fg" cx="17" cy="17" r="14"/></svg><i class="fas fa-music"></i><h3>Cours de voix</h3><p>Texture vocale, justesse, souffle, puissance et harmonies.</p></article></div>
 </div>
 </section>
 
@@ -391,10 +404,11 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 
 <section class="sec" style="background:var(--bg-alt)">
 <div class="wrap">
-<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">Nos sessions</h2><p class="sec-lead">1h30 par séance. À vous de choisir le rythme.</p></div></div>
-<div class="ac-ses">
-<article class="reveal"><h3>Session normale</h3><div class="big">4</div><p>séances par mois — 1 séance par semaine, 1h30 à chaque fois. Le rythme régulier, pour installer les acquis dans la durée.</p></article>
-<article class="reveal" style="--d:110ms"><h3>Session accélérée</h3><div class="big">8 à 12</div><p>séances par mois — 2 à 3 séances par semaine. Pour progresser vite, avant une échéance ou un projet.</p></article>
+<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">Nos sessions</h2><p class="sec-lead">1h30 par séance, théorie et pratique à chaque fois. À vous de choisir le rythme.</p></div></div>
+<div class="ac-ses ac-ses-3">
+<article class="reveal"><h3>Classique</h3><div class="big">4<span>/mois</span></div><p class="ac-ses-rythme">1 séance par semaine</p><ul class="ac-ses-perks"><li><i class="fas fa-check"></i>Théorie &amp; pratique</li></ul></article>
+<article class="reveal featured" style="--d:110ms"><span class="ac-ses-tag">Recommandé</span><h3>Recommandé</h3><div class="big">8<span>/mois</span></div><p class="ac-ses-rythme">2 séances par semaine</p><ul class="ac-ses-perks"><li><i class="fas fa-check"></i>Théorie &amp; pratique</li><li><i class="fas fa-check"></i>Suivi personnalisé</li></ul></article>
+<article class="reveal" style="--d:220ms"><h3>Accéléré</h3><div class="big">12<span>/mois</span></div><p class="ac-ses-rythme">3 séances par semaine</p><ul class="ac-ses-perks"><li><i class="fas fa-check"></i>Théorie &amp; pratique</li><li><i class="fas fa-check"></i>Suivi personnalisé</li><li><i class="fas fa-check"></i>Emprunt d'instruments possible</li></ul></article>
 </div>
 </div>
 </section>
