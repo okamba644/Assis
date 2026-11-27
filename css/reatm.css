@@ -1336,8 +1336,8 @@ html[data-theme="dark"] body[data-entity="maison"]{--logo-ink:#ffffff}
 body[data-entity="studio"]{--logo-ink:#e11b22}
 html[data-theme="dark"] body[data-entity="studio"]{--logo-ink:#FF4A50}
 /* le logo de l'Académie est vert-bleu : le logotype le suit */
-body[data-entity="academy"]{--logo-ink:#44797F}
-html[data-theme="dark"] body[data-entity="academy"]{--logo-ink:#7FB3B8}
+body[data-entity="academy"]{--logo-ink:#97D6DF}
+html[data-theme="dark"] body[data-entity="academy"]{--logo-ink:#97D6DF}
 /* le jaune du pôle Prod disparaît sur un en-tête blanc : on l'assombrit
    juste assez pour le lire, sans quitter la famille ambrée */
 body[data-entity="production"]{--logo-ink:#CA8A04}
