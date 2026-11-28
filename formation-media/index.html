@@ -193,6 +193,16 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 @media(max-width:1080px){.ac-form{grid-template-columns:repeat(2,1fr)}.ac-poles{grid-template-columns:1fr}}
 @media(max-width:760px){.ac-form,.ac-dots,.ac-ses{grid-template-columns:1fr}.ac-dots .pin{position:static;margin-bottom:12px}.ac-rail{margin:26px 0 22px}}
 
+/* ===== Aperçu des formations, en images ===== */
+.ac-gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:clamp(12px,1.6vw,20px)}
+.ac-gal-item{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--card);
+  transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .4s ease,box-shadow .5s ease}
+.ac-gal-item:hover{transform:translateY(-6px);border-color:#2563EB;box-shadow:0 18px 36px rgba(37,99,235,.14)}
+.ac-gal-shot{display:block;width:100%;border:none;padding:0;margin:0;background:none;cursor:zoom-in;aspect-ratio:1/1}
+.ac-gal-shot img{display:block;width:100%;height:100%;object-fit:cover}
+.ac-gal-item h3{font-size:13.5px;font-weight:700;margin:12px 14px 3px}
+.ac-gal-item p{font-size:11.5px;line-height:1.55;color:var(--muted);margin:0 14px 14px}
+
 </style>
 </head>
 <body data-entity="academy" style="--veil-in:#2563EB">
@@ -295,6 +305,14 @@ html[data-theme="dark"] .ac-cta{background:#0D1117;color:#fff}
 <div class="ac-ses"><article class="reveal" style="--d:0ms"><h3>Habiller un morceau</h3><p>Une pochette lisible en petit comme en grand, déclinée pour chaque plateforme et pour les réseaux.</p></article><article class="reveal" style="--d:110ms"><h3>Annoncer un événement</h3><p>Une affiche qui donne l'essentiel en un regard : qui, quoi, quand, où — et l'envie d'y être.</p></article><article class="reveal" style="--d:220ms"><h3>Monter une vidéo</h3><p>Capter, couper, rythmer, sous-titrer : de la captation brute au format prêt à publier.</p></article><article class="reveal" style="--d:330ms"><h3>Soigner ses photos</h3><p>Reprendre la lumière et la couleur d'une image de scène ou de studio sans la dénaturer.</p></article></div>
 </div>
 </section>
+
+<section class="sec" style="background:var(--bg-alt)">
+<div class="wrap">
+<div class="sec-head reveal"><span class="sec-num">03</span><div><h2 class="sec-title">Nos formations en images</h2><p class="sec-lead">Un aperçu de chaque module : contenu et durée. Cliquez sur une image pour l'agrandir.</p></div></div>
+<div class="ac-gal"><article class="ac-gal-item reveal reveal-zoom" style="--d:0ms"><button class="ac-gal-shot" type="button" data-nom="Shooting images" data-vues="../assets/formation-media/fm-shooting.webp" aria-label="Agrandir : Shooting images"><img src="../assets/formation-media/fm-shooting.webp" alt="Shooting images" loading="lazy"/></button><h3>Shooting images</h3><p>Formation en 24h : cadrage, réglages, lumière, shooting portrait/produit et tournage vidéo.</p></article><article class="ac-gal-item reveal reveal-zoom" style="--d:90ms"><button class="ac-gal-shot" type="button" data-nom="Traitement photo" data-vues="../assets/formation-media/fm-traitement-photo.webp" aria-label="Agrandir : Traitement photo"><img src="../assets/formation-media/fm-traitement-photo.webp" alt="Traitement photo" loading="lazy"/></button><h3>Traitement photo</h3><p>Formation en 18h : correction lumière/couleurs, retouche, détourage, filtres et export réseaux.</p></article><article class="ac-gal-item reveal reveal-zoom" style="--d:180ms"><button class="ac-gal-shot" type="button" data-nom="Design graphique" data-vues="../assets/formation-media/fm-design-graphic.webp" aria-label="Agrandir : Design graphique"><img src="../assets/formation-media/fm-design-graphic.webp" alt="Design graphique" loading="lazy"/></button><h3>Design graphique</h3><p>Formation en 18h : bases du design, affiches et flyers, identité visuelle, Canva et Photoshop.</p></article><article class="ac-gal-item reveal reveal-zoom" style="--d:270ms"><button class="ac-gal-shot" type="button" data-nom="Montage vidéo" data-vues="../assets/formation-media/fm-montage-video.webp" aria-label="Agrandir : Montage vidéo"><img src="../assets/formation-media/fm-montage-video.webp" alt="Montage vidéo" loading="lazy"/></button><h3>Montage vidéo</h3><p>Formation en 20h : découpe et assemblage, transitions, musique et titres, export haute qualité.</p></article></div>
+</div>
+</section>
+
 <section class="pcta ac-cta">
 <div class="wrap">
 <h2 class="reveal">Rejoindre<br/>la formation</h2>
